@@ -1,0 +1,61 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+const navItems = [
+	{ href: '/', text: 'Home' },
+	{ href: '/experience', text: 'Experience' },
+	{ href: '/projects', text: 'Projects' },
+	{ href: '/blog', text: 'Blog' },
+	{ href: '/contact', text: 'Contact' },
+];
+---
+
+<header class='fixed w-full top-0 z-50 left-1/2 -translate-x-1/2 max-w-7xl'>
+	<nav class='px-6 py-4'>
+		<div
+			class='backdrop-blur-lg bg-white/70 dark:bg-modern-dark/70 rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg shadow-gray-200/20 dark:shadow-black/30'
+		>
+			<a
+				href='/'
+				class='text-2xl font-bold bg-gradient-to-r from-modern-purple to-modern-cyan bg-clip-text text-transparent'
+			>
+				Dhruv Verma
+			</a>
+
+			<div class='hidden md:flex items-center gap-8'>
+				{
+					navItems.map((item) => (
+						<a
+							href={item.href}
+							class='text-gray-600 dark:text-gray-300 hover:text-modern-indigo dark:hover:text-modern-cyan transition-colors relative group'
+						>
+							{item.text}
+							<span class='absolute inset-x-0 bottom-0 h-0.5 bg-gradient-to-r from-modern-purple to-modern-cyan scale-x-0 group-hover:scale-x-100 transition-transform origin-left' />
+						</a>
+					))
+				}
+				<ThemeToggle />
+			</div>
+
+			<button
+				id='mobile-menu-button'
+				class='md:hidden'
+				aria-label='Toggle menu'
+			>
+				<svg
+					xmlns='http://www.w3.org/2000/svg'
+					class='h-6 w-6'
+					fill='none'
+					viewBox='0 0 24 24'
+					stroke='currentColor'
+				>
+					<path
+						stroke-linecap='round'
+						stroke-linejoin='round'
+						stroke-width='2'
+						d='M4 6h16M4 12h16M4 18h16'></path>
+				</svg>
+			</button>
+		</div>
+	</nav>
+</header>

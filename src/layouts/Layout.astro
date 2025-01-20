@@ -1,0 +1,163 @@
+---
+import { ViewTransitions } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import CursorFollower from '../components/CursorFollower.astro';
+import '@fontsource-variable/inter';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const {
+	title,
+	description = 'Dhruv Verma - Frontend Developer specializing in React.js, Next.js & Web Animations',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang='en' class='scroll-smooth'>
+	<head>
+		<meta charset='UTF-8' />
+		<meta name='description' content={description} />
+		<meta name='viewport' content='width=device-width' />
+		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+		<meta name='generator' content={Astro.generator} />
+		<title>{title}</title>
+		<ViewTransitions />
+		<style is:global>
+			html {
+				scroll-padding-top: 100px;
+			}
+
+			/* Custom Scrollbar - Global */
+			::-webkit-scrollbar {
+				width: 10px;
+				height: 10px;
+			}
+
+			::-webkit-scrollbar-track {
+				background: transparent;
+			}
+
+			/* Light theme scrollbar */
+			::-webkit-scrollbar-thumb {
+				background-color: rgba(156, 163, 175, 0.5);
+				border-radius: 9999px;
+				border: 2px solid transparent;
+				background-clip: content-box;
+			}
+
+			::-webkit-scrollbar-thumb:hover {
+				background-color: rgba(156, 163, 175, 0.7);
+			}
+
+			/* Dark theme scrollbar */
+			:root.dark ::-webkit-scrollbar-thumb {
+				background-color: rgba(75, 85, 99, 0.5);
+			}
+
+			:root.dark ::-webkit-scrollbar-thumb:hover {
+				background-color: rgba(75, 85, 99, 0.7);
+			}
+
+			/* For Firefox */
+			* {
+				scrollbar-width: thin;
+				scrollbar-color: rgba(156, 163, 175, 0.5) transparent;
+			}
+
+			:root.dark * {
+				scrollbar-color: rgba(75, 85, 99, 0.5) transparent;
+			}
+		</style>
+		<script>
+			// Add clipboard functionality
+			document.addEventListener('DOMContentLoaded', () => {
+				const codeBlocks = document.querySelectorAll('pre');
+
+				codeBlocks.forEach((block) => {
+					const wrapper = document.createElement('div');
+					wrapper.className = 'relative group';
+
+					const button = document.createElement('button');
+					button.className =
+						'absolute top-2 right-2 p-2 rounded-lg bg-gray-800/60 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-white';
+					button.innerHTML = `
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+							<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+							<path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+						</svg>
+					`;
+
+					button.addEventListener('click', async () => {
+						await navigator.clipboard.writeText(block.textContent || '');
+						button.innerHTML = `
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+								<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+								<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+							</svg>
+						`;
+						setTimeout(() => {
+							button.innerHTML = `
+								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+									<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+									<path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+								</svg>
+							`;
+						}, 2000);
+					});
+
+					block.parentNode?.insertBefore(wrapper, block);
+					wrapper.appendChild(block);
+					wrapper.appendChild(button);
+				});
+			});
+		</script>
+	</head>
+	<body
+		class='bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-white min-h-screen cursor-none md:cursor-none'
+	>
+		<div
+			class="fixed inset-0 bg-[url('/noise.png')] opacity-[0.015] pointer-events-none"
+		>
+		</div>
+		<CursorFollower />
+		<div class='max-w-7xl mx-auto'>
+			<Header />
+			<main class='min-h-screen pt-16'>
+				<slot />
+			</main>
+			<Footer />
+		</div>
+		<script>
+			import { gsap } from 'gsap';
+			import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+			gsap.registerPlugin(ScrollTrigger);
+
+			document.addEventListener('astro:after-swap', () => {
+				if (
+					localStorage.theme === 'dark' ||
+					(!('theme' in localStorage) &&
+						window.matchMedia('(prefers-color-scheme: dark)').matches)
+				) {
+					document.documentElement.classList.add('dark');
+				} else {
+					document.documentElement.classList.remove('dark');
+				}
+			});
+
+			document.addEventListener('astro:page-load', () => {
+				gsap.from('main > *', {
+					opacity: 0,
+					y: 20,
+					duration: 0.8,
+					stagger: 0.1,
+					ease: 'power2.out',
+				});
+			});
+		</script>
+	</body>
+</html>

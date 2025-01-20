@@ -1,0 +1,70 @@
+---
+const { headings } = Astro.props;
+---
+
+<nav class='toc pl-2 pr-4'>
+	<h2 class='text-lg font-semibold mb-4'>Table of Contents</h2>
+	<ul class='space-y-2'>
+		{
+			headings.map((heading) => (
+				<li class='pl-4' style={`margin-left: ${(heading.depth - 1) * 1}rem`}>
+					<a
+						href={`#${heading.slug}`}
+						class='text-gray-600 dark:text-gray-400 hover:text-modern-purple dark:hover:text-modern-cyan transition-colors'
+					>
+						{heading.text}
+					</a>
+				</li>
+			))
+		}
+	</ul>
+</nav>
+
+<style>
+	.toc {
+		position: sticky;
+		top: 6rem;
+		max-height: calc(100vh - 8rem);
+		overflow-y: auto;
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		margin-left: -0.5rem;
+	}
+
+	/* Custom Scrollbar for TableOfContents */
+	.toc::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.toc::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.toc::-webkit-scrollbar-thumb {
+		background-color: rgba(156, 163, 175, 0.3);
+		border-radius: 9999px;
+	}
+
+	.toc::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(156, 163, 175, 0.5);
+	}
+
+	/* Dark theme specific styles */
+	:root.dark .toc::-webkit-scrollbar-thumb {
+		background-color: rgba(75, 85, 99, 0.3);
+	}
+
+	:root.dark .toc::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(75, 85, 99, 0.5);
+	}
+
+	/* Firefox */
+	.toc {
+		scrollbar-width: thin;
+		scrollbar-color: rgba(156, 163, 175, 0.3) transparent;
+	}
+
+	:root.dark .toc {
+		scrollbar-color: rgba(75, 85, 99, 0.3) transparent;
+	}
+</style>

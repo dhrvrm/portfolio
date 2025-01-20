@@ -1,0 +1,116 @@
+---
+---
+<div class="cursor-container fixed inset-0 pointer-events-none z-[9999]">
+  <div id="cursor-outer" class="fixed w-8 h-8 rounded-full border-2 border-modern-indigo mix-blend-difference translate-x-[-50%] translate-y-[-50%]"></div>
+  <div id="cursor-inner" class="fixed w-2 h-2 rounded-full bg-modern-indigo mix-blend-difference translate-x-[-50%] translate-y-[-50%]"></div>
+  <div id="cursor-glow" class="fixed w-32 h-32 rounded-full bg-modern-indigo/30 blur-2xl translate-x-[-50%] translate-y-[-50%]"></div>
+</div>
+
+<script>
+  if (typeof window !== 'undefined') {
+    let cursor;
+    let cursorOuter;
+    let cursorInner;
+    let cursorGlow;
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+
+    function initCursor() {
+      cursor = document.querySelector('.cursor-container');
+      cursorOuter = document.getElementById('cursor-outer');
+      cursorInner = document.getElementById('cursor-inner');
+      cursorGlow = document.getElementById('cursor-glow');
+
+      if (!cursor || !cursorOuter || !cursorInner || !cursorGlow) return;
+
+      cursor.style.opacity = '1';
+      mouseX = window.innerWidth / 2;
+      mouseY = window.innerHeight / 2;
+      cursorX = mouseX;
+      cursorY = mouseY;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      requestAnimationFrame(updateCursor);
+
+      const interactiveElements = document.querySelectorAll('a, button, .project-card');
+      interactiveElements.forEach(element => {
+        element.addEventListener('mouseenter', () => {
+          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.5)';
+          cursorInner.style.transform = 'translate(-50%, -50%) scale(0)';
+          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.5)';
+          cursorGlow.style.opacity = '0.5';
+          element.style.cursor = 'none';
+        });
+
+        element.addEventListener('mouseleave', () => {
+          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)';
+          cursorInner.style.transform = 'translate(-50%, -50%) scale(1)';
+          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+          cursorGlow.style.opacity = '0.3';
+        });
+      });
+    }
+
+    function updateCursor() {
+      if (!cursorOuter || !cursorInner || !cursorGlow) return;
+
+      cursorX += (mouseX - cursorX) * 0.1;
+      cursorY += (mouseY - cursorY) * 0.1;
+
+      cursorOuter.style.left = `${cursorX}px`;
+      cursorOuter.style.top = `${cursorY}px`;
+      
+      cursorInner.style.left = `${mouseX}px`;
+      cursorInner.style.top = `${mouseY}px`;
+      
+      cursorGlow.style.left = `${cursorX}px`;
+      cursorGlow.style.top = `${cursorY}px`;
+
+      requestAnimationFrame(updateCursor);
+    }
+
+    document.addEventListener('astro:page-load', initCursor);
+    
+    if (document.readyState === 'complete') {
+      initCursor();
+    }
+  }
+</script>
+
+<style>
+  .cursor-container {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cursor-container * {
+    pointer-events: none;
+    will-change: transform;
+    position: fixed;
+  }
+
+  #cursor-outer {
+    transition: transform 0.3s ease;
+  }
+
+  #cursor-inner {
+    transition: transform 0.3s ease;
+  }
+
+  #cursor-glow {
+    opacity: 0.3;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  @media (max-width: 768px) {
+    .cursor-container {
+      display: none;
+    }
+  }
+</style>

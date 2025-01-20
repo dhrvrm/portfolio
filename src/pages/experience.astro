@@ -1,0 +1,74 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Experience - Dhruv Verma">
+  <div class="container mx-auto px-6 py-16">
+    <h1 class="text-4xl font-bold mb-12">Experience</h1>
+    
+    <div class="space-y-12">
+      <div class="experience-item border-l-4 border-gradient-to-r from-modern-purple to-modern-indigo pl-6">
+        <h2 class="text-2xl font-semibold">Software Engineer I & Founding Partner</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Vaayu Digital • Sep 2023 - Present</p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+          <li>Reduced chunk size using Code splitting, Lazy loading, Minification, and Compression by 60%</li>
+          <li>Worked with multiple US and UK based startups to start their business</li>
+          <li>Implemented modern CI/CD pipelines reducing deployment time by 40%</li>
+        </ul>
+      </div>
+
+      <div class="experience-item border-l-4 border-gradient-to-r from-modern-purple to-modern-indigo pl-6">
+        <h2 class="text-2xl font-semibold">Software Engineer</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">Growth Graphers • May 2022 - Aug 2023</p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+          <li>Engineered high-performance B2B and B2C web applications using React, Redux, and Node.js</li>
+          <li>Achieved 90+ PageSpeed scores through optimization techniques</li>
+          <li>Developed custom middleware for CRM-CMS connections</li>
+          <li>Led multiple full-stack projects from concept to deployment</li>
+        </ul>
+      </div>
+
+      <div class="experience-item border-l-4 border-gradient-to-r from-modern-purple to-modern-indigo pl-6">
+        <h2 class="text-2xl font-semibold">Product Engineer</h2>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">TUBBR • Jun 2019 - Apr 2022</p>
+        <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">
+          <li>Led a team of engineers in web and mobile application development</li>
+          <li>Orchestrated product planning from market research to delivery</li>
+          <li>Pioneered growth strategy spanning 2 years</li>
+          <li>Managed stakeholder communications and third-party collaborations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  
+  gsap.registerPlugin(ScrollTrigger);
+  
+  const experienceItems = document.querySelectorAll('.experience-item');
+  
+  experienceItems.forEach((item) => {
+    gsap.from(item, {
+      scrollTrigger: {
+        trigger: item,
+        start: 'top bottom-=100',
+        end: 'top center',
+        scrub: 1,
+      },
+      opacity: 0,
+      x: -50,
+      borderLeftWidth: 0,
+      duration: 1,
+      ease: 'power2.out'
+    });
+  });
+</script>
+
+<style>
+  .border-gradient-to-r {
+    border-image: linear-gradient(to bottom, var(--tw-gradient-from), var(--tw-gradient-to)) 1;
+  }
+</style>

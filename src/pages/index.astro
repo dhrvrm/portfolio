@@ -1,0 +1,34 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Dhruv Verma - Frontend Developer">
+  <section class="min-h-[calc(100vh-4rem)] flex items-center">
+    <div class="container mx-auto px-6">
+      <div class="max-w-3xl">
+        <h1 class="text-5xl md:text-6xl font-bold mb-6">
+          Frontend Developer crafting beautiful <span class="bg-gradient-to-r from-modern-purple to-modern-cyan bg-clip-text text-transparent">web experiences</span>
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+          Specializing in React.js, Next.js & Web Animations. Building performant and aesthetic websites and webapps that users love.
+        </p>
+        <div class="flex gap-4">
+          <a 
+            href="/projects" 
+            class="group relative px-8 py-4 rounded-2xl overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-gradient-to-r from-modern-purple to-modern-cyan opacity-90 group-hover:opacity-100 transition-opacity"></div>
+            <span class="relative z-10 text-white font-medium">View Projects</span>
+          </a>
+          <a 
+            href="/contact" 
+            class="group relative px-8 py-4 rounded-2xl overflow-hidden"
+          >
+            <div class="absolute inset-0 bg-gradient-to-r from-modern-purple/10 to-modern-cyan/10 dark:from-modern-purple/20 dark:to-modern-cyan/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left"></div>
+            <span class="relative z-10 bg-gradient-to-r from-modern-purple to-modern-cyan bg-clip-text text-transparent font-medium">Contact Me</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

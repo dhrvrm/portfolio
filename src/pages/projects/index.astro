@@ -1,0 +1,98 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+
+const schema = {
+	'@context': 'https://schema.org',
+	'@type': 'CollectionPage',
+	name: 'Projects - Dhruv Verma',
+	description:
+		'Portfolio of web development and design projects by Dhruv Verma',
+	author: {
+		'@type': 'Person',
+		name: 'Dhruv Verma',
+	},
+	mainEntity: {
+		'@type': 'ItemList',
+		itemListElement: projects.map((project, index) => ({
+			'@type': 'ListItem',
+			position: index + 1,
+			item: {
+				'@type': 'WebPage',
+				name: project.data.title,
+				description: project.data.description,
+				url: `https://dhruvverma.dev/projects/${project.slug}`,
+			},
+		})),
+	},
+};
+---
+
+<Layout
+	title='Projects - Dhruv Verma | Frontend Developer Portfolio'
+	description='Explore my portfolio of web development projects, including React applications, e-commerce platforms, and B2B solutions.'
+>
+	<div class='container mx-auto px-6 py-16'>
+		<h1 class='text-4xl font-bold mb-4'>Projects</h1>
+		<p class='text-gray-600 dark:text-gray-300 mb-12 max-w-2xl'>
+			A collection of my work, including client projects and personal
+			experiments.
+		</p>
+
+		<div class='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
+			{
+				projects.length > 0 ? (
+					projects.map((project) => (
+						<a
+							href={`/projects/${project.slug}`}
+							class='group relative bg-white/80 dark:bg-gray-800/80 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300'
+						>
+							<div class='relative aspect-video'>
+								<Image
+									width={390}
+									height={220}
+									src={project.data.image}
+									alt={project.data.title}
+									class='w-full h-full object-cover'
+								/>
+								<div class='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
+							</div>
+
+							<div class='p-6'>
+								<h2 class='text-xl font-semibold mb-2 group-hover:text-modern-purple dark:group-hover:text-modern-cyan transition-colors'>
+									{project.data.title}
+								</h2>
+
+								<p class='text-gray-600 dark:text-gray-300 mb-4 line-clamp-2'>
+									{project.data.description}
+								</p>
+
+								<div class='flex flex-wrap gap-2'>
+									{project.data.tech.slice(0, 3).map((tech) => (
+										<span class='px-3 py-1 rounded-md text-sm bg-modern-purple/10 dark:bg-modern-purple/20 text-modern-purple dark:text-modern-cyan'>
+											{tech}
+										</span>
+									))}
+									{project.data.tech.length > 3 && (
+										<span class='px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'>
+											+{project.data.tech.length - 3} more
+										</span>
+									)}
+								</div>
+							</div>
+						</a>
+					))
+				) : (
+					<div class='col-span-full text-center py-12'>
+						<p class='text-gray-600 dark:text-gray-400'>No projects found.</p>
+					</div>
+				)
+			}
+		</div>
+	</div>
+</Layout>
+
+<script type='application/ld+json' set:html={JSON.stringify(schema)} />
