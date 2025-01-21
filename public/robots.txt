@@ -1,0 +1,16 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://dhruvverma.com/sitemap.xml
+
+# Prevent crawling of admin or private areas
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+Disallow: /drafts/
+
+# Rate limiting
+Crawl-delay: 10

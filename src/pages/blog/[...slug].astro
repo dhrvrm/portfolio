@@ -38,9 +38,16 @@ if (post.data.series) {
 
 const shortBio =
 	'Dynamic Frontend Developer specializing in React.js and Next.js. Creating engaging web experiences with modern technologies and beautiful animations.';
+
+const ogImage = post.data.image || `/blogs/${post.slug}.png`;
 ---
 
-<Layout title={post.data.title}>
+<Layout
+	title={post.data.title}
+	description={post.data.excerpt}
+	image={ogImage}
+	article={true}
+>
 	<article class='container mx-auto px-6 py-16'>
 		<nav class='flex mb-8 text-sm' aria-label='Breadcrumb'>
 			<ol class='flex items-center space-x-2'>
