@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/react-rendering-lifecycle.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 10
 tags: ['React', 'SSR', 'Hydration', 'Rendering', 'Web Development']

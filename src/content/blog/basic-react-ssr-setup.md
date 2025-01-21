@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/basic-ssr-setup.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 10
 tags: ['React', 'SSR', 'Server-Side Rendering', 'Express', 'Hydration']

@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/understanding-ssr.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 10
 tags: ['React', 'Performance', 'SSR', 'Web Development', 'Optimization']

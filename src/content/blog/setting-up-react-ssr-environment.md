@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/setting-up-ssr-env.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 15
 tags: ['React', 'SSR', 'Webpack', 'Babel', 'Vite', 'Node.js']

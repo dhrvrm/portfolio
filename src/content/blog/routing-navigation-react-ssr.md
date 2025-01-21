@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/routing-navigation-ssr.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 12
 tags: ['React', 'SSR', 'Routing', 'Dynamic Routes', 'React Router']

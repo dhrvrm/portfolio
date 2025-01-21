@@ -17,7 +17,7 @@ author:
         github: 'https://github.com/dhrvrm',
       },
   }
-image: '/blog/react-performance-part1.jpg'
+image: '/blogs/teching-myself-react.webp'
 featured: true
 readingTime: 8
 tags: ['React', 'Performance', 'Optimization']
