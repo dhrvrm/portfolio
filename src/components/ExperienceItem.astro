@@ -1,0 +1,21 @@
+---
+interface Props {
+	title: string;
+	company: string;
+	duration: string;
+	achievements: string[];
+}
+
+const { title, company, duration, achievements } = Astro.props;
+---
+
+<div
+	class='experience-item border-l-4 border-gradient-to-r from-modern-purple to-modern-indigo pl-6'
+>
+	<h2 class='text-2xl font-semibold'>{title}</h2>
+	<p class='text-gray-600 dark:text-gray-400 mb-4'>{company} • {duration}</p>
+	<ul class='list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300'>
+		{achievements.map((achievement) => <li>{achievement}</li>)}
+	</ul>
+</div>
+
