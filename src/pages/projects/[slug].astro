@@ -62,14 +62,14 @@ const schema = {
 				</div>
 			</header>
 
-			<div class='aspect-video mb-12 rounded-lg overflow-hidden'>
+			<div class='aspect-video mb-12 rounded-lg overflow-hidden group'>
 				<Image
 					width={800}
 					height={450}
 					src={project.data.image}
 					alt={project.data.title}
 					loading='eager'
-					class='w-full h-full object-cover'
+					class='w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out'
 				/>
 			</div>
 

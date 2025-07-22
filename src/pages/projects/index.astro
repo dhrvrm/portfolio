@@ -5,6 +5,19 @@ import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects');
 
+// Sort projects: featured first, then by publish date (newest first)
+const sortedProjects = projects.sort((a, b) => {
+	// First sort by featured status
+	if (a.data.featured && !b.data.featured) return -1;
+	if (!a.data.featured && b.data.featured) return 1;
+
+	// Then sort by publish date (newest first)
+	return (
+		new Date(b.data.publishDate).getTime() -
+		new Date(a.data.publishDate).getTime()
+	);
+});
+
 const schema = {
 	'@context': 'https://schema.org',
 	'@type': 'CollectionPage',
@@ -17,7 +30,7 @@ const schema = {
 	},
 	mainEntity: {
 		'@type': 'ItemList',
-		itemListElement: projects.map((project, index) => ({
+		itemListElement: sortedProjects.map((project, index) => ({
 			'@type': 'ListItem',
 			position: index + 1,
 			item: {
@@ -44,19 +57,19 @@ const schema = {
 
 		<div class='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
 			{
-				projects.length > 0 ? (
-					projects.map((project) => (
+				sortedProjects.length > 0 ? (
+					sortedProjects.map((project) => (
 						<a
 							href={`/projects/${project.slug}`}
 							class='group relative bg-white/80 dark:bg-gray-800/80 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300'
 						>
-							<div class='relative aspect-video'>
+							<div class='relative aspect-video overflow-hidden'>
 								<Image
 									width={390}
 									height={220}
 									src={project.data.image}
 									alt={project.data.title}
-									class='w-full h-full object-cover'
+									class='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 								/>
 								<div class='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
 							</div>
