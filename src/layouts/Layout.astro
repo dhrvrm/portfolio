@@ -90,17 +90,24 @@ const canonicalURL = new URL(
 			}
 		</style>
 		<script>
-			// Add clipboard functionality
-			document.addEventListener('DOMContentLoaded', () => {
-				const codeBlocks = document.querySelectorAll('pre');
+			// Enhanced clipboard functionality for all code blocks
+			function addClipboardToCodeBlocks() {
+				// Target both pre tags and code blocks with specific classes
+				const codeBlocks = document.querySelectorAll(
+					'pre, .astro-code, .shiki, [class*="language-"]'
+				);
 
 				codeBlocks.forEach((block) => {
+					// Skip if already has clipboard button
+					if (block.querySelector('.clipboard-button')) return;
+
 					const wrapper = document.createElement('div');
 					wrapper.className = 'relative group';
 
 					const button = document.createElement('button');
 					button.className =
-						'absolute top-2 right-2 p-2 rounded-lg bg-gray-800/60 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-white';
+						'clipboard-button absolute top-2 right-2 p-2 rounded-lg bg-gray-800/60 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-white z-10';
+					button.setAttribute('aria-label', 'Copy code to clipboard');
 					button.innerHTML = `
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
 							<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
@@ -108,29 +115,66 @@ const canonicalURL = new URL(
 						</svg>
 					`;
 
-					button.addEventListener('click', async () => {
-						await navigator.clipboard.writeText(block.textContent || '');
-						button.innerHTML = `
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-								<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-								<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
-							</svg>
-						`;
-						setTimeout(() => {
+					button.addEventListener('click', async (e) => {
+						e.preventDefault();
+						e.stopPropagation();
+
+						try {
+							// Get the text content, handling different code block structures
+							let textToCopy = '';
+							const codeElement = block.querySelector('code');
+
+							if (codeElement) {
+								textToCopy = codeElement.textContent || '';
+							} else {
+								textToCopy = block.textContent || '';
+							}
+
+							await navigator.clipboard.writeText(textToCopy);
+
+							// Show success state
 							button.innerHTML = `
 								<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-									<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
-									<path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+									<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+									<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm9.707 5.707a1 1 0 00-1.414-1.414L9 12.586l-1.293-1.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
 								</svg>
 							`;
-						}, 2000);
+
+							// Reset after 2 seconds
+							setTimeout(() => {
+								button.innerHTML = `
+									<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+										<path d="M8 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" />
+										<path d="M6 3a2 2 0 00-2 2v11a2 2 0 002 2h8a2 2 0 002-2V5a2 2 0 00-2-2 3 3 0 01-3 3H9a3 3 0 01-3-3z" />
+									</svg>
+								`;
+							}, 2000);
+						} catch (err) {
+							console.error('Failed to copy code:', err);
+							// Fallback for older browsers
+							const textArea = document.createElement('textarea');
+							textArea.value = block.textContent || '';
+							document.body.appendChild(textArea);
+							textArea.select();
+							document.execCommand('copy');
+							document.body.removeChild(textArea);
+						}
 					});
 
-					block.parentNode?.insertBefore(wrapper, block);
-					wrapper.appendChild(block);
-					wrapper.appendChild(button);
+					// Insert wrapper and move block into it
+					if (block.parentNode) {
+						block.parentNode.insertBefore(wrapper, block);
+						wrapper.appendChild(block);
+						wrapper.appendChild(button);
+					}
 				});
-			});
+			}
+
+			// Run on DOM content loaded
+			document.addEventListener('DOMContentLoaded', addClipboardToCodeBlocks);
+
+			// Also run on Astro page transitions
+			document.addEventListener('astro:page-load', addClipboardToCodeBlocks);
 		</script>
 		<!-- Primary Meta Tags -->
 		<meta name='title' content={title} />

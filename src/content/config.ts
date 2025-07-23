@@ -26,21 +26,10 @@ const blog = defineCollection({
 		publishDate: z.date(),
 		categories: z.array(z.string()),
 		excerpt: z.string(),
-		author: z.object({
-			name: z.string(),
-			avatar: z.string(),
-			bio: z.string(),
-			social: z.object({
-				twitter: z.string().optional(),
-				linkedin: z.string().optional(),
-				github: z.string().optional(),
-			}),
-		}),
 		image: z.string(),
 		featured: z.boolean().default(false),
 		readingTime: z.number(),
 		tags: z.array(z.string()),
-		// Add these new fields
 		series: z.string().optional(),
 		seriesPart: z.number().optional(),
 	}),
