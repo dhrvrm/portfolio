@@ -3,7 +3,7 @@ title: 'The Ultimate Guide to Building a Production-Grade Node.js Backend in 202
 publishDate: 2025-08-06
 categories: ['Node.js', 'Backend Development', 'TypeScript']
 excerpt: 'Learn how to set up a robust, scalable, and maintainable Express.js backend with TypeScript, Prisma, and modern best practices for production applications.'
-image: '/blogs/nodejs/ultimate-guide-building-production-nodejs-backend-2025.webp'
+image: '/blogs/ultimate-guide-building-production-nodejs-backend-2025.webp'
 featured: true
 readingTime: 20
 tags:
