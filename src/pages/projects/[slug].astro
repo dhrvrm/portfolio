@@ -31,28 +31,28 @@ const schema = {
 	title={`${project.data.title} - Project by Dhruv Verma`}
 	description={project.data.description}
 >
-	<div class='container mx-auto px-6 py-16'>
-		<nav class='flex mb-8 text-sm' aria-label='Breadcrumb'>
+	<div class='container mx-auto py-16'>
+		<nav class='flex mb-8 text-sm text-muted' aria-label='Breadcrumb'>
 			<ol class='flex items-center space-x-2'>
 				<li>
-					<a href='/' class='text-gray-500 hover:text-modern-purple'>Home</a>
+					<a href='/' class='hover:text-ink'>Home</a>
 				</li>
 				<li class='text-gray-400'>/</li>
 				<li>
-					<a href='/projects' class='text-gray-500 hover:text-modern-purple'
-						>Projects</a
-					>
+					<a href='/projects' class='hover:text-ink'>Projects</a>
 				</li>
 				<li class='text-gray-400'>/</li>
-				<li class='text-modern-purple'>{project.data.title}</li>
+				<li class='text-ink'>{project.data.title}</li>
 			</ol>
 		</nav>
 
 		<article class='max-w-4xl mx-auto'>
 			<header class='mb-12'>
-				<h1 class='text-4xl font-bold mb-4'>{project.data.title}</h1>
+				<h1 class='text-3xl md:text-5xl font-semibold font-display mb-4'>
+					{project.data.title}
+				</h1>
 				<div
-					class='flex flex-wrap gap-4 items-center text-sm text-gray-600 dark:text-gray-400'
+					class='flex flex-wrap gap-4 items-center text-sm text-muted'
 				>
 					<span>{project.data.category}</span>
 					<span>•</span>
@@ -62,7 +62,7 @@ const schema = {
 				</div>
 			</header>
 
-			<div class='aspect-video mb-12 rounded-lg overflow-hidden group'>
+			<div class='aspect-video mb-12 rounded-2xl overflow-hidden border border-border/70 group'>
 				<Image
 					width={800}
 					height={450}
@@ -75,27 +75,23 @@ const schema = {
 
 			<div class='grid md:grid-cols-3 gap-8 mb-12'>
 				<div class='space-y-2'>
-					<h2 class='font-semibold text-modern-purple'>Challenge</h2>
-					<p class='text-gray-600 dark:text-gray-300'>
-						{project.data.challenge}
-					</p>
+					<h2 class='font-semibold'>Challenge</h2>
+					<p class='text-sm text-muted'>{project.data.challenge}</p>
 				</div>
 				<div class='space-y-2'>
-					<h2 class='font-semibold text-modern-purple'>Solution</h2>
-					<p class='text-gray-600 dark:text-gray-300'>
-						{project.data.solution}
-					</p>
+					<h2 class='font-semibold'>Solution</h2>
+					<p class='text-sm text-muted'>{project.data.solution}</p>
 				</div>
 				<div class='space-y-2'>
-					<h2 class='font-semibold text-modern-purple'>Impact</h2>
-					<p class='text-gray-600 dark:text-gray-300'>{project.data.impact}</p>
+					<h2 class='font-semibold'>Impact</h2>
+					<p class='text-sm text-muted'>{project.data.impact}</p>
 				</div>
 			</div>
 
 			<div class='flex flex-wrap gap-4 mb-12'>
 				{
 					project.data.tech.map((tech) => (
-						<span class='px-3 py-1 rounded-md text-sm bg-modern-purple/10 dark:bg-modern-purple/20 text-modern-purple dark:text-modern-cyan'>
+						<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
 							{tech}
 						</span>
 					))
@@ -104,13 +100,13 @@ const schema = {
 
 			{
 				(project.data.website || project.data.repository) && (
-					<div class='flex gap-4'>
+					<div class='flex gap-4 flex-wrap'>
 						{project.data.website && (
 							<a
 								href={project.data.website}
 								target='_blank'
 								rel='noopener noreferrer'
-								class='inline-flex items-center px-4 py-2 rounded-lg bg-modern-purple text-white hover:bg-modern-purple/90 transition-colors'
+								class='inline-flex items-center px-4 py-2 rounded-lg bg-accent text-white hover:bg-accentStrong transition-colors'
 							>
 								Visit Website
 							</a>
@@ -120,7 +116,7 @@ const schema = {
 								href={project.data.repository}
 								target='_blank'
 								rel='noopener noreferrer'
-								class='inline-flex items-center px-4 py-2 rounded-lg border border-modern-purple text-modern-purple hover:bg-modern-purple/10 transition-colors'
+								class='inline-flex items-center px-4 py-2 rounded-lg border border-border/70 text-ink hover:border-accent hover:text-accent transition-colors'
 							>
 								View Code
 							</a>

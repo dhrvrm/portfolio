@@ -48,9 +48,12 @@ const schema = {
 	title='Projects - Dhruv Verma | Frontend Developer Portfolio'
 	description='Explore my portfolio of web development projects, including React applications, e-commerce platforms, and B2B solutions.'
 >
-	<div class='container mx-auto px-6 py-16'>
-		<h1 class='text-4xl font-bold mb-4'>Projects</h1>
-		<p class='text-gray-600 dark:text-gray-300 mb-12 max-w-2xl'>
+	<div class='container mx-auto py-16'>
+		<p class='text-sm uppercase tracking-[0.3em] text-muted'>Work</p>
+		<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-4'>
+			Selected projects
+		</h1>
+		<p class='text-muted mb-12 max-w-2xl'>
 			A collection of my work, including client projects and personal
 			experiments.
 		</p>
@@ -61,7 +64,7 @@ const schema = {
 					sortedProjects.map((project) => (
 						<a
 							href={`/projects/${project.slug}`}
-							class='group relative bg-white/80 dark:bg-gray-800/80 rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300'
+							class='group relative bg-surface/70 rounded-2xl overflow-hidden border border-border/70 hover:border-accent/60 transition-all duration-300'
 						>
 							<div class='relative aspect-video overflow-hidden'>
 								<Image
@@ -71,26 +74,26 @@ const schema = {
 									alt={project.data.title}
 									class='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
 								/>
-								<div class='absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
+								<div class='absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
 							</div>
 
 							<div class='p-6'>
-								<h2 class='text-xl font-semibold mb-2 group-hover:text-modern-purple dark:group-hover:text-modern-cyan transition-colors'>
+								<h2 class='text-xl font-semibold mb-2 group-hover:text-ink transition-colors'>
 									{project.data.title}
 								</h2>
 
-								<p class='text-gray-600 dark:text-gray-300 mb-4 line-clamp-2'>
+								<p class='text-muted mb-4 line-clamp-2'>
 									{project.data.description}
 								</p>
 
 								<div class='flex flex-wrap gap-2'>
 									{project.data.tech.slice(0, 3).map((tech) => (
-										<span class='px-3 py-1 rounded-md text-sm bg-modern-purple/10 dark:bg-modern-purple/20 text-modern-purple dark:text-modern-cyan'>
+										<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
 											{tech}
 										</span>
 									))}
 									{project.data.tech.length > 3 && (
-										<span class='px-3 py-1 rounded-md text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300'>
+										<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
 											+{project.data.tech.length - 3} more
 										</span>
 									)}
@@ -100,7 +103,7 @@ const schema = {
 					))
 				) : (
 					<div class='col-span-full text-center py-12'>
-						<p class='text-gray-600 dark:text-gray-400'>No projects found.</p>
+						<p class='text-muted'>No projects found.</p>
 					</div>
 				)
 			}

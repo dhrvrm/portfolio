@@ -6,8 +6,15 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter Variable', 'sans-serif'],
+        display: ['Space Grotesk Variable', 'Inter Variable', 'sans-serif'],
       },
       colors: {
+        ink: 'rgb(var(--color-ink) / <alpha-value>)',
+        muted: 'rgb(var(--color-muted) / <alpha-value>)',
+        surface: 'rgb(var(--color-surface) / <alpha-value>)',
+        border: 'rgb(var(--color-border) / <alpha-value>)',
+        accent: 'rgb(var(--color-accent) / <alpha-value>)',
+        accentStrong: 'rgb(var(--color-accent-strong) / <alpha-value>)',
         primary: {
           50: '#f0fdf4',
           100: '#dcfce7',

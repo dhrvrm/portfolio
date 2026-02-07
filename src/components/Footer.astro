@@ -3,9 +3,10 @@ const currentYear = new Date().getFullYear();
 
 const navItems = [
 	{ href: '/', text: 'Home' },
+	{ href: '/projects', text: 'Work' },
 	{ href: '/experience', text: 'Experience' },
-	{ href: '/projects', text: 'Projects' },
-	{ href: '/blog', text: 'Blog' },
+	{ href: '/activities', text: 'Activities' },
+	{ href: '/blog', text: 'Writing' },
 	{ href: '/contact', text: 'Contact' },
 ];
 
@@ -41,12 +42,12 @@ const socialLinks = [
 ];
 ---
 
-<footer class='bg-white dark:bg-gray-900 py-8 mt-16'>
+<footer class='py-12 mt-20 border-t border-border/70'>
 	<div class='container mx-auto px-6'>
 		<div class='grid grid-cols-1 md:grid-cols-3 gap-8 items-center'>
 			{/* Copyright */}
 			<div>
-				<p class='text-gray-600 dark:text-gray-400'>
+				<p class='text-sm text-muted'>
 					© {currentYear} Dhruv Verma. All rights reserved.
 				</p>
 			</div>
@@ -60,7 +61,7 @@ const socialLinks = [
 								<li>
 									<a
 										href={item.href}
-										class='text-gray-600 dark:text-gray-400 hover:text-modern-purple dark:hover:text-modern-purple transition-colors'
+									class='text-sm text-muted hover:text-ink transition-colors'
 									>
 										{item.text}
 									</a>
@@ -72,14 +73,14 @@ const socialLinks = [
 			</div>
 
 			{/* Social Links */}
-			<div class='flex gap-6 justify-center md:justify-end'>
+			<div class='flex gap-5 justify-center md:justify-end'>
 				{
 					socialLinks.map((link) => (
 						<a
 							href={link.url}
 							target='_blank'
 							rel='noopener noreferrer'
-							class='text-gray-600 dark:text-gray-400 hover:text-modern-purple dark:hover:text-modern-purple transition-colors'
+							class='text-muted hover:text-ink transition-colors'
 							aria-label={link.name}
 						>
 							<Fragment set:html={link.icon} />

@@ -3,47 +3,280 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title='Dhruv Verma - Frontend Developer'>
-	<section class='min-h-[calc(100vh-4rem)] flex items-center'>
-		<div class='container mx-auto px-6'>
-			<div class='max-w-3xl'>
-				<h1 class='text-5xl md:text-6xl font-bold mb-6'>
-					Fullstack Developer crafting beautiful <span
-						class='bg-gradient-to-r from-modern-purple to-modern-cyan bg-clip-text text-transparent'
-						>web experiences</span
+	<section class='min-h-[calc(100vh-6rem)] flex items-center'>
+		<div class='container mx-auto py-12'>
+			<div class='grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center'>
+				<div class='max-w-[560px] space-y-7'>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>
+						Software engineer • builder • traveler
+					</p>
+					<h1 class='text-4xl md:text-6xl lg:text-6xl font-semibold font-display tracking-tight'>
+						Engineering thoughtful software while living a curious, human life.
+					</h1>
+					<p class='text-lg text-muted'>
+						I build reliable systems, learn from the road, and collaborate with
+						people and organizations doing meaningful work.
+					</p>
+					<div class='flex flex-wrap gap-4'>
+						<a
+							href='/projects'
+							class='inline-flex items-center justify-center px-6 py-3 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
+						>
+							View work
+						</a>
+						<a
+							href='/contact'
+							class='inline-flex items-center justify-center px-6 py-3 rounded-xl border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors'
+						>
+							Work together
+						</a>
+					</div>
+				</div>
+				<div class='hero-media relative justify-self-end'>
+					<img
+						src='/og-image.png'
+						alt='Portrait of Dhruv Verma'
+						class='hero-image inverted w-full h-[420px] md:h-[520px] object-cover rounded-[var(--radius-xl)]'
+						loading='eager'
+						decoding='async'
+					/>
+					<svg
+						class='hero-reveal'
+						viewBox='0 0 1000 1200'
+						preserveAspectRatio='xMidYMid slice'
+						aria-hidden='true'
 					>
-				</h1>
-				<p class='text-xl text-gray-600 dark:text-gray-300 mb-8'>
-					Specializing in React.js, Next.js & Web Animations. Building
-					performant and aesthetic websites and webapps that users love.
-				</p>
-				<div class='flex gap-4'>
-					<a
-						href='/projects'
-						class='group relative px-8 py-4 rounded-2xl overflow-hidden'
-					>
-						<div
-							class='absolute inset-0 bg-gradient-to-r from-modern-purple to-modern-cyan opacity-90 group-hover:opacity-100 transition-opacity'
-						>
-						</div>
-						<span class='relative z-10 text-white font-medium'
-							>View Projects</span
-						>
-					</a>
-					<a
-						href='/contact'
-						class='group relative px-8 py-4 rounded-2xl overflow-hidden'
-					>
-						<div
-							class='absolute inset-0 bg-gradient-to-r from-modern-purple/10 to-modern-cyan/10 dark:from-modern-purple/20 dark:to-modern-cyan/20 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left'
-						>
-						</div>
-						<span
-							class='relative z-10 bg-gradient-to-r from-modern-purple to-modern-cyan bg-clip-text text-transparent font-medium'
-							>Contact Me</span
-						>
-					</a>
+						<defs>
+							<filter id='gooey'>
+								<feGaussianBlur in='SourceGraphic' stdDeviation='18' result='blur' />
+								<feColorMatrix
+									in='blur'
+									mode='matrix'
+									values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -7'
+									result='goo'
+								/>
+								<feComposite in='SourceGraphic' in2='goo' operator='atop' />
+							</filter>
+							<mask id='reveal-mask'>
+								<rect width='100%' height='100%' fill='black' />
+								<g filter='url(#gooey)'>
+									<circle id='blob-main' cx='600' cy='520' r='140' fill='white' />
+									<circle id='blob-trail-1' cx='560' cy='540' r='90' fill='white' />
+									<circle id='blob-trail-2' cx='520' cy='560' r='70' fill='white' />
+								</g>
+							</mask>
+						</defs>
+						<image
+							href='/og-image.png'
+							x='0'
+							y='0'
+							width='100%'
+							height='100%'
+							preserveAspectRatio='xMidYMid slice'
+							mask='url(#reveal-mask)'
+						/>
+					</svg>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class='py-16 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<div class='grid md:grid-cols-3 gap-6'>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Engineering</p>
+					<h3 class='studio-title'>Software that lasts</h3>
+					<p class='studio-body'>
+						Reliable services, clean architecture, and sustainable shipping.
+					</p>
+				</div>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Life & travel</p>
+					<h3 class='studio-title'>Learning in motion</h3>
+					<p class='studio-body'>
+						Travel fuels my perspective on users, culture, and clarity.
+					</p>
+				</div>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Community</p>
+					<h3 class='studio-title'>Helping teams grow</h3>
+					<p class='studio-body'>
+						Mentoring, collaboration, and support for mission‑driven work.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section class='py-16 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
+				<h2 class='text-2xl md:text-3xl font-semibold font-display'>
+					Studio highlights
+				</h2>
+				<a href='/activities' class='text-sm font-semibold text-accent'>
+					View all activities →
+				</a>
+			</div>
+			<div class='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Organizations</p>
+					<h3 class='studio-title'>Impact partnerships</h3>
+					<p class='studio-body'>
+						Supporting teams building real‑world change with engineering.
+					</p>
+				</div>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Mentorship</p>
+					<h3 class='studio-title'>People first</h3>
+					<p class='studio-body'>
+						Guidance for builders, founders, and student communities.
+					</p>
+				</div>
+				<div class='studio-card'>
+					<p class='studio-eyebrow'>Travel & stories</p>
+					<h3 class='studio-title'>Human narratives</h3>
+					<p class='studio-body'>
+						Sharing lessons from places, people, and projects.
+					</p>
 				</div>
 			</div>
 		</div>
 	</section>
 </Layout>
+
+<script>
+	document.addEventListener('astro:page-load', () => {
+		const media = document.querySelector('.hero-media');
+		const svg = media?.querySelector('.hero-reveal');
+		if (!media || !svg) return;
+
+		const prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)'
+		).matches;
+		const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+		if (prefersReducedMotion || isCoarse) return;
+
+		const main = svg.querySelector('#blob-main');
+		const trail1 = svg.querySelector('#blob-trail-1');
+		const trail2 = svg.querySelector('#blob-trail-2');
+		if (!main || !trail1 || !trail2) return;
+
+		const viewBox = svg.viewBox.baseVal;
+		const state = {
+			targetX: 600,
+			targetY: 520,
+			mainX: 600,
+			mainY: 520,
+			t1X: 560,
+			t1Y: 540,
+			t2X: 520,
+			t2Y: 560,
+		};
+
+		const setTargetsFromEvent = (event) => {
+			const bounds = svg.getBoundingClientRect();
+			const x = ((event.clientX - bounds.left) / bounds.width) * viewBox.width;
+			const y = ((event.clientY - bounds.top) / bounds.height) * viewBox.height;
+			state.targetX = Math.max(0, Math.min(viewBox.width, x));
+			state.targetY = Math.max(0, Math.min(viewBox.height, y));
+		};
+
+		const animate = () => {
+			state.mainX += (state.targetX - state.mainX) * 0.12;
+			state.mainY += (state.targetY - state.mainY) * 0.12;
+			state.t1X += (state.mainX - state.t1X) * 0.1;
+			state.t1Y += (state.mainY - state.t1Y) * 0.1;
+			state.t2X += (state.t1X - state.t2X) * 0.08;
+			state.t2Y += (state.t1Y - state.t2Y) * 0.08;
+
+			main.setAttribute('cx', state.mainX);
+			main.setAttribute('cy', state.mainY);
+			trail1.setAttribute('cx', state.t1X);
+			trail1.setAttribute('cy', state.t1Y);
+			trail2.setAttribute('cx', state.t2X);
+			trail2.setAttribute('cy', state.t2Y);
+
+			requestAnimationFrame(animate);
+		};
+
+		media.addEventListener('mousemove', setTargetsFromEvent);
+		media.addEventListener('mouseenter', setTargetsFromEvent);
+		media.addEventListener('mouseleave', () => {
+			state.targetX = 600;
+			state.targetY = 520;
+		});
+
+		requestAnimationFrame(animate);
+	});
+</script>
+
+<style>
+	.hero-media {
+		border-radius: var(--radius-xl);
+		overflow: hidden;
+		box-shadow: var(--shadow-soft);
+		position: relative;
+	}
+
+	.hero-image.inverted {
+		filter: invert(1) grayscale(0.2);
+	}
+
+	.hero-reveal {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		pointer-events: none;
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.hero-media:hover .hero-reveal {
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-reveal {
+			opacity: 1;
+		}
+	}
+
+	.studio-card {
+		padding: 2rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+		transition: transform 0.3s ease, border-color 0.3s ease,
+			box-shadow 0.3s ease;
+	}
+
+	.studio-card:hover {
+		transform: translateY(-4px);
+		border-color: rgb(var(--color-accent) / 0.5);
+		box-shadow: 0 28px 60px rgba(15, 23, 42, 0.12);
+	}
+
+	.studio-eyebrow {
+		text-transform: uppercase;
+		letter-spacing: 0.24em;
+		font-size: 0.7rem;
+		color: rgb(var(--color-muted));
+	}
+
+	.studio-title {
+		margin-top: 0.75rem;
+		font-size: 1.15rem;
+		font-weight: 600;
+	}
+
+	.studio-body {
+		margin-top: 0.75rem;
+		font-size: 0.95rem;
+		color: rgb(var(--color-muted));
+		line-height: 1.6;
+	}
+</style>

@@ -1,9 +1,9 @@
 ---
 ---
 <div class="cursor-container fixed inset-0 pointer-events-none z-[9999]">
-  <div id="cursor-outer" class="fixed w-8 h-8 rounded-full border-2 border-modern-indigo mix-blend-difference translate-x-[-50%] translate-y-[-50%]"></div>
-  <div id="cursor-inner" class="fixed w-2 h-2 rounded-full bg-modern-indigo mix-blend-difference translate-x-[-50%] translate-y-[-50%]"></div>
-  <div id="cursor-glow" class="fixed w-32 h-32 rounded-full bg-modern-indigo/30 blur-2xl translate-x-[-50%] translate-y-[-50%]"></div>
+  <div id="cursor-outer" class="fixed w-8 h-8 rounded-full border border-accent/60 translate-x-[-50%] translate-y-[-50%]"></div>
+  <div id="cursor-inner" class="fixed w-2 h-2 rounded-full bg-accent translate-x-[-50%] translate-y-[-50%]"></div>
+  <div id="cursor-glow" class="fixed w-32 h-32 rounded-full bg-accent/20 blur-2xl translate-x-[-50%] translate-y-[-50%]"></div>
 </div>
 
 <script>
@@ -16,8 +16,13 @@
     let mouseY = 0;
     let cursorX = 0;
     let cursorY = 0;
+    let listenersAttached = false;
 
     function initCursor() {
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+      if (prefersReducedMotion || isCoarse) return;
+
       cursor = document.querySelector('.cursor-container');
       cursorOuter = document.getElementById('cursor-outer');
       cursorInner = document.getElementById('cursor-inner');
@@ -26,6 +31,7 @@
       if (!cursor || !cursorOuter || !cursorInner || !cursorGlow) return;
 
       cursor.style.opacity = '1';
+      document.documentElement.classList.add('cursor-enabled');
       mouseX = window.innerWidth / 2;
       mouseY = window.innerHeight / 2;
       cursorX = mouseX;
@@ -38,23 +44,29 @@
 
       requestAnimationFrame(updateCursor);
 
-      const interactiveElements = document.querySelectorAll('a, button, .project-card');
-      interactiveElements.forEach(element => {
-        element.addEventListener('mouseenter', () => {
-          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.5)';
+      const interactiveSelector = 'a, button, [data-interactive="true"]';
+
+      if (!listenersAttached) {
+        document.addEventListener('pointerover', (event) => {
+          const target = event.target.closest(interactiveSelector);
+          if (!target) return;
+          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.4)';
           cursorInner.style.transform = 'translate(-50%, -50%) scale(0)';
-          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.5)';
-          cursorGlow.style.opacity = '0.5';
-          element.style.cursor = 'none';
+          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.35)';
+          cursorGlow.style.opacity = '0.45';
         });
 
-        element.addEventListener('mouseleave', () => {
+        document.addEventListener('pointerout', (event) => {
+          const target = event.target.closest(interactiveSelector);
+          if (!target) return;
           cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)';
           cursorInner.style.transform = 'translate(-50%, -50%) scale(1)';
           cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
-          cursorGlow.style.opacity = '0.3';
+          cursorGlow.style.opacity = '0.25';
         });
-      });
+
+        listenersAttached = true;
+      }
     }
 
     function updateCursor() {
@@ -95,6 +107,11 @@
     position: fixed;
   }
 
+  :global(html.cursor-enabled),
+  :global(html.cursor-enabled body) {
+    cursor: none;
+  }
+
   #cursor-outer {
     transition: transform 0.3s ease;
   }
@@ -104,7 +121,7 @@
   }
 
   #cursor-glow {
-    opacity: 0.3;
+    opacity: 0.25;
     transition: transform 0.3s ease, opacity 0.3s ease;
   }
 

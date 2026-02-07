@@ -1,0 +1,22 @@
+---
+description: Use markdown content collections for site data and handle empty states.
+alwaysApply: true
+---
+
+# Content Delivery Rule
+
+- Store user-facing content as markdown in `src/content/**` rather than hardcoding in Astro/TS.
+- Keep content in topic folders (e.g., `src/content/activities/events/`, `src/content/blog/`).
+- Load content with `getCollection()` and group/sort by frontmatter fields.
+- Always handle empty states and missing optional fields gracefully.
+
+## Example
+
+```astro
+---
+import { getCollection } from 'astro:content';
+const items = await getCollection('activities');
+const events = items.filter((item) => item.data.category === 'events');
+---
+{events.length ? events.map((item) => <p>{item.data.title}</p>) : <p>No events yet.</p>}
+```

@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('activities');
+const grouped = items.reduce(
+	(acc, item) => {
+		const category = item.data.category;
+		if (!acc[category]) acc[category] = [];
+		acc[category].push(item);
+		return acc;
+	},
+	{} as Record<string, typeof items>
+);
+
+const sortByFeatured = (list: typeof items) =>
+	[...list].sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+---
+
+<Layout title='Activities - Dhruv Verma'>
+	<section class='py-16'>
+		<div class='container mx-auto'>
+			<p class='text-sm uppercase tracking-[0.3em] text-muted'>Studio</p>
+			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4'>
+				Events, mentoring, and case work
+			</h1>
+			<p class='text-lg text-muted mt-4 max-w-2xl'>
+				A snapshot of the events I have covered, hackathons mentored, talks I
+				have given, and case studies I have led.
+			</p>
+		</div>
+	</section>
+
+	<section class='py-10 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<h2 class='text-2xl font-semibold font-display mb-6'>Events covered</h2>
+			<div class='grid md:grid-cols-2 gap-6'>
+				{(grouped.events?.length ? sortByFeatured(grouped.events) : []).map(
+					(item) => (
+						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
+							<h3 class='font-semibold'>{item.data.title}</h3>
+							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
+							<p class='text-xs text-muted mt-4'>
+								{item.data.role} · {item.data.location} · {item.data.date}
+							</p>
+						</div>
+					)
+				)}
+				{!grouped.events?.length && (
+					<p class='text-sm text-muted'>No events listed yet.</p>
+				)}
+			</div>
+		</div>
+	</section>
+
+	<section class='py-10 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<h2 class='text-2xl font-semibold font-display mb-6'>
+				Hackathons mentored or judged
+			</h2>
+			<div class='grid md:grid-cols-2 gap-6'>
+				{(grouped.hackathons?.length
+					? sortByFeatured(grouped.hackathons)
+					: []
+				).map((item) => (
+					<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
+						<h3 class='font-semibold'>{item.data.title}</h3>
+						<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
+						<p class='text-xs text-muted mt-4'>
+							{item.data.role} · {item.data.location} · {item.data.date}
+						</p>
+					</div>
+				))}
+				{!grouped.hackathons?.length && (
+					<p class='text-sm text-muted'>No hackathons listed yet.</p>
+				)}
+			</div>
+		</div>
+	</section>
+
+	<section class='py-10 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<h2 class='text-2xl font-semibold font-display mb-6'>Speaking</h2>
+			<div class='grid md:grid-cols-2 gap-6'>
+				{(grouped.speaking?.length ? sortByFeatured(grouped.speaking) : []).map(
+					(item) => (
+						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
+							<h3 class='font-semibold'>{item.data.title}</h3>
+							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
+							<p class='text-xs text-muted mt-4'>
+								{item.data.role} · {item.data.location} · {item.data.date}
+							</p>
+						</div>
+					)
+				)}
+				{!grouped.speaking?.length && (
+					<p class='text-sm text-muted'>No talks listed yet.</p>
+				)}
+			</div>
+		</div>
+	</section>
+
+	<section class='py-10 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<h2 class='text-2xl font-semibold font-display mb-6'>Awards</h2>
+			<div class='grid md:grid-cols-2 gap-6'>
+				{(grouped.awards?.length ? sortByFeatured(grouped.awards) : []).map(
+					(item) => (
+						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
+							<h3 class='font-semibold'>{item.data.title}</h3>
+							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
+							<p class='text-xs text-muted mt-4'>
+								{item.data.role} · {item.data.location} · {item.data.date}
+							</p>
+						</div>
+					)
+				)}
+				{!grouped.awards?.length && (
+					<p class='text-sm text-muted'>No awards listed yet.</p>
+				)}
+			</div>
+		</div>
+	</section>
+
+	<section class='py-10 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<h2 class='text-2xl font-semibold font-display mb-6'>Case studies</h2>
+			<div class='grid md:grid-cols-2 gap-6'>
+				{(grouped['case-studies']?.length
+					? sortByFeatured(grouped['case-studies'])
+					: []
+				).map((item) => (
+					<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
+						<h3 class='font-semibold'>{item.data.title}</h3>
+						<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
+						<p class='text-xs text-muted mt-4'>
+							{item.data.role} · {item.data.location} · {item.data.date}
+						</p>
+					</div>
+				))}
+				{!grouped['case-studies']?.length && (
+					<p class='text-sm text-muted'>No case studies listed yet.</p>
+				)}
+			</div>
+		</div>
+	</section>
+</Layout>

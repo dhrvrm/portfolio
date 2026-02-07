@@ -1,0 +1,20 @@
+---
+description: Optimize planning and execution for large tasks with clear scope and checklists.
+alwaysApply: true
+---
+
+# Planning Optimizer
+
+- Define scope, goals, non-goals, and success metrics before edits.
+- Break work into phases with checklists and dependencies.
+- Track risks, edge cases, and validation steps early.
+- Execute in small batches, verify, and summarize changes.
+
+## Example structure
+
+```markdown
+## Phase N — Title
+### Checklist
+- [ ] Task 1
+- [ ] Task 2
+```

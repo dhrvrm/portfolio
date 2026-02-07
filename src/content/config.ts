@@ -35,7 +35,26 @@ const blog = defineCollection({
 	}),
 });
 
+const activities = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		category: z.enum([
+			'events',
+			'hackathons',
+			'speaking',
+			'awards',
+			'case-studies',
+		]),
+		role: z.string(),
+		date: z.string(),
+		location: z.string(),
+		summary: z.string(),
+		featured: z.boolean().default(false),
+	}),
+});
+
 export const collections = {
 	projects,
 	blog,
+	activities,
 };

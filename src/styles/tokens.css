@@ -1,0 +1,41 @@
+:root {
+  --color-bg: 248 250 252;
+  --color-surface: 255 255 255;
+  --color-ink: 15 23 42;
+  --color-muted: 71 85 105;
+  --color-border: 226 232 240;
+  --color-accent: 37 99 235;
+  --color-accent-strong: 29 78 216;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow-soft: 0 16px 40px rgba(15, 23, 42, 0.08);
+}
+
+:root.dark {
+  --color-bg: 10 12 16;
+  --color-surface: 15 23 42;
+  --color-ink: 226 232 240;
+  --color-muted: 148 163 184;
+  --color-border: 51 65 85;
+  --color-accent: 56 189 248;
+  --color-accent-strong: 14 116 144;
+  --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.5);
+}
+
+html {
+  color-scheme: light dark;
+}
+
+body {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-ink));
+}
+
+::selection {
+  background: rgb(var(--color-accent) / 0.2);
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--color-accent));
+  outline-offset: 3px;
+}

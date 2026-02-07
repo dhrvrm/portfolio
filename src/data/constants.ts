@@ -1,9 +1,9 @@
 export const AUTHOR = {
-	name: 'Dhruv',
+	name: 'Dhruv Verma',
 	avatar: 'https://avatars.githubusercontent.com/u/48381412?v=4',
-	bio: 'Frontend Developer specializing in React',
+	bio: 'Software engineer focused on people, systems, and impact',
 	shortBio:
-		'Dynamic Frontend Developer specializing in React.js and Next.js. Creating engaging web experiences with modern technologies and beautiful animations. Always up for learning.',
+		'Software engineer building reliable products, mentoring builders, and learning through travel and collaboration.',
 	social: {
 		twitter: 'https://x.com/verma1300',
 		linkedin: 'https://www.linkedin.com/in/dhruvv/',
