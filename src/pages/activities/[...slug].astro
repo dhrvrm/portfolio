@@ -1,0 +1,137 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ImageGallery from '../../components/ImageGallery.astro';
+import StudioBadge from '../../components/StudioBadge.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+	const items = await getCollection('activities');
+	return items.map((item) => ({
+		params: { slug: item.slug },
+		props: { item },
+	}));
+}
+
+const { item } = Astro.props;
+const { Content } = await item.render();
+const images = item.data.images ?? [];
+
+const categoryMap: Record<string, { href: string; label: string }> = {
+	events: { href: '/activities/events', label: 'Events' },
+	hackathons: { href: '/activities/hackathons', label: 'Hackathons' },
+	speaking: { href: '/activities/speaking', label: 'Speaking' },
+	awards: { href: '/activities/awards', label: 'Recognition' },
+	travel: { href: '/activities/travel', label: 'Travel' },
+};
+const back = categoryMap[item.data.category] ?? {
+	href: '/activities',
+	label: 'Activities',
+};
+
+const formattedDate = item.data.date.toLocaleDateString('en-US', {
+	year: 'numeric',
+	month: 'short',
+	day: 'numeric',
+});
+
+const hackathonLabel: Record<string, string> = {
+	participated: 'Participated',
+	mentored: 'Mentored',
+	judged: 'Judged',
+};
+const showHackathonBadge = item.data.category === 'hackathons' && item.data.hackathonType;
+const hackathonBadgeLabel = showHackathonBadge ? hackathonLabel[item.data.hackathonType!] : '';
+const hackathonBadgeVariant = showHackathonBadge ? item.data.hackathonType! : 'default';
+
+const allInCategory = (await getCollection('activities'))
+	.filter((i) => i.data.category === item.data.category)
+	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const idx = allInCategory.findIndex((i) => i.slug === item.slug);
+const prevItem = idx > 0 ? allInCategory[idx - 1] : null;
+const nextItem =
+	idx >= 0 && idx < allInCategory.length - 1 ? allInCategory[idx + 1] : null;
+---
+
+<Layout title={`${item.data.title} - Dhruv Verma`}>
+	<section class='py-16'>
+		<div class='container mx-auto'>
+			<a
+				href={back.href}
+				class='text-sm text-muted hover:text-ink transition-colors'
+			>
+				&larr; Back to {back.label}
+			</a>
+			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4'>
+				{item.data.title}
+			</h1>
+			{showHackathonBadge && (
+				<div class='mt-3'>
+					<StudioBadge label={hackathonBadgeLabel} variant={hackathonBadgeVariant} />
+				</div>
+			)}
+			<p class='text-lg text-muted mt-3 max-w-2xl'>
+				{item.data.summary}
+			</p>
+			<p class='text-sm text-muted mt-4'>
+				{item.data.role} &middot; {item.data.location} &middot; {formattedDate}
+			</p>
+		</div>
+	</section>
+
+	{
+		(images.length > 0 || item.data.video) && (
+			<section class='pb-10'>
+				<div class='container mx-auto'>
+					{item.data.video && (
+						<video
+							class='rounded-2xl border border-border/70 w-full mb-6'
+							src={item.data.video}
+							controls
+							preload='metadata'
+							poster={images[0]}
+						/>
+					)}
+					{images.length > 0 && (
+						<ImageGallery images={images.map((src) => ({ src }))} />
+					)}
+				</div>
+			</section>
+		)
+	}
+
+	<section class='pb-16 border-t border-border/70'>
+		<div class='container mx-auto pt-10 prose dark:prose-invert max-w-3xl'>
+			<Content />
+		</div>
+
+		{
+			(prevItem || nextItem) && (
+				<nav
+					class='container mx-auto pt-8 flex justify-between gap-4'
+					aria-label='Activity navigation'
+				>
+					{prevItem ? (
+						<a
+							href={`/activities/${prevItem.slug}`}
+							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors'
+						>
+							&larr; {prevItem.data.title}
+						</a>
+					) : (
+						<span />
+					)}
+					{nextItem ? (
+						<a
+							href={`/activities/${nextItem.slug}`}
+							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors text-right'
+						>
+							{nextItem.data.title} &rarr;
+						</a>
+					) : (
+						<span />
+					)}
+				</nav>
+			)
+		}
+	</section>
+</Layout>

@@ -8,7 +8,7 @@ interface Props {
 const { href, title, body } = Astro.props;
 ---
 
-<li class="link-card">
+<li class='link-card'>
 	<a href={href}>
 		<h2>
 			{title}
@@ -23,17 +23,19 @@ const { href, title, body } = Astro.props;
 	.link-card {
 		list-style: none;
 		display: flex;
-		border-radius: 16px;
+		border-radius: var(--radius-xl);
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background-color: rgb(var(--color-surface) / 0.7);
-		transition: border-color 0.3s ease, transform 0.3s ease;
+		transition:
+			border-color 0.3s ease,
+			transform 0.3s ease;
 	}
 	.link-card > a {
 		width: 100%;
 		text-decoration: none;
 		line-height: 1.5;
 		padding: 1.5rem;
-		border-radius: 16px;
+		border-radius: var(--radius-xl);
 		color: rgb(var(--color-ink));
 	}
 	h2 {

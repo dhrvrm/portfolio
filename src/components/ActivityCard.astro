@@ -1,0 +1,197 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import StudioBadge from './StudioBadge.astro';
+
+interface Props {
+	item: CollectionEntry<'activities'>;
+	showNarrative?: boolean;
+	variant?: 'default' | 'asymmetric';
+}
+
+const { item, showNarrative = false, variant = 'default' } = Astro.props;
+const media = item.data.images ?? [];
+const labelMap: Record<string, string> = {
+	events: 'Event',
+	hackathons: 'Hackathon',
+	speaking: 'Speaking',
+	awards: 'Award',
+	travel: 'Travel',
+};
+const hackathonLabel: Record<string, string> = {
+	participated: 'Participated',
+	mentored: 'Mentored',
+	judged: 'Judged',
+};
+const label =
+	item.data.category === 'hackathons' && item.data.hackathonType
+		? hackathonLabel[item.data.hackathonType]
+		: (labelMap[item.data.category] ?? 'Activity');
+const badgeVariant =
+	item.data.category === 'hackathons' && item.data.hackathonType
+		? item.data.hackathonType
+		: 'default';
+const href = `/activities/${item.slug}`;
+const cardClass = [
+	'activity-card',
+	variant === 'asymmetric' ? 'activity-card--asymmetric' : '',
+	`activity-card--${item.data.category}`,
+]
+	.filter(Boolean)
+	.join(' ');
+---
+
+<a class={cardClass} href={href}>
+	{
+		(media.length > 0 || item.data.video) && (
+			<div class='activity-card__media'>
+				{item.data.video ? (
+					<video
+						class='activity-card__video'
+						src={item.data.video}
+						poster={media[0]}
+						controls
+						preload='metadata'
+					/>
+				) : (
+					<img
+						class='activity-card__image'
+						src={media[0]}
+						alt=''
+						loading='lazy'
+					/>
+				)}
+				{media.length > 1 && (
+					<div class='activity-card__thumbs'>
+						{media.slice(1, 3).map((image) => (
+							<img src={image} alt='' loading='lazy' />
+						))}
+					</div>
+				)}
+			</div>
+		)
+	}
+	<div class='activity-card__body'>
+		<div class='activity-card__meta'>
+			<StudioBadge label={label} variant={badgeVariant} />
+			{item.data.video && <span class='activity-card__tag'>Video</span>}
+		</div>
+		<h3 class='font-semibold'>{item.data.title}</h3>
+	<p class='text-sm text-muted mt-2 line-clamp-2'>{item.data.summary}</p>
+	{
+		showNarrative && item.data.narrative && (
+			<blockquote class='mt-4 pl-4 border-l-2 border-accent/50 text-sm text-muted italic'>
+				{item.data.narrative}
+			</blockquote>
+		)
+	}
+	<p class='text-xs text-muted mt-4'>
+		{item.data.role} · {item.data.location} · {
+			item.data.date.toLocaleDateString('en-US', {
+				year: 'numeric',
+				month: 'short',
+				day: 'numeric',
+			})
+		}
+	</p>
+	</div>
+</a>
+
+<style>
+	.activity-card {
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		padding: 0;
+		transition:
+			transform 0.3s ease,
+			border-color 0.3s ease;
+		position: relative;
+		overflow: hidden;
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.activity-card:hover {
+		transform: translateY(-4px);
+		border-color: rgb(var(--color-accent) / 0.5);
+	}
+
+	.activity-card--asymmetric {
+		border-radius: var(--radius-lg) var(--radius-xl) var(--radius-lg)
+			var(--radius-xl);
+	}
+
+	.activity-card__body {
+		padding: 1.5rem;
+	}
+
+	.activity-card__media {
+		border-radius: 0;
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.2);
+		position: relative;
+	}
+
+	.activity-card__image,
+	.activity-card__video {
+		width: 100%;
+		height: 180px;
+		object-fit: cover;
+		display: block;
+	}
+
+	.activity-card__thumbs {
+		position: absolute;
+		right: 12px;
+		bottom: 12px;
+		display: grid;
+		gap: 6px;
+	}
+
+	.activity-card__thumbs img {
+		width: 46px;
+		height: 46px;
+		border-radius: var(--radius-md);
+		object-fit: cover;
+		border: 1px solid rgb(var(--color-border) / 0.6);
+		background: rgb(var(--color-surface));
+	}
+
+	.activity-card__meta {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.activity-card__tag {
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: rgb(var(--color-muted));
+		border: 1px dashed rgb(var(--color-border));
+		padding: 0.15rem 0.5rem;
+		border-radius: 999px;
+	}
+
+	.activity-card--events {
+		border-top: 3px solid rgb(var(--color-accent) / 0.6);
+	}
+
+	.activity-card--hackathons {
+		border-top: 3px solid rgb(var(--color-ink) / 0.3);
+	}
+
+	.activity-card--speaking {
+		border-top: 3px solid rgb(var(--color-accent-strong) / 0.7);
+	}
+
+	.activity-card--awards {
+		border-top: 3px solid rgb(var(--color-accent) / 0.8);
+	}
+
+	.activity-card--travel {
+		border-top: 3px solid rgb(var(--color-muted) / 0.5);
+	}
+</style>

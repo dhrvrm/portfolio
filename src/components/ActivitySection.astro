@@ -1,0 +1,127 @@
+---
+interface Props {
+	title: string;
+	description: string;
+	href: string;
+	/** 'left' = text left / media right, 'right' = text right / media left */
+	align: 'left' | 'right';
+	image?: string | null;
+}
+
+const { title, description, href, align, image } = Astro.props;
+---
+
+<section class={`activity-section activity-section--${align}`}>
+	<div class='activity-section__inner'>
+		<div class='activity-section__text'>
+			<h2 class='activity-section__title'>{title}</h2>
+			<p class='activity-section__desc'>{description}</p>
+			<a href={href} class='activity-section__cta'>
+				View all
+				<svg width='14' height='14' viewBox='0 0 16 16' fill='none' aria-hidden='true'>
+					<path d='M6 3l5 5-5 5' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' />
+				</svg>
+			</a>
+		</div>
+		{image && (
+			<div class='activity-section__media'>
+				<img src={image} alt='' loading='lazy' />
+			</div>
+		)}
+	</div>
+</section>
+
+<style>
+	.activity-section {
+		padding: 4rem 0;
+		border-top: 1px solid rgb(var(--color-border) / 0.5);
+	}
+
+	.activity-section__inner {
+		max-width: 72rem;
+		margin: 0;
+		padding: 0 1.5rem;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2rem;
+		align-items: center;
+	}
+
+	@media (min-width: 768px) {
+		.activity-section__inner {
+			grid-template-columns: 1fr 1fr;
+			gap: 3rem 4rem;
+		}
+		.activity-section--right .activity-section__inner {
+			direction: rtl;
+		}
+		.activity-section--right .activity-section__text {
+			direction: ltr;
+			text-align: right;
+		}
+		.activity-section--right .activity-section__cta {
+			justify-self: end;
+		}
+	}
+
+	.activity-section__title {
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: 1.75rem;
+		font-weight: 600;
+		margin: 0 0 0.75rem;
+		letter-spacing: -0.02em;
+	}
+
+	.activity-section__desc {
+		font-size: 1rem;
+		line-height: 1.65;
+		color: rgb(var(--color-muted));
+		margin: 0 0 1.25rem;
+		max-width: 36ch;
+	}
+
+	.activity-section--right .activity-section__desc {
+		margin-left: auto;
+	}
+
+	.activity-section__cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: rgb(var(--color-accent));
+		text-decoration: none;
+		transition: gap 0.2s ease, color 0.2s ease;
+	}
+
+	.activity-section__cta:hover {
+		gap: 0.5rem;
+		color: rgb(var(--color-accent-strong));
+	}
+
+	.activity-section__media {
+		border-radius: var(--radius-xl);
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.3);
+		aspect-ratio: 4 / 3;
+	}
+
+	.activity-section__media img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		transition: transform 0.4s ease;
+	}
+
+	.activity-section__media:hover img {
+		transform: scale(1.03);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.activity-section__media img {
+			transition: none;
+		}
+	}
+</style>

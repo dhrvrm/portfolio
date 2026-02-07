@@ -1,0 +1,178 @@
+---
+interface Props {
+	title: string;
+	/** Optional link to full page (e.g. /activities/awards) */
+	href?: string;
+	images: string[];
+	/** Unique id for ScrollTrigger and inner track */
+	id: string;
+}
+
+const { title, href, images, id } = Astro.props;
+const deck = images.length ? images.flatMap((src) => [{ src }]) : [];
+const trackCount = Math.max(deck.length, 8);
+const trackImages = deck.length
+	? Array.from({ length: trackCount }, (_, i) => deck[i % deck.length])
+	: [];
+---
+
+<section class='pinned-gallery' id={id} data-pinned-gallery data-gallery-id={id}>
+	<div class='pinned-gallery__pin' data-pin-target>
+		<div class='pinned-gallery__head'>
+			<h2 class='pinned-gallery__title'>{title}</h2>
+			{href && (
+				<a href={href} class='pinned-gallery__link'>
+					View all
+					<svg width='14' height='14' viewBox='0 0 16 16' fill='none' aria-hidden='true'>
+						<path d='M6 3l5 5-5 5' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' />
+					</svg>
+				</a>
+			)}
+		</div>
+		<div class='pinned-gallery__stage'>
+			<div class='pinned-gallery__track' data-gallery-track>
+				{trackImages.map((item) => (
+					<div class='pinned-gallery__card'>
+						<img src={item.src} alt='' loading='lazy' draggable='false' />
+					</div>
+				))}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.pinned-gallery {
+		padding: 0;
+		margin: 0;
+	}
+
+	.pinned-gallery__pin {
+		height: 72vh;
+		min-height: 420px;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		padding: 1.5rem 0 2rem;
+		background: rgb(var(--color-bg));
+		box-sizing: border-box;
+	}
+
+	.pinned-gallery__head {
+		max-width: 72rem;
+		margin: 0 0 1.25rem;
+		padding: 0 1.5rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+	}
+
+	.pinned-gallery__title {
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0;
+		letter-spacing: -0.02em;
+	}
+
+	.pinned-gallery__link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.9rem;
+		font-weight: 500;
+		color: rgb(var(--color-accent));
+		text-decoration: none;
+		transition: gap 0.2s ease;
+	}
+
+	.pinned-gallery__link:hover {
+		gap: 0.5rem;
+	}
+
+	.pinned-gallery__stage {
+		overflow: hidden;
+		display: flex;
+		align-items: center;
+		mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+		-webkit-mask-image: linear-gradient(90deg, transparent 0%, black 8%, black 92%, transparent 100%);
+	}
+
+	.pinned-gallery__track {
+		display: flex;
+		gap: 1.25rem;
+		padding: 0 2rem;
+		will-change: transform;
+	}
+
+	.pinned-gallery__card {
+		flex-shrink: 0;
+		width: clamp(160px, 22vw, 260px);
+		aspect-ratio: 4 / 5;
+		border-radius: var(--radius-lg);
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.4);
+		box-shadow: 0 8px 32px rgb(0 0 0 / 0.08);
+	}
+
+	.pinned-gallery__card img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	:root.dark .pinned-gallery__card {
+		box-shadow: 0 8px 32px rgb(0 0 0 / 0.35);
+	}
+</style>
+
+<script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	gsap.registerPlugin(ScrollTrigger);
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)'
+		).matches;
+		if (prefersReducedMotion) return;
+
+		const sections = document.querySelectorAll('[data-pinned-gallery]');
+		sections.forEach((section) => {
+			const pinTarget = section.querySelector('[data-pin-target]');
+			const track = section.querySelector('[data-gallery-track]');
+			if (!pinTarget || !track) return;
+
+			const trackWidth = track.scrollWidth;
+			const viewportWidth = window.innerWidth;
+			const maxX = -(trackWidth - viewportWidth + 80);
+
+				// Pin when section top hits 100px (below fixed header); shorter scroll so less gap to next section
+			const HEADER_OFFSET = 100;
+			ScrollTrigger.create({
+				trigger: pinTarget,
+				start: `top ${HEADER_OFFSET}px`,
+				end: '+=80%',
+				pin: true,
+				pinSpacing: true,
+			});
+
+			if (maxX < 0) {
+				gsap.to(track, {
+					x: maxX,
+					ease: 'none',
+					scrollTrigger: {
+						trigger: pinTarget,
+						start: `top ${HEADER_OFFSET}px`,
+						end: '+=80%',
+						scrub: 1.2,
+					},
+				});
+			}
+		});
+	});
+</script>

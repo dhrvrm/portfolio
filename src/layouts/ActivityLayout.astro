@@ -1,0 +1,120 @@
+---
+import Layout from './Layout.astro';
+import ActivityNav from '../components/ActivityNav.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+	title: string;
+	current?: string;
+}
+
+const { title, current } = Astro.props;
+
+const allActivities = await getCollection('activities');
+const counts = allActivities.reduce(
+	(acc, item) => {
+		acc[item.data.category] = (acc[item.data.category] || 0) + 1;
+		return acc;
+	},
+	{} as Record<string, number>,
+);
+
+const categories = [
+	{ slug: 'events', label: 'Events', count: counts.events || 0 },
+	{ slug: 'hackathons', label: 'Hackathons', count: counts.hackathons || 0 },
+	{ slug: 'speaking', label: 'Speaking', count: counts.speaking || 0 },
+	{ slug: 'awards', label: 'Recognition', count: counts.awards || 0 },
+	{ slug: 'travel', label: 'Travel', count: counts.travel || 0 },
+];
+
+const currentCategoryItems =
+	current && (counts[current] ?? 0) > 0
+		? allActivities
+				.filter((i) => i.data.category === current)
+				.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+				.map((i) => ({
+					slug: i.slug,
+					title: i.data.title,
+					date: i.data.date,
+				}))
+		: [];
+---
+
+<Layout title={title}>
+	<div class='activity-layout'>
+		<aside class='activity-layout__sidebar' aria-label='Activity navigation'>
+			<a href='/activities' class='activity-layout__back'>
+				<svg
+					width='16'
+					height='16'
+					viewBox='0 0 16 16'
+					fill='none'
+					aria-hidden='true'
+				>
+					<path
+						d='M10 3L5 8l5 5'
+						stroke='currentColor'
+						stroke-width='1.5'
+						stroke-linecap='round'
+						stroke-linejoin='round'></path>
+				</svg>
+				All activities
+			</a>
+			<ActivityNav categories={categories} current={current} currentCategoryItems={currentCategoryItems} />
+		</aside>
+		<div class='activity-layout__content'>
+			<slot />
+		</div>
+	</div>
+</Layout>
+
+<style>
+	.activity-layout {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.activity-layout__sidebar {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.activity-layout__back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.8rem;
+		color: rgb(var(--color-muted));
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.activity-layout__back:hover,
+	.activity-layout__back:focus-visible {
+		color: rgb(var(--color-ink));
+	}
+
+	.activity-layout__content {
+		flex: 1;
+		min-width: 0;
+	}
+
+	@media (min-width: 768px) {
+		.activity-layout {
+			flex-direction: row;
+			gap: 3rem;
+		}
+
+		.activity-layout__sidebar {
+			width: 200px;
+			flex-shrink: 0;
+			position: sticky;
+			top: 6rem;
+			align-self: flex-start;
+			max-height: calc(100vh - 8rem);
+			overflow-y: auto;
+		}
+	}
+</style>

@@ -38,18 +38,31 @@ const blog = defineCollection({
 const activities = defineCollection({
 	schema: z.object({
 		title: z.string(),
-		category: z.enum([
-			'events',
-			'hackathons',
-			'speaking',
-			'awards',
-			'case-studies',
-		]),
+		category: z.enum(['events', 'hackathons', 'speaking', 'awards', 'travel']),
 		role: z.string(),
-		date: z.string(),
+		date: z.coerce.date(),
 		location: z.string(),
 		summary: z.string(),
 		featured: z.boolean().default(false),
+		// Events: how was the event narrative
+		narrative: z.string().optional(),
+		// Hackathons: participated | mentored | judged
+		hackathonType: z.enum(['participated', 'mentored', 'judged']).optional(),
+		// Optional media gallery for cards/galleries
+		images: z.array(z.string()).optional(),
+		// Optional video (mp4/webm/url) for featured media
+		video: z.string().optional(),
+	}),
+});
+
+const experience = defineCollection({
+	schema: z.object({
+		title: z.string(),
+		company: z.string(),
+		startDate: z.string(),
+		endDate: z.string().optional(),
+		order: z.number(),
+		achievements: z.array(z.string()),
 	}),
 });
 
@@ -57,4 +70,5 @@ export const collections = {
 	projects,
 	blog,
 	activities,
+	experience,
 };

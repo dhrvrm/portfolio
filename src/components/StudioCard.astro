@@ -1,0 +1,152 @@
+---
+interface Props {
+	eyebrow?: string;
+	title: string;
+	body: string;
+	/** Short personality line (e.g. "One bag. Many time zones.") */
+	kicker?: string;
+	/** Decorative blob position: top-right, bottom-left, top-left */
+	decor?: 'blob-tr' | 'blob-bl' | 'blob-tl';
+	href?: string;
+	variant?: 'default' | 'asymmetric';
+}
+
+const { eyebrow, title, body, kicker, decor, href, variant = 'default' } = Astro.props;
+
+const baseClass =
+	variant === 'asymmetric'
+		? 'studio-card studio-card--asymmetric'
+		: 'studio-card';
+const decorClass = decor ? `studio-card--${decor}` : '';
+const Wrapper = href ? 'a' : 'div';
+const wrapperProps = href ? { href } : { tabindex: 0 };
+---
+
+<Wrapper
+	class={`${baseClass} ${decorClass}`.trim()}
+	{...wrapperProps}
+>
+	{decor && <span class='studio-card__blob' aria-hidden='true' />}
+	{eyebrow && <span class='studio-card__eyebrow'>{eyebrow}</span>}
+	<h3 class='studio-card__title'>{title}</h3>
+	<p class='studio-card__body'>{body}</p>
+	{kicker && <p class='studio-card__kicker'>{kicker}</p>}
+</Wrapper>
+
+<style>
+	.studio-card {
+		display: block;
+		position: relative;
+		overflow: hidden;
+		padding: 2rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+		transition: transform 0.3s ease, border-color 0.3s ease,
+			box-shadow 0.3s ease;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.studio-card:hover {
+		transform: translateY(-4px);
+		border-color: rgb(var(--color-accent) / 0.5);
+		box-shadow: 0 28px 60px rgba(15, 23, 42, 0.12);
+	}
+
+	.studio-card:focus-visible {
+		outline: 2px solid rgb(var(--color-accent));
+		outline-offset: 3px;
+	}
+
+	/* Decorative accent blob — transform only for performance */
+	.studio-card__blob {
+		position: absolute;
+		width: 140%;
+		height: 140%;
+		border-radius: 50%;
+		background: radial-gradient(
+			circle,
+			rgb(var(--color-accent) / 0.12) 0%,
+			transparent 65%
+		);
+		filter: blur(24px);
+		pointer-events: none;
+		transition: transform 0.4s ease;
+	}
+	.studio-card--blob-tr .studio-card__blob {
+		top: -40%;
+		right: -40%;
+	}
+	.studio-card--blob-bl .studio-card__blob {
+		bottom: -40%;
+		left: -40%;
+	}
+	.studio-card--blob-tl .studio-card__blob {
+		top: -40%;
+		left: -40%;
+	}
+	.studio-card:hover .studio-card__blob {
+		transform: scale(1.15);
+	}
+
+	.studio-card--asymmetric {
+		border-radius: var(--radius-xl) var(--radius-lg) var(--radius-xl)
+			var(--radius-lg);
+	}
+
+	:root.dark .studio-card {
+		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+	}
+
+	:root.dark .studio-card:hover {
+		box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.studio-card__blob {
+			transition: none;
+		}
+		.studio-card:hover .studio-card__blob {
+			transform: none;
+		}
+	}
+
+	.studio-card__eyebrow,
+	.studio-card__title,
+	.studio-card__body,
+	.studio-card__kicker {
+		position: relative;
+		z-index: 1;
+	}
+
+	.studio-card__eyebrow {
+		display: inline-block;
+		text-transform: uppercase;
+		letter-spacing: 0.24em;
+		font-size: 0.7rem;
+		color: rgb(var(--color-muted));
+	}
+
+	.studio-card__title {
+		margin-top: 0.75rem;
+		font-size: 1.15rem;
+		font-weight: 600;
+	}
+
+	.studio-card__body {
+		margin-top: 0.75rem;
+		font-size: 0.95rem;
+		color: rgb(var(--color-muted));
+		line-height: 1.6;
+	}
+
+	.studio-card__kicker {
+		margin-top: 1rem;
+		font-size: 0.8125rem;
+		font-weight: 500;
+		color: rgb(var(--color-accent));
+		line-height: 1.4;
+	}
+</style>

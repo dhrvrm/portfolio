@@ -1,0 +1,59 @@
+---
+import ActivityLayout from '../../layouts/ActivityLayout.astro';
+import ActivityCard from '../../components/ActivityCard.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('activities');
+const travel = items
+	.filter((i) => i.data.category === 'travel')
+	.sort((a, b) => {
+		if (b.data.featured !== a.data.featured)
+			return Number(b.data.featured) - Number(a.data.featured);
+		return b.data.date.getTime() - a.data.date.getTime();
+	});
+
+const groupByYear = (list: typeof travel) => {
+	const groups = list.reduce(
+		(acc, item) => {
+			const year = String(item.data.date.getFullYear());
+			if (!acc[year]) acc[year] = [];
+			acc[year].push(item);
+			return acc;
+		},
+		{} as Record<string, typeof travel>,
+	);
+	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
+};
+---
+
+<ActivityLayout title='Travel - Dhruv Verma' current='travel'>
+	<h1 class='text-2xl md:text-3xl font-semibold font-display mb-2'>Travel</h1>
+	<p class='text-muted mb-8'>
+		Places visited for work, conferences, and exploration.
+	</p>
+
+	{
+		travel.length ? (
+			<div class='space-y-10'>
+				{groupByYear(travel).map(([year, entries]) => (
+					<div>
+						<p class='text-xs uppercase tracking-[0.3em] text-muted mb-4'>
+							{year}
+						</p>
+						<div class='grid md:grid-cols-2 gap-6'>
+							{entries.map((item) => (
+								<ActivityCard
+									item={item}
+									showNarrative={true}
+									variant='asymmetric'
+								/>
+							))}
+						</div>
+					</div>
+				))}
+			</div>
+		) : (
+			<p class='text-sm text-muted'>No travel entries yet.</p>
+		)
+	}
+</ActivityLayout>

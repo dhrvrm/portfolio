@@ -2,18 +2,246 @@
 interface Props {
 	title: string;
 	company: string;
-	duration: string;
+	startDate: string;
+	endDate?: string;
 	achievements: string[];
+	isFirst?: boolean;
+	isLast?: boolean;
+	/** Unique id for aria-labelledby */
+	itemId?: string;
 }
 
-const { title, company, duration, achievements } = Astro.props;
+const {
+	title,
+	company,
+	startDate,
+	endDate,
+	achievements,
+	isFirst = false,
+	isLast = false,
+	itemId = 'exp-item',
+} = Astro.props;
+const isCurrent = !endDate;
+const duration = endDate
+	? `${startDate} – ${endDate}`
+	: `${startDate} – Present`;
+
+/** Parse "Jun 2019" -> "2019-06" for <time datetime> */
+function toISOMonth(dateStr: string): string | undefined {
+	const m = dateStr.match(
+		/^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s+(\d{4})$/i,
+	);
+	if (!m) return undefined;
+	const months: Record<string, string> = {
+		Jan: '01',
+		Feb: '02',
+		Mar: '03',
+		Apr: '04',
+		May: '05',
+		Jun: '06',
+		Jul: '07',
+		Aug: '08',
+		Sep: '09',
+		Oct: '10',
+		Nov: '11',
+		Dec: '12',
+	};
+	return `${m[2]}-${months[m[1]]}`;
+}
+const startDatetime = toISOMonth(startDate);
+const endDatetime = endDate ? toISOMonth(endDate) : undefined;
 ---
 
-<div class='experience-item border-l-2 border-accent/60 pl-6'>
-	<h2 class='text-xl md:text-2xl font-semibold'>{title}</h2>
-	<p class='text-sm text-muted mb-4'>{company} • {duration}</p>
-	<ul class='list-disc list-inside space-y-2 text-sm text-muted'>
-		{achievements.map((achievement) => <li>{achievement}</li>)}
-	</ul>
-</div>
+<li class:list={['tl-item', { 'tl-item--current': isCurrent }]}>
+	<div class='tl-item__track' aria-hidden='true'>
+		<div
+			class:list={[
+				'tl-item__line tl-item__line--top',
+				{ 'tl-item__line--hidden': isFirst },
+			]}
+		>
+		</div>
+		<div class:list={['tl-item__dot', { 'tl-item__dot--active': isCurrent }]}>
+		</div>
+		<div
+			class:list={[
+				'tl-item__line tl-item__line--bottom',
+				{ 'tl-item__line--hidden': isLast },
+			]}
+		>
+		</div>
+	</div>
 
+	<article
+		class='tl-item__card'
+		aria-labelledby={`tl-title-${itemId}`}
+		tabindex='0'
+	>
+		<p class='tl-item__eyebrow'>{company}</p>
+		<h3 id={`tl-title-${itemId}`} class='tl-item__title'>{title}</h3>
+		<span class='tl-item__duration'>
+			{
+				startDatetime ? (
+					<time datetime={startDatetime}>{startDate}</time>
+				) : (
+					<span>{startDate}</span>
+				)
+			}
+			{' – '}
+			{
+				endDatetime ? (
+					<time datetime={endDatetime}>{endDate}</time>
+				) : isCurrent ? (
+					<span>Present</span>
+				) : (
+					<span>{endDate ?? 'Present'}</span>
+				)
+			}
+		</span>
+		<ul class='tl-item__list'>
+			{achievements.map((a) => <li>{a}</li>)}
+		</ul>
+	</article>
+</li>
+
+<style>
+	.tl-item {
+		display: grid;
+		grid-template-columns: 28px 1fr;
+		gap: 1.25rem;
+	}
+
+	/* ── Track (line + dot) ── */
+	.tl-item__track {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.tl-item__line {
+		width: 1px;
+		flex: 1;
+		background: rgb(var(--color-border) / 0.6);
+	}
+
+	.tl-item__line--hidden {
+		background: transparent;
+	}
+
+	.tl-item__dot {
+		width: 10px;
+		height: 10px;
+		border-radius: 999px;
+		border: 2px solid rgb(var(--color-border));
+		background: rgb(var(--color-bg, var(--color-surface)));
+		flex-shrink: 0;
+		transition:
+			transform 0.25s ease,
+			border-color 0.25s ease;
+	}
+
+	.tl-item__dot--active {
+		border-color: rgb(var(--color-accent));
+		background: rgb(var(--color-accent));
+		box-shadow: 0 0 0 4px rgb(var(--color-accent) / 0.15);
+	}
+
+	.tl-item:hover .tl-item__dot {
+		transform: scale(1.3);
+	}
+
+	/* ── Card ── */
+	.tl-item__card {
+		padding: 1.25rem 1.5rem;
+		border-radius: var(--radius-lg);
+		background: rgb(var(--color-surface) / 0.6);
+		border: 1px solid rgb(var(--color-border) / 0.5);
+		transition:
+			transform 0.25s ease,
+			border-color 0.25s ease;
+		margin-bottom: 1rem;
+	}
+
+	.tl-item:hover .tl-item__card {
+		transform: translateY(-2px);
+		border-color: rgb(var(--color-border));
+	}
+
+	.tl-item__card:focus-visible {
+		outline: 2px solid rgb(var(--color-accent));
+		outline-offset: 3px;
+	}
+
+	.tl-item--current .tl-item__card {
+		border-color: rgb(var(--color-accent) / 0.3);
+		box-shadow: 0 4px 20px rgb(var(--color-accent) / 0.06);
+	}
+
+	.tl-item__eyebrow {
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.25em;
+		color: rgb(var(--color-muted));
+		margin: 0 0 0.25rem;
+	}
+
+	.tl-item__title {
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin: 0 0 0.35rem;
+		line-height: 1.3;
+	}
+
+	.tl-item__duration {
+		display: inline-block;
+		font-size: 0.72rem;
+		color: rgb(var(--color-muted));
+		background: rgb(var(--color-border) / 0.25);
+		padding: 0.15rem 0.6rem;
+		border-radius: 999px;
+		margin-bottom: 0.75rem;
+	}
+
+	.tl-item--current .tl-item__duration {
+		background: rgb(var(--color-accent) / 0.1);
+		color: rgb(var(--color-accent));
+	}
+
+	.tl-item__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		gap: 0.4rem;
+	}
+
+	.tl-item__list li {
+		font-size: 0.85rem;
+		color: rgb(var(--color-muted));
+		padding-left: 1rem;
+		position: relative;
+		line-height: 1.5;
+	}
+
+	.tl-item__list li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.55em;
+		width: 4px;
+		height: 4px;
+		border-radius: 999px;
+		background: rgb(var(--color-border));
+	}
+
+	.tl-item--current .tl-item__list li::before {
+		background: rgb(var(--color-accent) / 0.5);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.tl-item__dot,
+		.tl-item__card {
+			transition: none;
+		}
+	}
+</style>

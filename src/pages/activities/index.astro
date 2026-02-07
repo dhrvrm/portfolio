@@ -1,147 +1,150 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ActivitySection from '../../components/ActivitySection.astro';
+import PinnedScrollGallery from '../../components/PinnedScrollGallery.astro';
 import { getCollection } from 'astro:content';
 
 const items = await getCollection('activities');
-const grouped = items.reduce(
-	(acc, item) => {
-		const category = item.data.category;
-		if (!acc[category]) acc[category] = [];
-		acc[category].push(item);
-		return acc;
-	},
-	{} as Record<string, typeof items>
-);
 
-const sortByFeatured = (list: typeof items) =>
-	[...list].sort((a, b) => Number(b.data.featured) - Number(a.data.featured));
+const byDateDesc = (a: (typeof items)[0], b: (typeof items)[0]) =>
+	b.data.date.getTime() - a.data.date.getTime();
+
+// Static section images (not derived from latest activity)
+const EVENTS_SECTION_IMAGE = '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
+const HACKATHONS_SECTION_IMAGE = '/images/activities/srm-builds-6/srm-1.webp';
+
+const getCategoryImage = (slug: string) => {
+	if (slug === 'events') return EVENTS_SECTION_IMAGE;
+	if (slug === 'hackathons') return HACKATHONS_SECTION_IMAGE;
+	if (slug === 'speaking') return EVENTS_SECTION_IMAGE;
+	const list = items.filter((i) => i.data.category === slug).sort(byDateDesc);
+	const first = list[0];
+	const imgs = first?.data.images ?? [];
+	return imgs[0] ?? null;
+};
+
+// Category-specific images for galleries
+const awardsImages = items
+	.filter((i) => i.data.category === 'awards')
+	.flatMap((i) => i.data.images ?? []);
+
+const travelImages = items
+	.filter((i) => i.data.category === 'travel')
+	.flatMap((i) => i.data.images ?? []);
+
+const speakingImages = items
+	.filter((i) => i.data.category === 'speaking')
+	.flatMap((i) => i.data.images ?? []);
+
+// Pool of all activity images (events, hackathons, etc.) for filling galleries
+const pool = items.flatMap((i) => i.data.images ?? []);
+
+const MIN_GALLERY = 8;
+const fillGallery = (categoryImages: string[]) => {
+	const base = categoryImages.length ? categoryImages : pool.slice(0, MIN_GALLERY);
+	if (base.length >= MIN_GALLERY) return base;
+	const used = new Set(base);
+	const extra = pool.filter((src) => !used.has(src));
+	const need = MIN_GALLERY - base.length;
+	return [...base, ...extra.slice(0, need)];
+};
+
+const recognitionGalleryImages = fillGallery(awardsImages);
+const travelGalleryImages = fillGallery(travelImages);
+const speakingGalleryImages = fillGallery(speakingImages);
 ---
 
 <Layout title='Activities - Dhruv Verma'>
-	<section class='py-16'>
-		<div class='container mx-auto'>
-			<p class='text-sm uppercase tracking-[0.3em] text-muted'>Studio</p>
-			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4'>
-				Events, mentoring, and case work
-			</h1>
-			<p class='text-lg text-muted mt-4 max-w-2xl'>
-				A snapshot of the events I have covered, hackathons mentored, talks I
-				have given, and case studies I have led.
+	<!-- Hero: overview only, no nav, no numbers -->
+	<section class='act-hero'>
+		<div class='act-hero__inner'>
+			<p class='act-hero__eyebrow'>Activities</p>
+			<h1 class='act-hero__title'>Events, mentoring &amp; beyond</h1>
+			<p class='act-hero__desc'>
+				A snapshot of events I've covered, hackathons I've volunteered at as a mentor, talks I've
+				given, recognition received, and places I've traveled for the craft.
 			</p>
 		</div>
 	</section>
 
-	<section class='py-10 border-t border-border/70'>
-		<div class='container mx-auto'>
-			<h2 class='text-2xl font-semibold font-display mb-6'>Events covered</h2>
-			<div class='grid md:grid-cols-2 gap-6'>
-				{(grouped.events?.length ? sortByFeatured(grouped.events) : []).map(
-					(item) => (
-						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
-							<h3 class='font-semibold'>{item.data.title}</h3>
-							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
-							<p class='text-xs text-muted mt-4'>
-								{item.data.role} · {item.data.location} · {item.data.date}
-							</p>
-						</div>
-					)
-				)}
-				{!grouped.events?.length && (
-					<p class='text-sm text-muted'>No events listed yet.</p>
-				)}
-			</div>
-		</div>
-	</section>
+	<!-- 3 alternating text + image sections -->
+	<ActivitySection
+		title='Events covered'
+		description="Conferences, meetups, and community events I've attended and covered. Story-led highlights and takeaways shared with the community."
+		href='/activities/events'
+		align='left'
+		image={getCategoryImage('events')}
+	/>
+	<ActivitySection
+		title='Hackathons'
+		description='Volunteer mentoring, judging, and participating in hackathons. Helping teams with frontend strategy, product storytelling, and rapid prototyping.'
+		href='/activities/hackathons'
+		align='right'
+		image={getCategoryImage('hackathons')}
+	/>
+	<ActivitySection
+		title='Speaking'
+		description='Talks, workshops, and panel discussions on design systems, scalable frontend architecture, and motion in product design.'
+		href='/activities/speaking'
+		align='left'
+		image={getCategoryImage('speaking')}
+	/>
 
-	<section class='py-10 border-t border-border/70'>
-		<div class='container mx-auto'>
-			<h2 class='text-2xl font-semibold font-display mb-6'>
-				Hackathons mentored or judged
-			</h2>
-			<div class='grid md:grid-cols-2 gap-6'>
-				{(grouped.hackathons?.length
-					? sortByFeatured(grouped.hackathons)
-					: []
-				).map((item) => (
-					<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
-						<h3 class='font-semibold'>{item.data.title}</h3>
-						<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
-						<p class='text-xs text-muted mt-4'>
-							{item.data.role} · {item.data.location} · {item.data.date}
-						</p>
-					</div>
-				))}
-				{!grouped.hackathons?.length && (
-					<p class='text-sm text-muted'>No hackathons listed yet.</p>
-				)}
-			</div>
-		</div>
-	</section>
-
-	<section class='py-10 border-t border-border/70'>
-		<div class='container mx-auto'>
-			<h2 class='text-2xl font-semibold font-display mb-6'>Speaking</h2>
-			<div class='grid md:grid-cols-2 gap-6'>
-				{(grouped.speaking?.length ? sortByFeatured(grouped.speaking) : []).map(
-					(item) => (
-						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
-							<h3 class='font-semibold'>{item.data.title}</h3>
-							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
-							<p class='text-xs text-muted mt-4'>
-								{item.data.role} · {item.data.location} · {item.data.date}
-							</p>
-						</div>
-					)
-				)}
-				{!grouped.speaking?.length && (
-					<p class='text-sm text-muted'>No talks listed yet.</p>
-				)}
-			</div>
-		</div>
-	</section>
-
-	<section class='py-10 border-t border-border/70'>
-		<div class='container mx-auto'>
-			<h2 class='text-2xl font-semibold font-display mb-6'>Awards</h2>
-			<div class='grid md:grid-cols-2 gap-6'>
-				{(grouped.awards?.length ? sortByFeatured(grouped.awards) : []).map(
-					(item) => (
-						<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
-							<h3 class='font-semibold'>{item.data.title}</h3>
-							<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
-							<p class='text-xs text-muted mt-4'>
-								{item.data.role} · {item.data.location} · {item.data.date}
-							</p>
-						</div>
-					)
-				)}
-				{!grouped.awards?.length && (
-					<p class='text-sm text-muted'>No awards listed yet.</p>
-				)}
-			</div>
-		</div>
-	</section>
-
-	<section class='py-10 border-t border-border/70'>
-		<div class='container mx-auto'>
-			<h2 class='text-2xl font-semibold font-display mb-6'>Case studies</h2>
-			<div class='grid md:grid-cols-2 gap-6'>
-				{(grouped['case-studies']?.length
-					? sortByFeatured(grouped['case-studies'])
-					: []
-				).map((item) => (
-					<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 transition hover:-translate-y-1 hover:border-accent/50'>
-						<h3 class='font-semibold'>{item.data.title}</h3>
-						<p class='text-sm text-muted mt-2'>{item.data.summary}</p>
-						<p class='text-xs text-muted mt-4'>
-							{item.data.role} · {item.data.location} · {item.data.date}
-						</p>
-					</div>
-				))}
-				{!grouped['case-studies']?.length && (
-					<p class='text-sm text-muted'>No case studies listed yet.</p>
-				)}
-			</div>
-		</div>
-	</section>
+	<!-- 3 pinned scroll galleries: Recognition, Travel, Speaking -->
+	<PinnedScrollGallery
+		id='recognition-gallery'
+		title='Recognition'
+		href='/activities/awards'
+		images={recognitionGalleryImages.length ? recognitionGalleryImages : [EVENTS_SECTION_IMAGE]}
+	/>
+	<PinnedScrollGallery
+		id='travel-gallery'
+		title='Travel'
+		href='/activities/travel'
+		images={travelGalleryImages.length ? travelGalleryImages : [EVENTS_SECTION_IMAGE]}
+	/>
+	<PinnedScrollGallery
+		id='speaking-gallery'
+		title='Speaking'
+		href='/activities/speaking'
+		images={speakingGalleryImages.length ? speakingGalleryImages : [EVENTS_SECTION_IMAGE]}
+	/>
 </Layout>
+
+<style>
+	.act-hero {
+		padding: 4rem 0 5rem;
+		border-bottom: 1px solid rgb(var(--color-border) / 0.5);
+	}
+
+	.act-hero__inner {
+		max-width: 42rem;
+		margin: 0;
+		padding: 0 1.5rem;
+	}
+
+	.act-hero__eyebrow {
+		font-size: 0.75rem;
+		text-transform: uppercase;
+		letter-spacing: 0.25em;
+		color: rgb(var(--color-muted));
+		margin: 0 0 0.75rem;
+	}
+
+	.act-hero__title {
+		font-family:
+			'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: clamp(2rem, 5vw, 3rem);
+		font-weight: 600;
+		letter-spacing: -0.02em;
+		line-height: 1.2;
+		margin: 0 0 1rem;
+	}
+
+	.act-hero__desc {
+		font-size: 1.1rem;
+		line-height: 1.6;
+		color: rgb(var(--color-muted));
+		margin: 0;
+	}
+</style>

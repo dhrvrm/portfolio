@@ -6,7 +6,7 @@ excerpt: 'Learn how to publish your NPM package to the registry, manage versions
 series: 'NPM Package Development'
 seriesPart: 2
 image: '/blogs/npm/publishing-your-npm-package-from-code-to-registry.webp'
-featured: true
+featured: false
 readingTime: 12
 tags: ['JavaScript', 'NPM', 'Package Development', 'Publishing', 'Registry']
 slug: 'publishing-your-npm-package-from-code-to-registry'
@@ -353,7 +353,6 @@ const slug = slugifyText('My Blog Post Title');
 console.log(slug); // "my-blog-post-title"
 ```
 
-
 ### **Monitor Package Usage**
 
 Track your package's adoption through:
@@ -407,9 +406,9 @@ The `files` field specifies which files and directories should be included when 
 
 ```json
 {
-  "files": ["lib", "README.md"]
+	"files": ["lib", "README.md"]
 }
-````
+```
 
 This would only publish the `lib` directory and README file, excluding everything else.
 
@@ -548,16 +547,8 @@ console.log(toCamelCase('my-variable-name')); // "myVariableName"
 
 ## **Next Steps**
 
-Congratulations! You've successfully published your first NPM package and learned how to manage updates. In future chapters, we'll explore advanced topics like:
-
-- Automated releases with GitHub Actions
-- Comprehensive testing strategies
-- Package optimization techniques
-- Documentation generation
-- Performance monitoring
-- Security best practices
-
-Your package is now part of the global JavaScript ecosystem, ready to help developers around the world.
+Next, we’ll move beyond public publishing into the real world: **private registries, internal feeds, and artifacts**.  
+You’ll learn where to host private npm packages and why **Azure DevOps Artifacts** is the most practical choice today.
 
 ---
 

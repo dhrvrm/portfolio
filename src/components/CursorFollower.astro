@@ -1,133 +1,164 @@
 ---
+
 ---
-<div class="cursor-container fixed inset-0 pointer-events-none z-[9999]">
-  <div id="cursor-outer" class="fixed w-8 h-8 rounded-full border border-accent/60 translate-x-[-50%] translate-y-[-50%]"></div>
-  <div id="cursor-inner" class="fixed w-2 h-2 rounded-full bg-accent translate-x-[-50%] translate-y-[-50%]"></div>
-  <div id="cursor-glow" class="fixed w-32 h-32 rounded-full bg-accent/20 blur-2xl translate-x-[-50%] translate-y-[-50%]"></div>
+
+<div class='cursor-container fixed inset-0 pointer-events-none z-[9999]'>
+	<div
+		id='cursor-outer'
+		class='fixed w-8 h-8 rounded-full border border-accent/60 translate-x-[-50%] translate-y-[-50%]'
+	>
+	</div>
+	<div
+		id='cursor-inner'
+		class='fixed w-2 h-2 rounded-full bg-accent translate-x-[-50%] translate-y-[-50%]'
+	>
+	</div>
+	<div
+		id='cursor-glow'
+		class='fixed w-32 h-32 rounded-full bg-accent/20 blur-2xl translate-x-[-50%] translate-y-[-50%]'
+	>
+	</div>
 </div>
 
 <script>
-  if (typeof window !== 'undefined') {
-    let cursor;
-    let cursorOuter;
-    let cursorInner;
-    let cursorGlow;
-    let mouseX = 0;
-    let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    let listenersAttached = false;
+	if (typeof window !== 'undefined') {
+		let cursor;
+		let cursorOuter;
+		let cursorInner;
+		let cursorGlow;
+		let mouseX = 0;
+		let mouseY = 0;
+		let cursorX = 0;
+		let cursorY = 0;
+		let listenersAttached = false;
 
-    function initCursor() {
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isCoarse = window.matchMedia('(pointer: coarse)').matches;
-      if (prefersReducedMotion || isCoarse) return;
+		let usedKeyboardForFocus = false;
 
-      cursor = document.querySelector('.cursor-container');
-      cursorOuter = document.getElementById('cursor-outer');
-      cursorInner = document.getElementById('cursor-inner');
-      cursorGlow = document.getElementById('cursor-glow');
+		function disableCustomCursor() {
+			usedKeyboardForFocus = true;
+			document.documentElement.classList.remove('cursor-enabled');
+			const c = document.querySelector('.cursor-container');
+			if (c) (c as HTMLElement).style.opacity = '0';
+		}
 
-      if (!cursor || !cursorOuter || !cursorInner || !cursorGlow) return;
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Tab') disableCustomCursor();
+		});
 
-      cursor.style.opacity = '1';
-      document.documentElement.classList.add('cursor-enabled');
-      mouseX = window.innerWidth / 2;
-      mouseY = window.innerHeight / 2;
-      cursorX = mouseX;
-      cursorY = mouseY;
+		function initCursor() {
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)',
+			).matches;
+			const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+			if (prefersReducedMotion || isCoarse || usedKeyboardForFocus) return;
 
-      document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-      });
+			cursor = document.querySelector('.cursor-container');
+			cursorOuter = document.getElementById('cursor-outer');
+			cursorInner = document.getElementById('cursor-inner');
+			cursorGlow = document.getElementById('cursor-glow');
 
-      requestAnimationFrame(updateCursor);
+			if (!cursor || !cursorOuter || !cursorInner || !cursorGlow) return;
 
-      const interactiveSelector = 'a, button, [data-interactive="true"]';
+			cursor.style.opacity = '1';
+			document.documentElement.classList.add('cursor-enabled');
+			mouseX = window.innerWidth / 2;
+			mouseY = window.innerHeight / 2;
+			cursorX = mouseX;
+			cursorY = mouseY;
 
-      if (!listenersAttached) {
-        document.addEventListener('pointerover', (event) => {
-          const target = event.target.closest(interactiveSelector);
-          if (!target) return;
-          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.4)';
-          cursorInner.style.transform = 'translate(-50%, -50%) scale(0)';
-          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.35)';
-          cursorGlow.style.opacity = '0.45';
-        });
+			document.addEventListener('mousemove', (e) => {
+				mouseX = e.clientX;
+				mouseY = e.clientY;
+			});
 
-        document.addEventListener('pointerout', (event) => {
-          const target = event.target.closest(interactiveSelector);
-          if (!target) return;
-          cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)';
-          cursorInner.style.transform = 'translate(-50%, -50%) scale(1)';
-          cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
-          cursorGlow.style.opacity = '0.25';
-        });
+			requestAnimationFrame(updateCursor);
 
-        listenersAttached = true;
-      }
-    }
+			const interactiveSelector = 'a, button, [data-interactive="true"]';
 
-    function updateCursor() {
-      if (!cursorOuter || !cursorInner || !cursorGlow) return;
+			if (!listenersAttached) {
+				document.addEventListener('pointerover', (event) => {
+					const target = event.target.closest(interactiveSelector);
+					if (!target) return;
+					cursorOuter.style.transform = 'translate(-50%, -50%) scale(1.4)';
+					cursorInner.style.transform = 'translate(-50%, -50%) scale(0)';
+					cursorGlow.style.transform = 'translate(-50%, -50%) scale(1.35)';
+					cursorGlow.style.opacity = '0.45';
+				});
 
-      cursorX += (mouseX - cursorX) * 0.1;
-      cursorY += (mouseY - cursorY) * 0.1;
+				document.addEventListener('pointerout', (event) => {
+					const target = event.target.closest(interactiveSelector);
+					if (!target) return;
+					cursorOuter.style.transform = 'translate(-50%, -50%) scale(1)';
+					cursorInner.style.transform = 'translate(-50%, -50%) scale(1)';
+					cursorGlow.style.transform = 'translate(-50%, -50%) scale(1)';
+					cursorGlow.style.opacity = '0.25';
+				});
 
-      cursorOuter.style.left = `${cursorX}px`;
-      cursorOuter.style.top = `${cursorY}px`;
-      
-      cursorInner.style.left = `${mouseX}px`;
-      cursorInner.style.top = `${mouseY}px`;
-      
-      cursorGlow.style.left = `${cursorX}px`;
-      cursorGlow.style.top = `${cursorY}px`;
+				listenersAttached = true;
+			}
+		}
 
-      requestAnimationFrame(updateCursor);
-    }
+		function updateCursor() {
+			if (!cursorOuter || !cursorInner || !cursorGlow) return;
 
-    document.addEventListener('astro:page-load', initCursor);
-    
-    if (document.readyState === 'complete') {
-      initCursor();
-    }
-  }
+			cursorX += (mouseX - cursorX) * 0.1;
+			cursorY += (mouseY - cursorY) * 0.1;
+
+			cursorOuter.style.left = `${cursorX}px`;
+			cursorOuter.style.top = `${cursorY}px`;
+
+			cursorInner.style.left = `${mouseX}px`;
+			cursorInner.style.top = `${mouseY}px`;
+
+			cursorGlow.style.left = `${cursorX}px`;
+			cursorGlow.style.top = `${cursorY}px`;
+
+			requestAnimationFrame(updateCursor);
+		}
+
+		document.addEventListener('DOMContentLoaded', initCursor);
+
+		if (document.readyState === 'complete') {
+			initCursor();
+		}
+	}
 </script>
 
 <style>
-  .cursor-container {
-    opacity: 0;
-    transition: opacity 0.3s ease;
-  }
+	.cursor-container {
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
 
-  .cursor-container * {
-    pointer-events: none;
-    will-change: transform;
-    position: fixed;
-  }
+	.cursor-container * {
+		pointer-events: none;
+		will-change: transform;
+		position: fixed;
+	}
 
-  :global(html.cursor-enabled),
-  :global(html.cursor-enabled body) {
-    cursor: none;
-  }
+	:global(html.cursor-enabled),
+	:global(html.cursor-enabled body) {
+		cursor: none;
+	}
 
-  #cursor-outer {
-    transition: transform 0.3s ease;
-  }
+	#cursor-outer {
+		transition: transform 0.3s ease;
+	}
 
-  #cursor-inner {
-    transition: transform 0.3s ease;
-  }
+	#cursor-inner {
+		transition: transform 0.3s ease;
+	}
 
-  #cursor-glow {
-    opacity: 0.25;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-  }
+	#cursor-glow {
+		opacity: 0.25;
+		transition:
+			transform 0.3s ease,
+			opacity 0.3s ease;
+	}
 
-  @media (max-width: 768px) {
-    .cursor-container {
-      display: none;
-    }
-  }
+	@media (max-width: 768px) {
+		.cursor-container {
+			display: none;
+		}
+	}
 </style>

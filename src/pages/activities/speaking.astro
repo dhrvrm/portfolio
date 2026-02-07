@@ -1,0 +1,53 @@
+---
+import ActivityLayout from '../../layouts/ActivityLayout.astro';
+import ActivityCard from '../../components/ActivityCard.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('activities');
+const speaking = items
+	.filter((i) => i.data.category === 'speaking')
+	.sort((a, b) => {
+		if (b.data.featured !== a.data.featured)
+			return Number(b.data.featured) - Number(a.data.featured);
+		return b.data.date.getTime() - a.data.date.getTime();
+	});
+
+const groupByYear = (list: typeof speaking) => {
+	const groups = list.reduce(
+		(acc, item) => {
+			const year = String(item.data.date.getFullYear());
+			if (!acc[year]) acc[year] = [];
+			acc[year].push(item);
+			return acc;
+		},
+		{} as Record<string, typeof speaking>,
+	);
+	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
+};
+---
+
+<ActivityLayout title='Speaking - Dhruv Verma' current='speaking'>
+	<h1 class='text-2xl md:text-3xl font-semibold font-display mb-2'>Speaking</h1>
+	<p class='text-muted mb-8'>Talks, workshops, and panel discussions.</p>
+
+	{
+		speaking.length ? (
+			<div class='space-y-10'>
+				{groupByYear(speaking).map(([year, entries]) => (
+					<div>
+						<p class='text-xs uppercase tracking-[0.3em] text-muted mb-4'>
+							{year}
+						</p>
+						<div class='grid md:grid-cols-2 gap-6'>
+							{entries.map((item) => (
+								<ActivityCard item={item} />
+							))}
+						</div>
+					</div>
+				))}
+			</div>
+		) : (
+			<p class='text-sm text-muted'>No talks listed yet.</p>
+		)
+	}
+</ActivityLayout>

@@ -1,0 +1,205 @@
+---
+
+---
+
+<div id='page-transition' class='pt' aria-hidden='true'>
+	<div class='pt__circle' data-pt-circle></div>
+	<div class='pt__panel pt__panel--left' data-pt-panel></div>
+	<div class='pt__panel pt__panel--right' data-pt-panel></div>
+</div>
+
+<script>
+	import { gsap } from 'gsap';
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)',
+		).matches;
+		if (prefersReducedMotion) {
+			document.getElementById('page-transition')?.classList.add('pt--reduced');
+			return;
+		}
+
+		const overlay = document.getElementById('page-transition');
+		const circle = overlay?.querySelector<HTMLElement>('[data-pt-circle]');
+		const left = overlay?.querySelector<HTMLElement>('.pt__panel--left');
+		const right = overlay?.querySelector<HTMLElement>('.pt__panel--right');
+		if (!overlay || !circle || !left || !right) return;
+
+		/* Exit: circle expands, panels close, then navigate (cover first, then change page) */
+		document.addEventListener(
+			'click',
+			(e) => {
+				const a = (e.target as Element)?.closest?.(
+					'a[href^="/"]:not([target="_blank"]):not([href^="#"])',
+				);
+				if (!a) return;
+				const href = (a as HTMLAnchorElement).getAttribute('href');
+				if (!href) return;
+				const path = href.split('?')[0] || '/';
+				if (path === window.location.pathname) return;
+
+				try {
+					const url = new URL(href, window.location.origin);
+					if (url.origin !== window.location.origin) return;
+				} catch {
+					return;
+				}
+
+				e.preventDefault();
+
+				const tl = gsap.timeline({
+					onComplete: () => {
+						window.location.href = href;
+					},
+				});
+
+				/* 1. Circle expands + panels close together – cover the page first */
+				tl.to(
+					circle,
+					{
+						scale: 8,
+						opacity: 0.9,
+						duration: 0.5,
+						ease: 'power2.out',
+					},
+					0,
+				);
+				tl.to(
+					[left, right],
+					{
+						x: 0,
+						duration: 0.5,
+						ease: 'power2.inOut',
+					},
+					0,
+				);
+				/* 2. Brief hold so covered state is visible before navigate */
+				tl.to({}, { duration: 0.12 });
+			},
+			{ capture: true },
+		);
+	});
+</script>
+
+<style>
+	.pt {
+		position: fixed;
+		inset: 0;
+		z-index: 9999;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	/* Circle blur – same style as cursor glow */
+	.pt__circle {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 8rem;
+		height: 8rem;
+		margin-left: -4rem;
+		margin-top: -4rem;
+		border-radius: 9999px;
+		background: rgb(var(--color-accent) / 0.25);
+		filter: blur(40px);
+		-webkit-filter: blur(40px);
+		transform-origin: center;
+	}
+
+	.pt__panel {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: 50vw;
+		background: rgb(var(--color-surface));
+	}
+
+	.pt__panel--left {
+		left: 0;
+		transform: translateX(0);
+	}
+
+	.pt__panel--right {
+		right: 0;
+		transform: translateX(0);
+	}
+
+	/* Entrance: panels start CLOSED (covering), circle large; then split open, circle shrinks */
+	.pt__panel--left {
+		animation: pt-enter-left 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+	}
+
+	.pt__panel--right {
+		animation: pt-enter-right 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+	}
+
+	@keyframes pt-enter-left {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(-100%);
+		}
+	}
+
+	@keyframes pt-enter-right {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			transform: translateX(100%);
+		}
+	}
+
+	/* Circle: start large (matches exit end state), shrink during entrance */
+	.pt__circle {
+		transform: scale(8);
+		opacity: 0.9;
+		animation: pt-enter-circle 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.2s forwards;
+	}
+
+	@keyframes pt-enter-circle {
+		from {
+			transform: scale(8);
+			opacity: 0.9;
+		}
+		to {
+			transform: scale(1);
+			opacity: 0;
+		}
+	}
+
+	/* Reduced motion */
+	.pt--reduced .pt__panel--left,
+	.pt--reduced .pt__panel--right,
+	.pt--reduced .pt__circle {
+		animation: none;
+		opacity: 0;
+	}
+
+	.pt--reduced .pt__panel--left {
+		transform: translateX(-100%);
+	}
+
+	.pt--reduced .pt__panel--right {
+		transform: translateX(100%);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.pt__panel--left,
+		.pt__panel--right,
+		.pt__circle {
+			animation: none;
+			opacity: 0;
+		}
+
+		.pt__panel--left {
+			transform: translateX(-100%);
+		}
+
+		.pt__panel--right {
+			transform: translateX(100%);
+		}
+	}
+</style>

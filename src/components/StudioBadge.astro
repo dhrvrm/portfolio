@@ -1,0 +1,59 @@
+---
+interface Props {
+	label: string;
+	class?: string;
+	/** For hackathon cards: participated | mentored | judged. Default uses accent. */
+	variant?: 'default' | 'participated' | 'mentored' | 'judged';
+}
+
+const { label, class: className = '', variant = 'default' } = Astro.props;
+const variantClass = variant !== 'default' ? `studio-badge--${variant}` : '';
+---
+
+<span
+	class={`studio-badge inline-flex items-center px-3 py-1 rounded-full text-xs font-medium uppercase tracking-wider ${variantClass} ${className}`}
+>
+	{label}
+</span>
+
+<style>
+	.studio-badge {
+		background: rgb(var(--color-accent) / 0.12);
+		color: rgb(var(--color-accent));
+		border: 1px solid rgb(var(--color-accent) / 0.25);
+	}
+
+	:root.dark .studio-badge {
+		background: rgb(var(--color-accent) / 0.15);
+		border-color: rgb(var(--color-accent) / 0.3);
+	}
+
+	.studio-badge--participated {
+		background: rgb(var(--color-border) / 0.4);
+		color: rgb(var(--color-muted));
+		border-color: rgb(var(--color-border) / 0.6);
+	}
+
+	.studio-badge--mentored {
+		background: rgb(var(--color-accent) / 0.12);
+		color: rgb(var(--color-accent));
+		border-color: rgb(var(--color-accent) / 0.25);
+	}
+
+	:root.dark .studio-badge--mentored {
+		background: rgb(var(--color-accent) / 0.15);
+		border-color: rgb(var(--color-accent) / 0.3);
+	}
+
+	.studio-badge--judged {
+		background: rgb(34 197 94 / 0.12);
+		color: rgb(34 197 94);
+		border-color: rgb(34 197 94 / 0.25);
+	}
+
+	:root.dark .studio-badge--judged {
+		background: rgb(34 197 94 / 0.15);
+		color: rgb(134 239 172);
+		border-color: rgb(34 197 94 / 0.3);
+	}
+</style>

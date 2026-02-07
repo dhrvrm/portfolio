@@ -1,0 +1,29 @@
+---
+import ActivityLayout from '../../layouts/ActivityLayout.astro';
+import AwardsGallery from '../../components/AwardsGallery.astro';
+import { getCollection } from 'astro:content';
+
+const items = await getCollection('activities');
+const awards = items
+	.filter((i) => i.data.category === 'awards')
+	.sort((a, b) => {
+		if (b.data.featured !== a.data.featured)
+			return Number(b.data.featured) - Number(a.data.featured);
+		return b.data.date.getTime() - a.data.date.getTime();
+	});
+---
+
+<ActivityLayout title='Recognition - Dhruv Verma' current='awards'>
+	<h1 class='text-2xl md:text-3xl font-semibold font-display mb-2'>
+		Recognition
+	</h1>
+	<p class='text-muted mb-8'>Awards and community acknowledgements.</p>
+
+	{
+		awards.length ? (
+			<AwardsGallery items={awards} />
+		) : (
+			<p class='text-sm text-muted'>No awards listed yet.</p>
+		)
+	}
+</ActivityLayout>

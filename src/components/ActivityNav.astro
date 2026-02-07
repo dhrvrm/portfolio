@@ -1,0 +1,276 @@
+---
+interface Category {
+	slug: string;
+	label: string;
+	count: number;
+}
+
+interface CurrentCategoryItem {
+	slug: string;
+	title: string;
+	date: Date;
+}
+
+interface Props {
+	categories: Category[];
+	current?: string;
+	currentCategoryItems?: CurrentCategoryItem[];
+}
+
+const { categories, current, currentCategoryItems = [] } = Astro.props;
+
+function groupByYear(items: CurrentCategoryItem[]) {
+	const groups: Record<string, CurrentCategoryItem[]> = {};
+	for (const item of items) {
+		const d = item.date instanceof Date ? item.date : new Date(item.date as unknown as string);
+		const year = String(d.getFullYear());
+		if (!groups[year]) groups[year] = [];
+		groups[year].push(item);
+	}
+	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
+}
+
+const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItems) : [];
+---
+
+<nav class='activity-nav' aria-label='Activity categories'>
+	<ul class='activity-nav__list'>
+		{categories.map((cat) => {
+			const isActive = current === cat.slug;
+			const showExpanded = isActive && byYear.length > 0;
+			return (
+				<li class='activity-nav__item'>
+					<a
+						href={`/activities/${cat.slug}`}
+						class:list={['activity-nav__link', { 'is-active': isActive }]}
+						aria-current={isActive ? 'page' : undefined}
+						aria-expanded={showExpanded ? true : undefined}
+					>
+						<span class='activity-nav__label'>{cat.label}</span>
+						<span class='activity-nav__count'>{cat.count}</span>
+					</a>
+					{showExpanded && (
+						<div class='activity-nav__expand'>
+							<ul class='activity-nav__sublist' role='list'>
+								{byYear.map(([year, entries]) => (
+									<li class='activity-nav__year-group'>
+										<span class='activity-nav__year' aria-hidden='true'>{year}</span>
+										<ul class='activity-nav__item-list' role='list'>
+											{entries.map((entry) => {
+												const d = entry.date instanceof Date ? entry.date : new Date(entry.date as unknown as string);
+												const dateStr = d.toLocaleDateString('en-US', {
+													month: 'short',
+													day: 'numeric',
+													year: 'numeric',
+												});
+												return (
+													<li>
+														<a href={`/activities/${entry.slug}`} class='activity-nav__sublink'>
+															<span class='activity-nav__sublink-title'>{entry.title}</span>
+															<time class='activity-nav__sublink-date' datetime={d.toISOString()}>
+																{dateStr}
+															</time>
+														</a>
+													</li>
+												);
+											})}
+										</ul>
+									</li>
+								))}
+							</ul>
+						</div>
+					)}
+				</li>
+			);
+		})}
+	</ul>
+</nav>
+
+<style>
+	.activity-nav__list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		gap: 0.5rem;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+
+	.activity-nav__item {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.activity-nav__expand {
+		display: none;
+		margin-top: 0.25rem;
+		padding-left: 0.5rem;
+		border-left: 2px solid rgb(var(--color-border) / 0.6);
+	}
+
+	.activity-nav__sublist {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.activity-nav__year-group {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	.activity-nav__year {
+		display: block;
+		font-size: 0.65rem;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: rgb(var(--color-muted));
+		margin-bottom: 0.35rem;
+		margin-top: 0.75rem;
+	}
+
+	.activity-nav__year:first-child {
+		margin-top: 0;
+	}
+
+	.activity-nav__item-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.activity-nav__sublink {
+		display: flex;
+		flex-direction: column;
+		gap: 0.1rem;
+		padding: 0.4rem 0.6rem;
+		border-radius: var(--radius-md);
+		font-size: 0.8rem;
+		text-decoration: none;
+		color: rgb(var(--color-muted));
+		transition: color 0.2s ease, background 0.2s ease;
+	}
+
+	.activity-nav__sublink:hover,
+	.activity-nav__sublink:focus-visible {
+		color: rgb(var(--color-ink));
+		background: rgb(var(--color-surface) / 0.5);
+	}
+
+	.activity-nav__sublink-title {
+		font-weight: 500;
+		line-height: 1.3;
+	}
+
+	.activity-nav__sublink-date {
+		font-size: 0.7rem;
+		opacity: 0.85;
+	}
+
+	.activity-nav__list::-webkit-scrollbar {
+		display: none;
+	}
+
+	.activity-nav__link {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.5rem 1rem;
+		border-radius: 999px;
+		font-size: 0.82rem;
+		font-weight: 500;
+		white-space: nowrap;
+		text-decoration: none;
+		color: rgb(var(--color-muted));
+		border: 1px solid rgb(var(--color-border) / 0.5);
+		background: transparent;
+		transition:
+			color 0.2s ease,
+			border-color 0.2s ease,
+			background 0.2s ease;
+	}
+
+	.activity-nav__link:hover {
+		color: rgb(var(--color-ink));
+		border-color: rgb(var(--color-border));
+	}
+
+	.activity-nav__link.is-active {
+		color: rgb(var(--color-ink));
+		background: rgb(var(--color-surface));
+		border-color: rgb(var(--color-accent) / 0.5);
+		box-shadow: 0 0 0 1px rgb(var(--color-accent) / 0.1);
+	}
+
+	.activity-nav__count {
+		font-size: 0.7rem;
+		color: rgb(var(--color-muted));
+		background: rgb(var(--color-border) / 0.3);
+		padding: 0.1rem 0.45rem;
+		border-radius: 999px;
+		min-width: 1.4rem;
+		text-align: center;
+	}
+
+	.activity-nav__link.is-active .activity-nav__count {
+		background: rgb(var(--color-accent) / 0.12);
+		color: rgb(var(--color-accent));
+	}
+
+	/* Desktop: vertical sidebar style + show expanded list */
+	@media (min-width: 768px) {
+		.activity-nav__list {
+			flex-direction: column;
+			gap: 0.25rem;
+			overflow-x: visible;
+			align-items: stretch;
+		}
+
+		.activity-nav__item {
+			display: flex;
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		.activity-nav__expand {
+			display: block;
+			padding-left: 1rem;
+			margin-left: 0.35rem;
+			border-left-color: rgb(var(--color-accent) / 0.35);
+		}
+
+		.activity-nav__sublink {
+			padding: 0.45rem 0.5rem;
+		}
+
+		.activity-nav__link {
+			border-radius: var(--radius-lg);
+			padding: 0.6rem 1rem;
+			justify-content: space-between;
+			border: none;
+			border-left: 2px solid transparent;
+			border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+		}
+
+		.activity-nav__link:hover {
+			background: rgb(var(--color-surface) / 0.6);
+		}
+
+		.activity-nav__link.is-active {
+			border-left-color: rgb(var(--color-accent));
+			background: rgb(var(--color-surface));
+			box-shadow: none;
+		}
+	}
+</style>

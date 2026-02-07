@@ -2,35 +2,47 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Contact - Dhruv Verma">
-  <div class="container mx-auto py-16">
-    <div class="max-w-2xl mx-auto">
-      <p class="text-sm uppercase tracking-[0.3em] text-muted">Contact</p>
-      <h1 class="text-3xl md:text-5xl font-semibold font-display mt-4 mb-8">Let’s connect</h1>
-      
-      <div class="space-y-6">
-        <a 
-          href="mailto:dhruvv@live.com"
-          class="block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group"
-        >
-          <div class="relative z-10">
-            <h2 class="text-xl font-semibold mb-2">Email</h2>
-            <p class="text-base text-muted group-hover:text-ink transition-colors">dhruvv@live.com</p>
-          </div>
-        </a>
+<Layout title='Contact - Dhruv Verma'>
+	<div class='container mx-auto py-16'>
+		<div class='max-w-2xl mx-auto'>
+			<p class='text-sm uppercase tracking-[0.3em] text-muted'>Contact</p>
+			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-8'>
+				Let’s connect
+			</h1>
 
-        <a 
-          href="https://www.linkedin.com/in/dhruvv"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group"
-        >
-          <div class="relative z-10">
-            <h2 class="text-xl font-semibold mb-2">LinkedIn</h2>
-            <p class="text-base text-muted group-hover:text-ink transition-colors">linkedin.com/in/dhruvv</p>
-          </div>
-        </a>
-      </div>
-    </div>
-  </div>
+			<div class='space-y-6'>
+				<a
+					href='mailto:dhruvv@live.com'
+					class='block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group'
+					aria-label='Send email to dhruvv@live.com'
+				>
+					<div class='relative z-10'>
+						<h2 class='text-xl font-semibold mb-2'>Email</h2>
+						<p
+							class='text-base text-muted group-hover:text-ink transition-colors'
+						>
+							dhruvv@live.com
+						</p>
+					</div>
+				</a>
+
+				<a
+					href='https://www.linkedin.com/in/dhruvv'
+					target='_blank'
+					rel='noopener noreferrer'
+					class='block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group'
+					aria-label='LinkedIn profile (opens in new tab)'
+				>
+					<div class='relative z-10'>
+						<h2 class='text-xl font-semibold mb-2'>LinkedIn</h2>
+						<p
+							class='text-base text-muted group-hover:text-ink transition-colors'
+						>
+							linkedin.com/in/dhruvv
+						</p>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
 </Layout>

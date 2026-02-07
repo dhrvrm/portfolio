@@ -1,8 +1,8 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CursorFollower from '../components/CursorFollower.astro';
+import TransitionOverlay from '../components/TransitionOverlay.astro';
 import '@fontsource-variable/inter';
 import '@fontsource-variable/space-grotesk';
 import '../styles/base.css';
@@ -17,14 +17,14 @@ interface Props {
 
 const {
 	title,
-	description = 'Frontend Developer specializing in React.js and modern web technologies',
+	description = 'Software engineer building reliable products, mentoring builders, and learning through travel and collaboration.',
 	image = '/og-image.png', // Default OG image
 	article = false,
 } = Astro.props;
 
 const canonicalURL = new URL(
 	Astro.url.pathname,
-	Astro.site || 'https://dhruvverma.dev'
+	Astro.site || 'https://dhruvverma.dev',
 ).toString();
 ---
 
@@ -39,7 +39,7 @@ const canonicalURL = new URL(
 				try {
 					const stored = localStorage.getItem('theme');
 					const prefersDark = window.matchMedia(
-						'(prefers-color-scheme: dark)'
+						'(prefers-color-scheme: dark)',
 					).matches;
 					const theme = stored || (prefersDark ? 'dark' : 'light');
 					if (theme === 'dark') {
@@ -63,7 +63,44 @@ const canonicalURL = new URL(
 		<meta name='generator' content={Astro.generator} />
 		<link rel='canonical' href={canonicalURL} />
 		<title>{title}</title>
-		<ViewTransitions />
+		<style is:global>
+			/* Critical: overlay covers from first paint so no flash before entrance */
+			#page-transition {
+				position: fixed;
+				inset: 0;
+				z-index: 9999;
+				overflow: hidden;
+				pointer-events: none;
+			}
+			#page-transition .pt__panel {
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				width: 50vw;
+				background: rgb(var(--color-surface));
+			}
+			#page-transition .pt__panel--left {
+				left: 0;
+				transform: translateX(0);
+			}
+			#page-transition .pt__panel--right {
+				right: 0;
+				transform: translateX(0);
+			}
+			#page-transition .pt__circle {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				width: 8rem;
+				height: 8rem;
+				margin: -4rem 0 0 -4rem;
+				border-radius: 50%;
+				background: rgb(var(--color-accent) / 0.25);
+				filter: blur(40px);
+				transform: scale(8);
+				opacity: 0.9;
+			}
+		</style>
 		<style is:global>
 			html {
 				scroll-padding-top: 100px;
@@ -115,7 +152,7 @@ const canonicalURL = new URL(
 			function addClipboardToCodeBlocks() {
 				// Target both pre tags and code blocks with specific classes
 				const codeBlocks = document.querySelectorAll(
-					'pre, .astro-code, .shiki, [class*="language-"]'
+					'pre, .astro-code, .shiki, [class*="language-"]',
 				);
 
 				codeBlocks.forEach((block) => {
@@ -127,7 +164,7 @@ const canonicalURL = new URL(
 
 					const button = document.createElement('button');
 					button.className =
-						'clipboard-button absolute top-2 right-2 p-2 rounded-lg bg-gray-800/60 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-white z-10';
+						'clipboard-button absolute top-2 right-2 p-2 rounded-md bg-gray-800/60 opacity-0 group-hover:opacity-100 transition-opacity text-gray-300 hover:text-white z-10';
 					button.setAttribute('aria-label', 'Copy code to clipboard');
 					button.innerHTML = `
 						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -191,11 +228,7 @@ const canonicalURL = new URL(
 				});
 			}
 
-			// Run on DOM content loaded
 			document.addEventListener('DOMContentLoaded', addClipboardToCodeBlocks);
-
-			// Also run on Astro page transitions
-			document.addEventListener('astro:page-load', addClipboardToCodeBlocks);
 		</script>
 		<!-- Primary Meta Tags -->
 		<meta name='title' content={title} />
@@ -232,7 +265,7 @@ const canonicalURL = new URL(
 	<body class='min-h-screen font-sans antialiased'>
 		<a
 			href='#main-content'
-			class='sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] bg-surface text-ink border border-border px-4 py-2 rounded-lg shadow-lg'
+			class='skip-link sr-only bg-surface text-ink border border-border px-4 py-2 rounded-md shadow-lg'
 		>
 			Skip to content
 		</a>
@@ -241,6 +274,7 @@ const canonicalURL = new URL(
 		>
 		</div>
 		<CursorFollower />
+		<TransitionOverlay />
 		<div class='max-w-7xl mx-auto px-6'>
 			<Header />
 			<main id='main-content' class='min-h-screen pt-24'>
@@ -253,22 +287,6 @@ const canonicalURL = new URL(
 			import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 			gsap.registerPlugin(ScrollTrigger);
-
-			document.addEventListener('astro:page-load', () => {
-				const prefersReducedMotion = window.matchMedia(
-					'(prefers-reduced-motion: reduce)'
-				).matches;
-
-				if (!prefersReducedMotion) {
-					gsap.from('main > *', {
-						opacity: 0,
-						y: 18,
-						duration: 0.6,
-						stagger: 0.08,
-						ease: 'power2.out',
-					});
-				}
-			});
 		</script>
 	</body>
 </html>

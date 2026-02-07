@@ -6,7 +6,7 @@ excerpt: 'Learn how to create, structure, and publish your first NPM package wit
 series: 'NPM Package Development'
 seriesPart: 1
 image: '/blogs/npm/creating-your-first-npm-package-the-beginners-guide.webp'
-featured: true
+featured: false
 readingTime: 15
 tags: ['JavaScript', 'NPM', 'TypeScript', 'Package Development', 'Rollup']
 slug: 'creating-your-first-npm-package-the-beginners-guide'

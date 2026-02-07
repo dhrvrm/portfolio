@@ -1,0 +1,191 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+	items: CollectionEntry<'activities'>[];
+}
+
+const { items } = Astro.props;
+
+const featuredItems = items.filter((item) => item.data.featured);
+const ringSource = (featuredItems.length ? featuredItems : items).filter(
+	(item) => (item.data.images ?? []).length > 0,
+);
+const ringCards = ringSource.flatMap((item) =>
+	(item.data.images ?? []).map((src: string) => ({ src })),
+);
+const ringDeck = ringCards.length
+	? Array.from({ length: 10 }, (_, i) => ringCards[i % ringCards.length])
+	: [];
+const count = ringDeck.length || 1;
+---
+
+<!-- 3D Carousel (full-bleed, decorative) -->
+<div class='gallery-carousel' data-awards>
+	<div class='gallery-carousel__stage'>
+		<div class='gallery-carousel__ring' data-ring style={`--count:${count};`}>
+			{
+				ringDeck.map((card, index) => (
+					<div class='gallery-carousel__card' style={`--i:${index};`}>
+						<img src={card.src} alt='' loading='lazy' draggable='false' />
+					</div>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<!-- Card list -->
+<div class='container mx-auto px-6'>
+	<div class='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8'>
+		{
+			items.map((item) => (
+				<a
+					class='gallery-carousel__list-item'
+					href={`/activities/${item.slug}`}
+				>
+					<div class='gallery-carousel__list-body'>
+						<h3>{item.data.title}</h3>
+						<p class='line-clamp-2'>{item.data.summary}</p>
+						<span>
+							{item.data.role} &middot; {item.data.location} &middot;{' '}
+							{item.data.date.toLocaleDateString('en-US', {
+								year: 'numeric',
+								month: 'short',
+								day: 'numeric',
+							})}
+						</span>
+					</div>
+				</a>
+			))
+		}
+	</div>
+</div>
+
+<style>
+	.gallery-carousel {
+		width: 100vw;
+		margin-left: calc(50% - 50vw);
+		margin-right: calc(50% - 50vw);
+		padding-bottom: 2rem;
+	}
+
+	.gallery-carousel__stage {
+		width: 100%;
+		overflow: hidden;
+		perspective: 22rem;
+		-webkit-perspective: 22rem;
+		mask: linear-gradient(90deg, transparent, #fff 12% 88%, transparent);
+		-webkit-mask: linear-gradient(
+			90deg,
+			transparent,
+			#fff 12% 88%,
+			transparent
+		);
+		display: grid;
+	}
+
+	.gallery-carousel__ring {
+		position: relative;
+		width: 100%;
+		--card-width: clamp(140px, 18vw, 210px);
+		--card-height: calc(var(--card-width) * 10 / 7);
+		--gap: 80px;
+		height: var(--card-height);
+		transform-style: preserve-3d;
+		will-change: transform;
+		place-self: center;
+	}
+
+	.gallery-carousel__card {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%)
+			rotateY(calc((360deg / var(--count)) * var(--i)))
+			translateZ(
+				calc(
+					-1 * (0.5 * var(--card-width) + var(--gap)) /
+						tan(0.5 * (360deg / var(--count)))
+				)
+			);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+	}
+
+	.gallery-carousel__card img {
+		width: var(--card-width);
+		aspect-ratio: 7 / 10;
+		border-radius: var(--radius-sm);
+		object-fit: cover;
+		box-shadow: 0 6px 24px rgb(0 0 0 / 0.3);
+		border: 1px solid rgb(var(--color-border) / 0.4);
+		backface-visibility: hidden;
+		-webkit-backface-visibility: hidden;
+		pointer-events: none;
+	}
+
+	/* ── List cards ── */
+	.gallery-carousel__list-item {
+		border-radius: var(--radius-md);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		overflow: hidden;
+		transition:
+			transform 0.3s ease,
+			border-color 0.3s ease;
+		display: block;
+	}
+
+	.gallery-carousel__list-item:hover {
+		transform: translateY(-4px);
+		border-color: rgb(var(--color-accent) / 0.5);
+	}
+
+	.gallery-carousel__list-body {
+		padding: 1rem 1.25rem 1.25rem;
+	}
+
+	.gallery-carousel__list-body h3 {
+		margin: 0 0 0.5rem;
+		font-size: 1rem;
+		font-weight: 600;
+	}
+
+	.gallery-carousel__list-body p {
+		font-size: 0.9rem;
+		color: rgb(var(--color-muted));
+		margin: 0 0 0.75rem;
+	}
+
+	.gallery-carousel__list-body span {
+		font-size: 0.75rem;
+		color: rgb(var(--color-muted));
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.gallery-carousel__ring {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	import { gsap } from 'gsap';
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)',
+		).matches;
+
+		const ring = document.querySelector('[data-ring]') as HTMLElement | null;
+		if (!ring || prefersReducedMotion) return;
+
+		gsap.to(ring, {
+			rotationY: '-=360',
+			duration: 32,
+			ease: 'none',
+			repeat: -1,
+		});
+	});
+</script>

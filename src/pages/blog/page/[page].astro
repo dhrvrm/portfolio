@@ -1,0 +1,216 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	const POSTS_PER_PAGE = 12;
+	const totalPages = Math.max(1, Math.ceil(posts.length / POSTS_PER_PAGE));
+	return Array.from({ length: totalPages - 1 }, (_, i) => ({
+		params: { page: String(i + 2) },
+	}));
+}
+
+const { page } = Astro.params;
+const currentPage = Number(page) || 2;
+const posts = await getCollection('blog');
+const slugify = (value: string) =>
+	value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+
+const categories = [...new Set(posts.flatMap((p) => p.data.categories))];
+const tags = [...new Set(posts.flatMap((p) => p.data.tags ?? []))];
+const categoryCounts = categories.reduce(
+	(acc, cat) => {
+		acc[cat] = posts.filter((p) => p.data.categories.includes(cat)).length;
+		return acc;
+	},
+	{} as Record<string, number>,
+);
+
+const recentPosts = [...posts]
+	.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+	.slice(0, 5);
+
+const seriesMap = posts
+	.filter((p) => p.data.series)
+	.reduce(
+		(acc, post) => {
+			const name = post.data.series!;
+			if (!acc[name]) acc[name] = [];
+			acc[name].push(post);
+			return acc;
+		},
+		{} as Record<string, typeof posts>,
+	);
+Object.values(seriesMap).forEach((arr) =>
+	arr.sort((a, b) => (a.data.seriesPart ?? 0) - (b.data.seriesPart ?? 0)),
+);
+const seriesEntries = Object.entries(seriesMap)
+	.map(([name, seriesPosts]) => ({
+		name,
+		posts: seriesPosts,
+		first: seriesPosts[0],
+		count: seriesPosts.length,
+	}))
+	.sort(
+		(a, b) =>
+			(b.posts[b.posts.length - 1]?.data.publishDate?.getTime() ?? 0) -
+			(a.posts[a.posts.length - 1]?.data.publishDate?.getTime() ?? 0),
+	);
+
+const allPostsSorted = [...posts].sort((a, b) => {
+	if (Number(b.data.featured) !== Number(a.data.featured)) {
+		return Number(b.data.featured) - Number(a.data.featured);
+	}
+	return b.data.publishDate.getTime() - a.data.publishDate.getTime();
+});
+
+const POSTS_PER_PAGE = 12;
+const totalPages = Math.max(1, Math.ceil(allPostsSorted.length / POSTS_PER_PAGE));
+const start = (currentPage - 1) * POSTS_PER_PAGE;
+const postsForPage = allPostsSorted.slice(start, start + POSTS_PER_PAGE);
+
+const SIDEBAR_TAGS_SHOW = 15;
+const tagsPreview = tags.slice(0, SIDEBAR_TAGS_SHOW);
+const tagsMore = tags.length > SIDEBAR_TAGS_SHOW;
+---
+
+<Layout title={`Blog — Page ${currentPage} - Dhruv Verma`}>
+	<div class='container mx-auto py-16'>
+		<div class='grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12'>
+			<aside class='space-y-8' aria-label='Blog categories and navigation'>
+				<div class='bg-surface/70 rounded-2xl p-6 border border-border/70'>
+					<h2 class='text-lg font-semibold mb-4'>Categories</h2>
+					<ul class='space-y-2 max-h-48 overflow-y-auto'>
+						{categories.map((category) => (
+							<li>
+								<span class='text-sm text-muted flex items-center justify-between'>
+									<span>{category}</span>
+									<span class='text-xs bg-surface border border-border/70 text-muted px-2 py-1 rounded-full'>
+										{categoryCounts[category]}
+									</span>
+								</span>
+							</li>
+						))}
+					</ul>
+				</div>
+				<div class='bg-surface/70 rounded-2xl p-6 border border-border/70'>
+					<h2 class='text-lg font-semibold mb-4'>Recent posts</h2>
+					<ul class='space-y-4'>
+						{recentPosts.map((post) => (
+							<li>
+								<a href={`/blog/${post.slug}`} class='group block'>
+									<h3 class='text-sm font-medium group-hover:text-ink transition-colors line-clamp-2'>
+										{post.data.title}
+									</h3>
+									<p class='text-xs text-muted mt-0.5'>
+										{new Date(post.data.publishDate).toLocaleDateString('en-US', {
+											month: 'short',
+											day: 'numeric',
+											year: 'numeric',
+										})}
+									</p>
+								</a>
+							</li>
+						))}
+					</ul>
+					<a
+						href='/blog'
+						class='mt-4 inline-block text-sm font-medium text-accent hover:text-accentStrong'
+					>
+						All posts →
+					</a>
+				</div>
+				<div class='bg-surface/70 rounded-2xl p-6 border border-border/70'>
+					<h2 class='text-lg font-semibold mb-4'>Tags</h2>
+					<div class='flex flex-wrap gap-2'>
+						{tagsPreview.map((tag) => (
+							<a
+								href={`/blog/tag/${slugify(tag)}`}
+								class='text-xs px-3 py-1 rounded-full border border-border/70 text-muted hover:text-ink hover:border-accent transition-colors'
+							>
+								{tag}
+							</a>
+						))}
+					</div>
+					{tagsMore && (
+						<details class='mt-3'>
+							<summary class='cursor-pointer text-xs text-muted hover:text-ink transition-colors'>Show more tags</summary>
+							<div class='flex flex-wrap gap-2 mt-2'>
+								{tags.slice(SIDEBAR_TAGS_SHOW).map((tag) => (
+									<a
+										href={`/blog/tag/${slugify(tag)}`}
+										class='text-xs px-3 py-1 rounded-full border border-border/70 text-muted hover:text-ink hover:border-accent transition-colors'
+									>
+										{tag}
+									</a>
+								))}
+							</div>
+						</details>
+					)}
+				</div>
+			</aside>
+
+			<div class='space-y-16 min-w-0'>
+				<section aria-label='Blog posts'>
+					<div class='flex items-center justify-between gap-4 mb-6'>
+						<h2 class='text-xl md:text-2xl font-semibold font-display'>Posts</h2>
+						<span class='text-sm text-muted'>
+							{allPostsSorted.length} post{allPostsSorted.length !== 1 ? 's' : ''} · Page {currentPage}
+						</span>
+					</div>
+					<div class='grid gap-8 sm:grid-cols-2'>
+						{postsForPage.map((post) => (
+							<BlogCard post={post} />
+						))}
+					</div>
+					<nav class='mt-10 flex items-center justify-center gap-4' aria-label='Posts pagination'>
+						<a
+							href={currentPage === 2 ? '/blog' : `/blog/page/${currentPage - 1}`}
+							class='text-sm font-medium text-accent hover:text-accentStrong'
+						>
+							← Newer
+						</a>
+						<span class='text-sm text-muted'>
+							Page {currentPage} of {totalPages}
+						</span>
+						{currentPage < totalPages ? (
+							<a
+								href={`/blog/page/${currentPage + 1}`}
+								class='text-sm font-medium text-accent hover:text-accentStrong'
+							>
+								Older →
+							</a>
+						) : (
+							<span />
+						)}
+					</nav>
+				</section>
+
+				{seriesEntries.length > 0 && (
+					<section aria-label='Series'>
+						<h2 class='text-xl md:text-2xl font-semibold font-display mb-6'>Series</h2>
+						<ul class='space-y-3'>
+							{seriesEntries.map((entry) => (
+								<li>
+									<a
+										href={`/blog/${entry.first.slug}`}
+										class='flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface/70 px-4 py-3 hover:border-accent/60 transition-colors group'
+									>
+										<span class='font-medium group-hover:text-ink transition-colors'>
+											{entry.name}
+										</span>
+										<span class='text-sm text-muted flex-shrink-0'>
+											{entry.count} part{entry.count !== 1 ? 's' : ''} →
+										</span>
+									</a>
+								</li>
+							))}
+						</ul>
+					</section>
+				)}
+			</div>
+		</div>
+	</div>
+</Layout>

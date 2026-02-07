@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import StudioCard from '../components/StudioCard.astro';
+import StudioBadge from '../components/StudioBadge.astro';
 ---
 
 <Layout title='Dhruv Verma - Frontend Developer'>
@@ -20,13 +22,13 @@ import Layout from '../layouts/Layout.astro';
 					<div class='flex flex-wrap gap-4'>
 						<a
 							href='/projects'
-							class='inline-flex items-center justify-center px-6 py-3 rounded-xl bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
+							class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
 						>
 							View work
 						</a>
 						<a
 							href='/contact'
-							class='inline-flex items-center justify-center px-6 py-3 rounded-xl border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors'
+							class='inline-flex items-center justify-center px-6 py-3 rounded-md border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors'
 						>
 							Work together
 						</a>
@@ -36,7 +38,7 @@ import Layout from '../layouts/Layout.astro';
 					<img
 						src='/og-image.png'
 						alt='Portrait of Dhruv Verma'
-						class='hero-image inverted w-full h-[420px] md:h-[520px] object-cover rounded-[var(--radius-xl)]'
+						class='hero-image inverted w-full h-[420px] md:h-[520px] object-cover rounded-[var(--radius-md)]'
 						loading='eager'
 						decoding='async'
 					/>
@@ -81,29 +83,56 @@ import Layout from '../layouts/Layout.astro';
 		</div>
 	</section>
 
-	<section class='py-16 border-t border-border/70'>
+	<section class='py-12 border-t border-border/70 proof-band'>
 		<div class='container mx-auto'>
-			<div class='grid md:grid-cols-3 gap-6'>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Engineering</p>
-					<h3 class='studio-title'>Software that lasts</h3>
-					<p class='studio-body'>
-						Reliable services, clean architecture, and sustainable shipping.
-					</p>
+			<div class='flex flex-wrap items-center justify-between gap-6'>
+				<div>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Track record</p>
+					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
+						Shipping with care, impact, and mentorship
+					</h2>
 				</div>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Life & travel</p>
-					<h3 class='studio-title'>Learning in motion</h3>
-					<p class='studio-body'>
-						Travel fuels my perspective on users, culture, and clarity.
-					</p>
+				<div class='flex flex-wrap gap-3'>
+					<StudioBadge label='12+ launches' />
+					<StudioBadge label='Coached 6+ teams' />
+					<StudioBadge label='3 communities served' />
 				</div>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Community</p>
-					<h3 class='studio-title'>Helping teams grow</h3>
-					<p class='studio-body'>
-						Mentoring, collaboration, and support for mission‑driven work.
-					</p>
+			</div>
+		</div>
+	</section>
+
+	<section class='py-16 border-t border-border/70 personality-cards' data-studio-cards>
+		<div class='container mx-auto'>
+			<div class='personality-cards__grid' data-studio-grid data-tilt-cards>
+				<div class='personality-cards__wrap' data-tilt-wrap>
+					<StudioCard
+						eyebrow='Engineering'
+						title="Code that doesn't keep you up at night"
+						body="Clean architecture, sensible defaults, and shipping without the 2am heroics. I'm into boring-in-the-best-way systems."
+						kicker='Less duct tape. More sleep.'
+						decor='blob-tr'
+						variant='asymmetric'
+					/>
+				</div>
+				<div class='personality-cards__wrap' data-tilt-wrap>
+					<StudioCard
+						eyebrow='Life & travel'
+						title="Where the wifi is (and isn't)"
+						body="Travel isn't a sidebar—it's how I learn. Different places, different users, same obsession with clarity and good coffee."
+						kicker='One bag. Many time zones.'
+						decor='blob-bl'
+						variant='default'
+					/>
+				</div>
+				<div class='personality-cards__wrap' data-tilt-wrap>
+					<StudioCard
+						eyebrow='Community'
+						title='Mentorship without the corporate bingo'
+						body="Workshops, hackathon mentoring, and actually replying to DMs. All free. I do it to help others, not as a gig."
+						kicker='Growing people, not headcount.'
+						decor='blob-tl'
+						variant='asymmetric'
+					/>
 				</div>
 			</div>
 		</div>
@@ -113,33 +142,61 @@ import Layout from '../layouts/Layout.astro';
 		<div class='container mx-auto'>
 			<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
 				<h2 class='text-2xl md:text-3xl font-semibold font-display'>
-					Studio highlights
+					Highlights
 				</h2>
 				<a href='/activities' class='text-sm font-semibold text-accent'>
 					View all activities →
 				</a>
 			</div>
 			<div class='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Organizations</p>
-					<h3 class='studio-title'>Impact partnerships</h3>
-					<p class='studio-body'>
-						Supporting teams building real‑world change with engineering.
+				<StudioCard
+					eyebrow='Organizations'
+					title='Impact partnerships'
+					body='Supporting people and teams building real‑world change with engineering.'
+					variant='default'
+				/>
+				<StudioCard
+					eyebrow='Mentorship'
+					title='People first'
+					body='Free guidance for builders, founders, and student communities. Helping others, not a side gig.'
+					variant='asymmetric'
+				/>
+				<StudioCard
+					eyebrow='Travel & stories'
+					title='Human narratives'
+					body='Sharing lessons from places, people, and projects.'
+					variant='default'
+				/>
+			</div>
+		</div>
+	</section>
+
+	<section class='py-16 border-t border-border/70'>
+		<div class='container mx-auto'>
+			<div class='cta-panel'>
+				<div>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Work together</p>
+					<h2 class='text-3xl md:text-4xl font-semibold font-display mt-3'>
+						Need a reliable collaborator for your next product sprint?
+					</h2>
+					<p class='text-lg text-muted mt-3 max-w-2xl'>
+						I work with founders and teams who care about clarity, speed, and quality.
+						Let’s talk about a focused engagement.
 					</p>
 				</div>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Mentorship</p>
-					<h3 class='studio-title'>People first</h3>
-					<p class='studio-body'>
-						Guidance for builders, founders, and student communities.
-					</p>
-				</div>
-				<div class='studio-card'>
-					<p class='studio-eyebrow'>Travel & stories</p>
-					<h3 class='studio-title'>Human narratives</h3>
-					<p class='studio-body'>
-						Sharing lessons from places, people, and projects.
-					</p>
+				<div class='cta-panel__actions'>
+					<a
+						href='/contact'
+						class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
+					>
+						Start a project
+					</a>
+					<a
+						href='/projects'
+						class='inline-flex items-center justify-center px-6 py-3 rounded-md border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors'
+					>
+						See case work
+					</a>
 				</div>
 			</div>
 		</div>
@@ -147,7 +204,7 @@ import Layout from '../layouts/Layout.astro';
 </Layout>
 
 <script>
-	document.addEventListener('astro:page-load', () => {
+	document.addEventListener('DOMContentLoaded', () => {
 		const media = document.querySelector('.hero-media');
 		const svg = media?.querySelector('.hero-reveal');
 		if (!media || !svg) return;
@@ -163,7 +220,7 @@ import Layout from '../layouts/Layout.astro';
 		const trail2 = svg.querySelector('#blob-trail-2');
 		if (!main || !trail1 || !trail2) return;
 
-		const viewBox = svg.viewBox.baseVal;
+		const viewBox = (svg as SVGSVGElement).viewBox.baseVal;
 		const state = {
 			targetX: 600,
 			targetY: 520,
@@ -191,12 +248,12 @@ import Layout from '../layouts/Layout.astro';
 			state.t2X += (state.t1X - state.t2X) * 0.08;
 			state.t2Y += (state.t1Y - state.t2Y) * 0.08;
 
-			main.setAttribute('cx', state.mainX);
-			main.setAttribute('cy', state.mainY);
-			trail1.setAttribute('cx', state.t1X);
-			trail1.setAttribute('cy', state.t1Y);
-			trail2.setAttribute('cx', state.t2X);
-			trail2.setAttribute('cy', state.t2Y);
+			main.setAttribute('cx', String(state.mainX));
+			main.setAttribute('cy', String(state.mainY));
+			trail1.setAttribute('cx', String(state.t1X));
+			trail1.setAttribute('cy', String(state.t1Y));
+			trail2.setAttribute('cx', String(state.t2X));
+			trail2.setAttribute('cy', String(state.t2Y));
 
 			requestAnimationFrame(animate);
 		};
@@ -210,9 +267,115 @@ import Layout from '../layouts/Layout.astro';
 
 		requestAnimationFrame(animate);
 	});
+
+	// Personality cards: scroll reveal + hover tilt
+		import { gsap } from 'gsap';
+		import { ScrollTrigger } from 'gsap/ScrollTrigger';
+		gsap.registerPlugin(ScrollTrigger);
+
+		document.addEventListener('DOMContentLoaded', () => {
+			const prefersReducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)'
+			).matches;
+			const isCoarse = window.matchMedia('(pointer: coarse)').matches;
+
+			const section = document.querySelector('[data-studio-cards]');
+			const grid = document.querySelector('[data-tilt-cards]');
+			if (!section || !grid) return;
+
+			const cards = grid.querySelectorAll('.studio-card');
+			if (!cards.length) return;
+
+			// Scroll reveal: scale + slight Y rotation + stagger (skip if reduced motion or touch)
+			if (!prefersReducedMotion && !isCoarse) {
+				gsap.from(cards, {
+					scrollTrigger: {
+						trigger: section,
+						start: 'top 85%',
+						toggleActions: 'play none none reverse',
+					},
+					opacity: 0,
+					y: 24,
+					scale: 0.96,
+					rotationY: -4,
+					duration: 0.6,
+					stagger: 0.12,
+					ease: 'power2.out',
+					transformOrigin: 'center center',
+				});
+			}
+
+			// Mouse-follow tilt on personality cards (desktop, fine pointer, no reduced motion)
+			if (prefersReducedMotion || isCoarse) return;
+
+			const wraps = grid.querySelectorAll('[data-tilt-wrap]');
+			const tiltStrength = 5;
+			const smooth = 0.15;
+
+			wraps.forEach((wrap) => {
+				const card = wrap.querySelector('.studio-card');
+				if (!card) return;
+
+				const setTilt = (x, y) => {
+					gsap.to(card, {
+						duration: smooth,
+						rotateY: x * tiltStrength,
+						rotateX: -y * tiltStrength,
+						ease: 'power2.out',
+						transformPerspective: 800,
+					});
+				};
+
+				const clearTilt = () => {
+					gsap.to(card, {
+						duration: 0.4,
+						rotateY: 0,
+						rotateX: 0,
+						ease: 'power2.out',
+						onComplete: () => gsap.set(card, { clearProps: 'transform' }),
+					});
+				};
+
+				wrap.addEventListener('mouseenter', () => {
+					wrap.addEventListener('mousemove', onMove);
+				});
+				wrap.addEventListener('mouseleave', () => {
+					wrap.removeEventListener('mousemove', onMove);
+					clearTilt();
+				});
+
+				function onMove(e) {
+					const rect = wrap.getBoundingClientRect();
+					const w = rect.width;
+					const h = rect.height;
+					const x = (e.clientX - rect.left) / w - 0.5;
+					const y = (e.clientY - rect.top) / h - 0.5;
+					setTilt(x, y);
+				}
+			});
+		});
 </script>
 
 <style>
+	.personality-cards__grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.5rem;
+	}
+	@media (min-width: 768px) {
+		.personality-cards__grid {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.5rem;
+		}
+	}
+
+	.personality-cards__wrap {
+		perspective: 800px;
+	}
+	.personality-cards__wrap .studio-card {
+		transform-style: preserve-3d;
+	}
+
 	.hero-media {
 		border-radius: var(--radius-xl);
 		overflow: hidden;
@@ -244,39 +407,28 @@ import Layout from '../layouts/Layout.astro';
 		}
 	}
 
-	.studio-card {
-		padding: 2rem;
-		border-radius: var(--radius-xl);
+	.proof-band {
+		background: linear-gradient(
+			90deg,
+			rgb(var(--color-surface) / 0.4),
+			rgb(var(--color-bg))
+		);
+	}
+
+	.cta-panel {
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background: rgb(var(--color-surface) / 0.7);
-		box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
-		transition: transform 0.3s ease, border-color 0.3s ease,
-			box-shadow 0.3s ease;
+		border-radius: var(--radius-xl);
+		padding: 2.5rem;
+		display: grid;
+		gap: 2rem;
+		box-shadow: var(--shadow-soft);
 	}
 
-	.studio-card:hover {
-		transform: translateY(-4px);
-		border-color: rgb(var(--color-accent) / 0.5);
-		box-shadow: 0 28px 60px rgba(15, 23, 42, 0.12);
+	.cta-panel__actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
 	}
 
-	.studio-eyebrow {
-		text-transform: uppercase;
-		letter-spacing: 0.24em;
-		font-size: 0.7rem;
-		color: rgb(var(--color-muted));
-	}
-
-	.studio-title {
-		margin-top: 0.75rem;
-		font-size: 1.15rem;
-		font-weight: 600;
-	}
-
-	.studio-body {
-		margin-top: 0.75rem;
-		font-size: 0.95rem;
-		color: rgb(var(--color-muted));
-		line-height: 1.6;
-	}
 </style>
