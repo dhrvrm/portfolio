@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://dhruvverma.com/sitemap.xml
+Sitemap: https://dhruvverma.dev/sitemap-index.xml
 
 # Prevent crawling of admin or private areas
 User-agent: *
