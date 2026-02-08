@@ -12,7 +12,10 @@ const ringSource = (featuredItems.length ? featuredItems : items).filter(
 	(item) => (item.data.images ?? []).length > 0,
 );
 const ringCards = ringSource.flatMap((item) =>
-	(item.data.images ?? []).map((src: string) => ({ src })),
+	(item.data.images ?? []).map((src: string, i: number) => ({
+		src,
+		alt: `${item.data.title} — image ${i + 1}`,
+	})),
 );
 const ringDeck = ringCards.length
 	? Array.from({ length: 10 }, (_, i) => ringCards[i % ringCards.length])
@@ -27,7 +30,7 @@ const count = ringDeck.length || 1;
 			{
 				ringDeck.map((card, index) => (
 					<div class='gallery-carousel__card' style={`--i:${index};`}>
-						<img src={card.src} alt='' loading='lazy' draggable='false' />
+						<img src={card.src} alt={card.alt ?? `Award or recognition — image ${index + 1}`} loading='lazy' draggable='false' />
 					</div>
 				))
 			}

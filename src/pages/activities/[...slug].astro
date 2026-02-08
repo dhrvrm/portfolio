@@ -94,7 +94,7 @@ const nextItem =
 						/>
 					)}
 					{images.length > 0 && (
-						<ImageGallery images={images.map((src) => ({ src }))} />
+						<ImageGallery images={images.map((src, i) => ({ src, alt: `${item.data.title} — image ${i + 1}` }))} />
 					)}
 				</div>
 			</section>

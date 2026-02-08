@@ -76,9 +76,19 @@ const navItems = [
 		const menu = document.getElementById('mobile-menu');
 		if (!toggle || !menu) return;
 
-		const setOpen = (isOpen) => {
+		const focusables = (): HTMLElement[] =>
+			Array.from(menu.querySelectorAll<HTMLElement>('a[href], button, [tabindex]:not([tabindex="-1"])'));
+		const firstFocusable = () => focusables()[0];
+		const lastFocusable = () => focusables()[focusables().length - 1];
+
+		const setOpen = (isOpen: boolean) => {
 			toggle.setAttribute('aria-expanded', String(isOpen));
 			menu.classList.toggle('hidden', !isOpen);
+			if (isOpen) {
+				firstFocusable()?.focus();
+			} else {
+				toggle.focus();
+			}
 		};
 
 		setOpen(false);
@@ -86,6 +96,31 @@ const navItems = [
 		toggle.addEventListener('click', () => {
 			const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 			setOpen(!isOpen);
+		});
+
+		menu.addEventListener('keydown', (e: KeyboardEvent) => {
+			if (e.key !== 'Tab') return;
+			const els = focusables();
+			if (els.length === 0) return;
+			const first = els[0];
+			const last = els[els.length - 1];
+			if (e.shiftKey) {
+				if (document.activeElement === first) {
+					e.preventDefault();
+					last?.focus();
+				}
+			} else {
+				if (document.activeElement === last) {
+					e.preventDefault();
+					first?.focus();
+				}
+			}
+		});
+
+		document.addEventListener('keydown', (e: KeyboardEvent) => {
+			if (e.key !== 'Escape') return;
+			const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+			if (isOpen) setOpen(false);
 		});
 
 		menu.querySelectorAll('a').forEach((link) => {

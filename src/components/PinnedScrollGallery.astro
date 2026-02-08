@@ -51,9 +51,9 @@ const trackImages = deck.length
 		<div class='pinned-gallery__stage'>
 			<div class='pinned-gallery__track' data-gallery-track>
 				{
-					trackImages.map((item) => (
+					trackImages.map((item, index) => (
 						<div class='pinned-gallery__card'>
-							<img src={item.src} alt='' loading='lazy' draggable='false' />
+							<img src={item.src} alt={`${title} — image ${index + 1}`} loading='lazy' draggable='false' />
 						</div>
 					))
 				}

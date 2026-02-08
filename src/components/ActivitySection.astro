@@ -25,7 +25,7 @@ const { title, description, href, align, image } = Astro.props;
 		</div>
 		{image && (
 			<div class='activity-section__media'>
-				<img src={image} alt='' loading='lazy' />
+				<img src={image} alt={title} loading='lazy' />
 			</div>
 		)}
 	</div>

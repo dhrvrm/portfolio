@@ -56,14 +56,14 @@ const cardClass = [
 					<img
 						class='activity-card__image'
 						src={media[0]}
-						alt=''
+						alt={item.data.title}
 						loading='lazy'
 					/>
 				)}
 				{media.length > 1 && (
 					<div class='activity-card__thumbs'>
-						{media.slice(1, 3).map((image) => (
-							<img src={image} alt='' loading='lazy' />
+						{media.slice(1, 3).map((image, i) => (
+							<img src={image} alt={`${item.data.title} — image ${i + 2}`} loading='lazy' />
 						))}
 					</div>
 				)}

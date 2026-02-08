@@ -340,7 +340,10 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 
 				function show(index: number) {
 					current = ((index % total) + total) % total;
-					if (img) img.src = allImages[current].src;
+					if (img) {
+						img.src = allImages[current].src;
+						img.alt = allImages[current].caption || 'Gallery image';
+					}
 					if (caption) caption.textContent = allImages[current].caption;
 					if (counter) counter.textContent = `${current + 1} / ${total}`;
 				}
