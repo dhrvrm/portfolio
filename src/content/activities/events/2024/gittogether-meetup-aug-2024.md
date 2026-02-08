@@ -5,7 +5,7 @@ role: 'Attendee'
 date: 2024-08-24
 location: 'Microsoft, Noida'
 summary: "GitTogether Meetup: Zomato's AI with Unnati Chhabra, Couchbase database testing with Shivay Lamba, GitHub's roadmap with Karan M.V. Organizers Chhavi Garg & Vipul Gupta; ideation-to-presentation group activity."
-narrative: 'Walked out with a brain full of code and a pocket full of ideas. AI at Zomato, database testing as a thriller, GitHub heading to Hogwarts-level — and an atmosphere where chill meets mind-blown.'
+narrative: 'Walked out with a brain full of code and a pocket full of ideas. AI at Zomato, database testing as a thriller, GitHub heading to Hogwarts-level, and an atmosphere where chill meets mind-blown.'
 images:
   [
     '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp',
@@ -21,7 +21,7 @@ Just walked out of the **GitTogether** Meetup with a brain full of code and a po
 
 **Highlights from this tech feast:**
 
-- **Unnati Chhabra** (Zomato) demystified their AI magic — apparently, their chatbots aren't powered by caffeinated elves after all.
+- **Unnati Chhabra** (Zomato) demystified their AI magic. Apparently, their chatbots aren't powered by caffeinated elves after all.
 - **Shivay Lamba** (Couchbase) turned database testing from a snooze-fest into a thriller. Who knew deadlocks could be so riveting?
 - **Karan M.V.** unveiled GitHub's master plan to become the Hogwarts of coding. GitHub Universe 2024, here we come!
 

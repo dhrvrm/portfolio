@@ -6,6 +6,7 @@
   --color-border: 226 232 240;
   --color-accent: 37 99 235;
   --color-accent-strong: 29 78 216;
+  --color-on-accent: 255 255 255;
   --radius-sm: 4px;
   --radius-md: 6px;
   --radius-lg: 8px;
@@ -22,6 +23,7 @@
   --color-border: 38 38 38;
   --color-accent: 251 191 36;
   --color-accent-strong: 245 158 11;
+  --color-on-accent: 15 23 42;
   --shadow-soft: 0 18px 50px rgba(0, 0, 0, 0.6);
 }
 

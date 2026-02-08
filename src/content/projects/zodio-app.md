@@ -4,7 +4,7 @@ description: 'Frontend development for a dating app that matches users based on 
 tech: ['React', 'SCSS', 'HTML', 'Nodejs', 'Google Cloud']
 image: '/projects/zodio.webp'
 category: 'client'
-featured: true
+featured: false
 publishDate: 2024-01-15
 client: 'Zodio'
 role: 'Frontend Developer'

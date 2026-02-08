@@ -5,7 +5,7 @@ role: 'Attendee'
 date: 2024-08-10
 location: 'Microsoft Noida, Noida'
 summary: 'EPYC conference at Microsoft Noida: no-code with Webflow & Wix Studio, Power Platform & AI, inclusive design & accessibility, and gamification (Octalysis).'
-narrative: "Transformative event at EPYC's 'Design, No-Code, aur AI' at Microsoft Noida — no-code revolution, AI-driven solutions, inclusive design, and gamification insights. Left inspired and equipped with new tools for digital creation."
+narrative: "Transformative event at EPYC's 'Design, No-Code, aur AI' at Microsoft Noida. No-code revolution, AI-driven solutions, inclusive design, and gamification insights. Left inspired and equipped with new tools for digital creation."
 images:
   [
     '/images/activities/design-nocode-ai-epyc/epyc-0.webp',

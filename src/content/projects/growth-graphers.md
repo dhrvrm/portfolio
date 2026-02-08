@@ -4,7 +4,7 @@ description: 'Designed and developed a comprehensive website for showcasing tech
 tech: ['HTML', 'CSS', 'JavaScript']
 image: '/projects/growth-graphers.webp'
 category: 'client'
-featured: true
+featured: false
 publishDate: 2024-01-15
 client: 'Growth Graphers'
 role: 'Frontend Developer'

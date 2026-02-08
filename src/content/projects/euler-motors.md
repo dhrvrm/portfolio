@@ -4,7 +4,7 @@ description: 'Designed and developed a multilingual CMS-based website for showca
 tech: ['React', 'JavaScript', 'Strapi', 'Express']
 image: '/projects/euler.webp'
 category: 'client'
-featured: false
+featured: true
 publishDate: 2024-01-15
 client: 'Euler Motors'
 role: 'Web Design and Development Lead'

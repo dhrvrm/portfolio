@@ -4,7 +4,7 @@ description: 'Created a digital presence for a 2D animation agency with unique, 
 tech: ['Astro', 'HTML', 'CSS', 'JavaScript']
 image: '/projects/elevate-hub-media.webp'
 category: 'client'
-featured: true
+featured: false
 publishDate: 2024-01-15
 client: 'Elevate Hub Media'
 role: 'Web Design and Development'

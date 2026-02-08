@@ -4,7 +4,7 @@ description: 'Developed an e-commerce platform with appointment booking and paym
 tech: ['Next.js', 'React', 'Appwrite', 'Framer Motion']
 image: '/projects/adept.webp'
 category: 'client'
-featured: true
+featured: false
 publishDate: 2024-01-15
 client: 'AdeptNumero'
 role: 'Full Stack Software Engineer'

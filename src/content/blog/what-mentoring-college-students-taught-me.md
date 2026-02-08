@@ -2,7 +2,7 @@
 title: 'What Mentoring College Students Taught Me About Myself'
 publishDate: 2025-02-06
 categories: ['Mentorship', 'Career', 'Personal Growth']
-excerpt: 'Two years after college I didn npt write a single line of code professionally. I said yes to everything, hoping something would feel right. Now I mentor students—not because I have all the answers, but because I remember what it felt like to drown in options.'
+excerpt: 'Two years after college I didn npt write a single line of code professionally. I said yes to everything, hoping something would feel right. Now I mentor students, not because I have all the answers, but because I remember what it felt like to drown in options.'
 image: '/images/activities/srm-builds-6/srm-1.webp'
 featured: true
 readingTime: 8

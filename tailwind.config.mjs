@@ -22,6 +22,7 @@ export default {
 				border: 'rgb(var(--color-border) / <alpha-value>)',
 				accent: 'rgb(var(--color-accent) / <alpha-value>)',
 				accentStrong: 'rgb(var(--color-accent-strong) / <alpha-value>)',
+				onAccent: 'rgb(var(--color-on-accent) / <alpha-value>)',
 				primary: {
 					50: '#f0fdf4',
 					100: '#dcfce7',

@@ -60,7 +60,7 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		outline-offset: 3px;
 	}
 
-	/* Decorative accent blob — transform only for performance */
+	/* Decorative accent blob: transform only for performance; moves on hover */
 	.studio-card__blob {
 		position: absolute;
 		width: 140%;
@@ -90,6 +90,15 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 	.studio-card:hover .studio-card__blob {
 		transform: scale(1.15);
 	}
+	.studio-card:hover.studio-card--blob-tr .studio-card__blob {
+		transform: scale(1.15) translate(-6%, -6%);
+	}
+	.studio-card:hover.studio-card--blob-bl .studio-card__blob {
+		transform: scale(1.15) translate(6%, 6%);
+	}
+	.studio-card:hover.studio-card--blob-tl .studio-card__blob {
+		transform: scale(1.15) translate(6%, -6%);
+	}
 
 	.studio-card--asymmetric {
 		border-radius: var(--radius-xl) var(--radius-lg) var(--radius-xl)
@@ -108,7 +117,10 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		.studio-card__blob {
 			transition: none;
 		}
-		.studio-card:hover .studio-card__blob {
+		.studio-card:hover .studio-card__blob,
+		.studio-card:hover.studio-card--blob-tr .studio-card__blob,
+		.studio-card:hover.studio-card--blob-bl .studio-card__blob,
+		.studio-card:hover.studio-card--blob-tl .studio-card__blob {
 			transform: none;
 		}
 	}

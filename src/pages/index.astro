@@ -2,11 +2,27 @@
 import Layout from '../layouts/Layout.astro';
 import StudioCard from '../components/StudioCard.astro';
 import StudioBadge from '../components/StudioBadge.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+	.filter((p) => p.data.featured)
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
+	.slice(0, 6);
+
+const activities = await getCollection('activities');
+const activityImages = activities
+	.filter((a) => (a.data.images ?? []).length > 0)
+	.flatMap((a) => a.data.images ?? []);
+const bentoImage1 = activityImages[0] ?? '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
+const bentoImage2 = activityImages[1] ?? activityImages[0] ?? '/images/activities/srm-builds-6/srm-1.webp';
+const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
 ---
 
 <Layout title='Dhruv Verma - Frontend Developer'>
-	<section class='min-h-[calc(100vh-6rem)] flex items-center'>
-		<div class='container mx-auto py-12'>
+	<section class='hero-section min-h-[calc(100vh-6rem)] flex items-center'>
+		<div class='hero-beam' aria-hidden='true'></div>
+		<div class='container mx-auto py-12 relative z-10'>
 			<div class='grid lg:grid-cols-[1.15fr_0.85fr] gap-12 items-center'>
 				<div class='max-w-[560px] space-y-7'>
 					<p class='text-sm uppercase tracking-[0.3em] text-muted'>
@@ -22,7 +38,7 @@ import StudioBadge from '../components/StudioBadge.astro';
 					<div class='flex flex-wrap gap-4'>
 						<a
 							href='/projects'
-							class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
+							class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-onAccent text-sm font-semibold hover:bg-accentStrong transition-colors'
 						>
 							View work
 						</a>
@@ -89,13 +105,14 @@ import StudioBadge from '../components/StudioBadge.astro';
 				<div>
 					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Track record</p>
 					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
-						Shipping with care, impact, and mentorship
+						Shipping with care and impact, and mentoring builders along the way
 					</h2>
 				</div>
 				<div class='flex flex-wrap gap-3'>
-					<StudioBadge label='12+ launches' />
-					<StudioBadge label='Coached 6+ teams' />
-					<StudioBadge label='3 communities served' />
+					<StudioBadge label='6+ product launches' />
+					<StudioBadge label='10+ teams consulted' />
+					<StudioBadge label='20+ communities served' />
+					<StudioBadge label='1000+ students mentored' />
 				</div>
 			</div>
 		</div>
@@ -103,8 +120,8 @@ import StudioBadge from '../components/StudioBadge.astro';
 
 	<section class='py-16 border-t border-border/70 personality-cards' data-studio-cards>
 		<div class='container mx-auto'>
-			<div class='personality-cards__grid' data-studio-grid data-tilt-cards>
-				<div class='personality-cards__wrap' data-tilt-wrap>
+			<div class='personality-cards__grid' data-studio-grid>
+				<div class='personality-cards__wrap'>
 					<StudioCard
 						eyebrow='Engineering'
 						title="Code that doesn't keep you up at night"
@@ -114,17 +131,17 @@ import StudioBadge from '../components/StudioBadge.astro';
 						variant='asymmetric'
 					/>
 				</div>
-				<div class='personality-cards__wrap' data-tilt-wrap>
+				<div class='personality-cards__wrap'>
 					<StudioCard
 						eyebrow='Life & travel'
 						title="Where the wifi is (and isn't)"
-						body="Travel isn't a sidebar—it's how I learn. Different places, different users, same obsession with clarity and good coffee."
+						body="Travel isn't a sidebar, it's how I learn. Different places, different users, same obsession with clarity and good coffee."
 						kicker='One bag. Many time zones.'
 						decor='blob-bl'
 						variant='default'
 					/>
 				</div>
-				<div class='personality-cards__wrap' data-tilt-wrap>
+				<div class='personality-cards__wrap'>
 					<StudioCard
 						eyebrow='Community'
 						title='Mentorship without the corporate bingo'
@@ -138,35 +155,201 @@ import StudioBadge from '../components/StudioBadge.astro';
 		</div>
 	</section>
 
-	<section class='py-16 border-t border-border/70'>
+	{featuredProjects.length > 0 && (
+		<section class='featured-accordion-section border-t border-border/70' id='featured-projects' data-accordion-section>
+			<div class='featured-accordion__wrapper'>
+				<div class='flex items-center justify-between flex-wrap gap-4 mb-6'>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Work</p>
+					<a href='/projects' class='text-sm font-semibold text-accent'>
+						View all projects →
+					</a>
+				</div>
+				<h2 class='text-2xl md:text-3xl font-semibold font-display mb-8'>Featured projects</h2>
+				<div class='featured-accordion__list'>
+					{featuredProjects.map((entry) => (
+						<div class='featured-accordion__item' data-accordion-item>
+							<div class='featured-accordion__header'>
+								<div class='featured-accordion__header-inner'>
+									<h3 class='featured-accordion__title'>{entry.data.title}</h3>
+									<p class='featured-accordion__desc'>{entry.data.description}</p>
+								</div>
+								<a href={`/projects/${entry.slug}`} class='featured-accordion__cta'>
+									View project
+								</a>
+							</div>
+							<div class='featured-accordion__content'>
+								<div class='featured-accordion__img-wrap'>
+									<img
+										src={entry.data.image}
+										alt=''
+										width={800}
+										height={500}
+										loading='lazy'
+										class='featured-accordion__img'
+									/>
+								</div>
+							</div>
+						</div>
+					))}
+				</div>
+			</div>
+		</section>
+	)}
+
+	<!-- Highlights: benefits/social proof section. Intent: skimmable bento grid, one primary CTA "View all activities". Responsive, semantic articles. -->
+	<section class='highlights-bento py-16 border-t border-border/70' data-bento-section aria-labelledby='highlights-heading'>
 		<div class='container mx-auto'>
 			<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
-				<h2 class='text-2xl md:text-3xl font-semibold font-display'>
+				<h2 id='highlights-heading' class='text-2xl md:text-3xl font-semibold font-display'>
 					Highlights
 				</h2>
 				<a href='/activities' class='text-sm font-semibold text-accent'>
 					View all activities →
 				</a>
 			</div>
-			<div class='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
-				<StudioCard
-					eyebrow='Organizations'
-					title='Impact partnerships'
-					body='Supporting people and teams building real‑world change with engineering.'
-					variant='default'
-				/>
-				<StudioCard
-					eyebrow='Mentorship'
-					title='People first'
-					body='Free guidance for builders, founders, and student communities. Helping others, not a side gig.'
-					variant='asymmetric'
-				/>
-				<StudioCard
-					eyebrow='Travel & stories'
-					title='Human narratives'
-					body='Sharing lessons from places, people, and projects.'
-					variant='default'
-				/>
+			<div class='bento-grid' data-bento-grid>
+				<article class='bento-item bento-item--large' data-bento-item>
+					<div class='bento-item__header bento-item__header--large bento-item__header--img' aria-hidden='true'>
+						<img src={bentoImage1} alt='' class='bento-item__header-img' width='400' height='240' />
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Human narratives</h3>
+						<p class='bento-item__desc'>Lessons from places, people, and projects. Travel and stories, same focus on clarity.</p>
+					</div>
+				</article>
+				<article class='bento-item bento-item--small bento-item--image' data-bento-item>
+					<div class='bento-item__header bento-item__header--img' aria-hidden='true'>
+						<img src={bentoImage2} alt='' class='bento-item__header-img' width='280' height='160' />
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Impact partnerships</h3>
+						<p class='bento-item__desc'>Supporting teams that build real-world change with engineering.</p>
+					</div>
+				</article>
+				<article class='bento-item bento-item--small bento-item--chat' data-bento-item>
+					<div class='bento-item__header bento-item__header--chat' aria-hidden='true'>
+						<div class='bento-chat'>
+							<div class='bento-chat__bubble bento-chat__bubble--them' data-bento-chat-bubble>Can you help us ship faster?</div>
+							<div class='bento-chat__bubble bento-chat__bubble--me' data-bento-chat-bubble>Sure. Let's align on the stack first.</div>
+							<div class='bento-chat__bubble bento-chat__bubble--them' data-bento-chat-bubble>Thanks, that unblocked us.</div>
+						</div>
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>People first</h3>
+						<p class='bento-item__desc'>Free guidance for builders and communities. Not a side gig.</p>
+					</div>
+				</article>
+				<article class='bento-item bento-item--small bento-item--code' data-bento-item>
+					<div class='bento-item__header bento-item__header--code' aria-hidden='true'>
+						<div class='bento-item__visual-dots bento-code-circle' aria-hidden='true' data-bento-code-circle></div>
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Code that holds up</h3>
+						<p class='bento-item__desc'>Sensible systems. Fewer 2am fixes, more sleep.</p>
+					</div>
+				</article>
+				<article class='bento-item bento-item--tall' data-bento-item>
+					<div class='bento-item__header bento-item__header--alt bento-item__header--tall-visual' aria-hidden='true'>
+						<span class='bento-item__visual-label' data-bento-visual-label>
+							<span class='bento-item__visual-word' data-bento-label-word>Workshops</span>
+							<span class='bento-item__visual-word' data-bento-label-word>·</span>
+							<span class='bento-item__visual-word' data-bento-label-word>Hackathons</span>
+							<span class='bento-item__visual-word' data-bento-label-word>·</span>
+							<span class='bento-item__visual-word' data-bento-label-word>DMs</span>
+						</span>
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Community</h3>
+						<p class='bento-item__desc'>Workshops, hackathons, and actually replying to DMs.</p>
+					</div>
+				</article>
+				<article class='bento-item bento-item--wide' data-bento-item>
+					<div class='bento-item__header bento-item__header--wide bento-item__header--img' aria-hidden='true'>
+						<img src={bentoImageTravel} alt='' class='bento-item__header-img' width='560' height='280' />
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Where the wifi is</h3>
+						<p class='bento-item__desc'>Travel as part of the work. Different places, same focus on clarity and good coffee.</p>
+					</div>
+				</article>
+			</div>
+		</div>
+	</section>
+
+	<section class='travel-polaroids border-t border-border/70 py-16 md:py-24'>
+		<div class='container mx-auto'>
+			<div class='flex items-center justify-between flex-wrap gap-4 mb-10'>
+				<div>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Places</p>
+					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
+						Featured travel photos
+					</h2>
+				</div>
+				<a href='/activities/travel' class='text-sm font-semibold text-accent'>
+					More travel →
+				</a>
+			</div>
+			<div class='travel-polaroids__pile' aria-label='Featured travel photos'>
+				<article class='travel-polaroid' style='--twist: -5deg; --pos-top: 0.5rem; --pos-left: 12%;'>
+					<div class='travel-polaroid__img-wrap'>
+						<img
+							src='https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop'
+							alt='Iceland'
+							loading='lazy'
+							draggable='false'
+							class='travel-polaroid__img'
+						/>
+					</div>
+					<p class='travel-polaroid__caption'>Iceland</p>
+				</article>
+				<article class='travel-polaroid' style='--twist: -7deg; --pos-top: 6rem; --pos-left: 28%;'>
+					<div class='travel-polaroid__img-wrap'>
+						<img
+							src='https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=800&auto=format&fit=crop'
+							alt='Japan'
+							loading='lazy'
+							draggable='false'
+							class='travel-polaroid__img'
+						/>
+					</div>
+					<p class='travel-polaroid__caption'>Japan</p>
+				</article>
+				<article class='travel-polaroid' style='--twist: 8deg; --pos-top: 0.25rem; --pos-left: 48%;'>
+					<div class='travel-polaroid__img-wrap'>
+						<img
+							src='https://images.unsplash.com/photo-1421789665209-c9b2a435e3dc?q=80&w=800&auto=format&fit=crop'
+							alt='Norway'
+							loading='lazy'
+							draggable='false'
+							class='travel-polaroid__img'
+						/>
+					</div>
+					<p class='travel-polaroid__caption'>Norway</p>
+				</article>
+				<article class='travel-polaroid' style='--twist: 10deg; --pos-top: 5rem; --pos-left: 65%;'>
+					<div class='travel-polaroid__img-wrap'>
+						<img
+							src='https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=800&auto=format&fit=crop'
+							alt='New Zealand'
+							loading='lazy'
+							draggable='false'
+							class='travel-polaroid__img'
+						/>
+					</div>
+					<p class='travel-polaroid__caption'>New Zealand</p>
+				</article>
+				<article class='travel-polaroid' style='--twist: 2deg; --pos-top: 4rem; --pos-left: 82%;'>
+					<div class='travel-polaroid__img-wrap'>
+						<img
+							src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800&auto=format&fit=crop'
+							alt='Canada'
+							loading='lazy'
+							draggable='false'
+							class='travel-polaroid__img'
+						/>
+					</div>
+					<p class='travel-polaroid__caption'>Canada</p>
+				</article>
 			</div>
 		</div>
 	</section>
@@ -187,7 +370,7 @@ import StudioBadge from '../components/StudioBadge.astro';
 				<div class='cta-panel__actions'>
 					<a
 						href='/contact'
-						class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-white text-sm font-semibold hover:bg-accentStrong transition-colors'
+						class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-onAccent text-sm font-semibold hover:bg-accentStrong transition-colors'
 					>
 						Start a project
 					</a>
@@ -204,6 +387,9 @@ import StudioBadge from '../components/StudioBadge.astro';
 </Layout>
 
 <script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	gsap.registerPlugin(ScrollTrigger);
 	document.addEventListener('DOMContentLoaded', () => {
 		const media = document.querySelector('.hero-media');
 		const svg = media?.querySelector('.hero-reveal');
@@ -268,11 +454,7 @@ import StudioBadge from '../components/StudioBadge.astro';
 		requestAnimationFrame(animate);
 	});
 
-	// Personality cards: scroll reveal + hover tilt
-		import { gsap } from 'gsap';
-		import { ScrollTrigger } from 'gsap/ScrollTrigger';
-		gsap.registerPlugin(ScrollTrigger);
-
+	// Personality cards: scroll reveal + Comet-style 3D tilt and subtle follow (smooth return on mouse out)
 		document.addEventListener('DOMContentLoaded', () => {
 			const prefersReducedMotion = window.matchMedia(
 				'(prefers-reduced-motion: reduce)'
@@ -280,83 +462,273 @@ import StudioBadge from '../components/StudioBadge.astro';
 			const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 
 			const section = document.querySelector('[data-studio-cards]');
-			const grid = document.querySelector('[data-tilt-cards]');
-			if (!section || !grid) return;
-
-			const cards = grid.querySelectorAll('.studio-card');
-			if (!cards.length) return;
-
-			// Scroll reveal: scale + slight Y rotation + stagger (skip if reduced motion or touch)
-			if (!prefersReducedMotion && !isCoarse) {
-				gsap.from(cards, {
-					scrollTrigger: {
-						trigger: section,
-						start: 'top 85%',
-						toggleActions: 'play none none reverse',
-					},
-					opacity: 0,
-					y: 24,
-					scale: 0.96,
-					rotationY: -4,
-					duration: 0.6,
-					stagger: 0.12,
-					ease: 'power2.out',
-					transformOrigin: 'center center',
-				});
+			const grid = document.querySelector('[data-studio-grid]');
+			if (section && grid) {
+				const cards = grid.querySelectorAll('.studio-card');
+				if (cards.length) {
+					if (!prefersReducedMotion && !isCoarse) {
+						gsap.from(cards, {
+							scrollTrigger: {
+								trigger: section,
+								start: 'top 85%',
+								toggleActions: 'play none none reverse',
+							},
+							opacity: 0,
+							y: 24,
+							scale: 0.96,
+							rotationY: -4,
+							duration: 0.6,
+							stagger: 0.12,
+							ease: 'power2.out',
+							transformOrigin: 'center center',
+						});
+					}
+					if (!prefersReducedMotion && !isCoarse) {
+						const rotateDepth = 10;
+						const translateDepth = 6;
+						const hoverLift = -4;
+						const followDuration = 0.18;
+						const returnDuration = 0.45;
+						grid.querySelectorAll('.personality-cards__wrap').forEach((wrap) => {
+							const card = wrap.querySelector('.studio-card');
+							if (!card) return;
+							const applyTilt = (xNorm, yNorm) => {
+								gsap.to(card, {
+									duration: followDuration,
+									rotateY: -xNorm * rotateDepth,
+									rotateX: yNorm * rotateDepth,
+									translateX: xNorm * translateDepth,
+									translateY: yNorm * translateDepth + hoverLift,
+									ease: 'power2.out',
+									overwrite: true,
+								});
+							};
+							const returnToCenter = () => {
+								gsap.to(card, {
+									duration: returnDuration,
+									rotateY: 0,
+									rotateX: 0,
+									translateX: 0,
+									translateY: 0,
+									ease: 'power2.out',
+									overwrite: true,
+								});
+							};
+							wrap.addEventListener('mouseenter', () => {
+								wrap.addEventListener('mousemove', onMove);
+							});
+							wrap.addEventListener('mouseleave', () => {
+								wrap.removeEventListener('mousemove', onMove);
+								returnToCenter();
+							});
+							function onMove(e) {
+								const rect = wrap.getBoundingClientRect();
+								const x = (e.clientX - rect.left) / rect.width - 0.5;
+								const y = (e.clientY - rect.top) / rect.height - 0.5;
+								applyTilt(x, y);
+							}
+						});
+					}
+				}
 			}
 
-			// Mouse-follow tilt on personality cards (desktop, fine pointer, no reduced motion)
-			if (prefersReducedMotion || isCoarse) return;
-
-			const wraps = grid.querySelectorAll('[data-tilt-wrap]');
-			const tiltStrength = 5;
-			const smooth = 0.15;
-
-			wraps.forEach((wrap) => {
-				const card = wrap.querySelector('.studio-card');
-				if (!card) return;
-
-				const setTilt = (x, y) => {
-					gsap.to(card, {
-						duration: smooth,
-						rotateY: x * tiltStrength,
-						rotateX: -y * tiltStrength,
-						ease: 'power2.out',
-						transformPerspective: 800,
-					});
-				};
-
-				const clearTilt = () => {
-					gsap.to(card, {
-						duration: 0.4,
-						rotateY: 0,
-						rotateX: 0,
-						ease: 'power2.out',
-						onComplete: () => gsap.set(card, { clearProps: 'transform' }),
-					});
-				};
-
-				wrap.addEventListener('mouseenter', () => {
-					wrap.addEventListener('mousemove', onMove);
-				});
-				wrap.addEventListener('mouseleave', () => {
-					wrap.removeEventListener('mousemove', onMove);
-					clearTilt();
-				});
-
-				function onMove(e) {
-					const rect = wrap.getBoundingClientRect();
-					const w = rect.width;
-					const h = rect.height;
-					const x = (e.clientX - rect.left) / w - 0.5;
-					const y = (e.clientY - rect.top) / h - 0.5;
-					setTilt(x, y);
+			// Bento grid: scroll-in once, then loop animations (chat pop-in, label stagger). Respect reduced motion.
+			const bentoSection = document.querySelector('[data-bento-section]');
+			const bentoItems = document.querySelectorAll('[data-bento-item]');
+			if (bentoSection && bentoItems.length && !prefersReducedMotion && !isCoarse) {
+				const headers = bentoSection.querySelectorAll('.bento-item__header');
+				const chatBubbles = bentoSection.querySelectorAll('[data-bento-chat-bubble]');
+				const labelWords = bentoSection.querySelectorAll('[data-bento-label-word]');
+				let loopsStarted = false;
+				function startBentoLoops() {
+					if (loopsStarted) return;
+					loopsStarted = true;
+					if (chatBubbles.length) {
+						const chatLoop = gsap.timeline({ repeat: -1, repeatDelay: 6 });
+						chatLoop
+							.set(chatBubbles, { opacity: 0, y: 14 })
+							.to(chatBubbles, { opacity: 1, y: 0, duration: 1, stagger: 0.4, ease: 'power2.out' });
+					}
+					if (labelWords.length) {
+						const labelLoop = gsap.timeline({ repeat: -1, repeatDelay: 4 });
+						labelLoop
+							.set(labelWords, { opacity: 0, y: 6 })
+							.to(labelWords, { opacity: 1, y: 0, duration: 0.24, stagger: 0.07, ease: 'power2.out' });
+					}
 				}
-			});
+				const tl = gsap.timeline({
+					scrollTrigger: {
+						trigger: bentoSection,
+						start: 'top 82%',
+						toggleActions: 'play none none reverse',
+						onEnter: startBentoLoops,
+					},
+				});
+				tl.set(headers, { scaleY: 0.85, opacity: 0.5, transformOrigin: 'center top' })
+					.set(chatBubbles, { opacity: 0, y: 12 })
+					.set(labelWords, { opacity: 0, y: 6 })
+					.from(bentoItems, { opacity: 0, y: 20, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, 0)
+					.to(headers, { scaleY: 1, opacity: 1, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, 0.03)
+					.to(chatBubbles, { opacity: 1, y: 0, duration: 0.85, stagger: 0.32, ease: 'power2.out' }, 0.22)
+					.to(labelWords, { opacity: 1, y: 0, duration: 0.22, stagger: 0.06, ease: 'power2.out' }, 0.35);
+			}
 		});
+
+	// Featured projects: scroll-driven accordion (pin + scrub)
+	document.addEventListener('DOMContentLoaded', () => {
+		const section = document.querySelector('[data-accordion-section]');
+		const wrapper = section?.querySelector('.featured-accordion__wrapper');
+		const contents = section ? (gsap.utils.toArray('.featured-accordion__content') as HTMLElement[]) : [];
+
+		if (!section || !wrapper || contents.length === 0) return;
+
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (prefersReducedMotion) {
+			gsap.set(wrapper, { visibility: 'visible', autoAlpha: 1 });
+			return;
+		}
+
+		gsap.set(wrapper, { visibility: 'hidden' });
+		gsap.set(contents.slice(1), { height: 0, overflow: 'hidden' });
+
+		const tl = gsap.timeline({
+			scrollTrigger: {
+				trigger: section,
+				start: 'top top',
+				end: () => '+=' + 100 * contents.length + '%',
+				pin: true,
+				scrub: true,
+				invalidateOnRefresh: true,
+			},
+		});
+
+		contents.forEach((item, i) => {
+			const next = contents[i + 1];
+			if (next) {
+				tl.to(item, { height: 0, overflow: 'hidden', duration: 1 }).to(next, { height: 'auto', overflow: 'hidden', duration: 1 }, '<');
+			}
+		});
+
+		gsap.set(wrapper, { autoAlpha: 1 });
+	});
+
+	// Travel polaroids: draggable on desktop
+	document.addEventListener('DOMContentLoaded', () => {
+		const pile = document.querySelector('.travel-polaroids__pile');
+		const cards = pile?.querySelectorAll('.travel-polaroid');
+		if (!pile || !cards?.length) return;
+
+		const isTouch = () => window.matchMedia('(pointer: coarse)').matches;
+		if (isTouch()) return;
+
+		let active: HTMLElement | null = null;
+		let startX = 0;
+		let startY = 0;
+		let dragX = 0;
+		let dragY = 0;
+
+		function getDragValues(el: HTMLElement): { x: number; y: number } {
+			const x = el.style.getPropertyValue('--drag-x');
+			const y = el.style.getPropertyValue('--drag-y');
+			return {
+				x: x ? parseFloat(x) || 0 : 0,
+				y: y ? parseFloat(y) || 0 : 0,
+			};
+		}
+
+		function setDrag(el: HTMLElement, x: number, y: number) {
+			el.style.setProperty('--drag-x', x + 'px');
+			el.style.setProperty('--drag-y', y + 'px');
+		}
+
+		function onPointerDown(e: PointerEvent) {
+			if (e.button !== 0) return;
+			const el = (e.target as HTMLElement).closest('.travel-polaroid') as HTMLElement;
+			if (!el) return;
+			e.preventDefault();
+			active = el;
+			el.classList.add('is-dragging');
+			el.setPointerCapture(e.pointerId);
+			startX = e.clientX;
+			startY = e.clientY;
+			const current = getDragValues(el);
+			dragX = current.x;
+			dragY = current.y;
+		}
+
+		function onPointerMove(e: PointerEvent) {
+			if (!active) return;
+			const dx = e.clientX - startX;
+			const dy = e.clientY - startY;
+			setDrag(active, dragX + dx, dragY + dy);
+		}
+
+		function onPointerUp(e: PointerEvent) {
+			if (!active) return;
+			const el = active;
+			el.releasePointerCapture(e.pointerId);
+			el.classList.remove('is-dragging');
+			const current = getDragValues(el);
+			dragX = current.x;
+			dragY = current.y;
+			active = null;
+		}
+
+		cards.forEach((card) => {
+			card.addEventListener('pointerdown', onPointerDown);
+		});
+		document.addEventListener('pointermove', onPointerMove);
+		document.addEventListener('pointerup', onPointerUp);
+		document.addEventListener('pointercancel', onPointerUp);
+	});
 </script>
 
 <style>
+	/* Hero: white beam from top-left toward center, viewport-fixed (dark mode only) */
+	.hero-section {
+		position: relative;
+	}
+
+	.hero-beam {
+		display: none;
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 0;
+		opacity: 0;
+	}
+
+	:global(:root.dark) .hero-section .hero-beam {
+		display: block;
+		/* Narrow spread, long reach: bright at top-right, long faint tail */
+		background:
+			linear-gradient(
+				225deg,
+				rgba(255, 255, 255, 0.22) 0%,
+				rgba(255, 255, 255, 0.08) 8%,
+				rgba(255, 255, 255, 0.03) 20%,
+				rgba(255, 255, 255, 0.01) 45%,
+				transparent 72%
+			);
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		:global(:root.dark) .hero-section .hero-beam {
+			animation: hero-beam-pulse 3s ease-in-out infinite;
+		}
+	}
+
+	@keyframes hero-beam-pulse {
+		0%,
+		100% {
+			opacity: 0.7;
+		}
+		50% {
+			opacity: 1;
+		}
+	}
+
 	.personality-cards__grid {
 		display: grid;
 		grid-template-columns: 1fr;
@@ -370,16 +742,16 @@ import StudioBadge from '../components/StudioBadge.astro';
 	}
 
 	.personality-cards__wrap {
-		perspective: 800px;
+		perspective: 900px;
 	}
 	.personality-cards__wrap .studio-card {
 		transform-style: preserve-3d;
+		will-change: transform;
 	}
 
 	.hero-media {
 		border-radius: var(--radius-xl);
 		overflow: hidden;
-		box-shadow: var(--shadow-soft);
 		position: relative;
 	}
 
@@ -411,6 +783,303 @@ import StudioBadge from '../components/StudioBadge.astro';
 		);
 	}
 
+	/* Highlights: Bento grid. Mobile: single column. Desktop: grid-area layout, travel below human narratives (same cols). */
+	.bento-grid {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+	@media (min-width: 768px) {
+		.bento-grid {
+			grid-template-columns: repeat(4, 1fr);
+			grid-template-rows: 420px 60px 160px 112px;
+			grid-template-areas:
+				'large large image chat'
+				'travel travel image chat'
+				'travel travel code community'
+				'travel travel code community' ;
+			gap: 1rem;
+			align-items: stretch;
+		}
+		.bento-item--large {
+			grid-area: large;
+			min-height: 0;
+		}
+		.bento-item--image {
+			grid-area: image;
+			min-height: 0;
+		}
+		.bento-item--chat {
+			grid-area: chat;
+			min-height: 0;
+		}
+		.bento-item--code {
+			grid-area: code;
+			min-height: 0;
+		}
+		.bento-item--tall {
+			grid-area: community;
+			min-height: 0;
+		}
+		.bento-item--wide {
+			grid-area: travel;
+			min-height: 0;
+		}
+	}
+
+	.bento-item {
+		display: flex;
+		flex-direction: column;
+		min-height: 0;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		overflow: hidden;
+		transition: border-color 0.25s ease, box-shadow 0.25s ease;
+	}
+	.bento-item:hover {
+		border-color: rgb(var(--color-accent) / 0.4);
+		box-shadow: var(--shadow-soft);
+	}
+
+	.bento-item__header {
+		height: 4.5rem;
+		min-height: 4.5rem;
+		background: linear-gradient(
+			135deg,
+			rgb(var(--color-accent) / 0.12),
+			rgb(var(--color-border) / 0.25)
+		);
+		flex-shrink: 0;
+		transform-origin: center top;
+	}
+	.bento-item__header--alt {
+		background: linear-gradient(
+			135deg,
+			rgb(var(--color-border) / 0.2),
+			rgb(var(--color-accent) / 0.08)
+		);
+	}
+	@media (min-width: 768px) {
+		/* Visual area fills cell; body takes only the space it needs */
+		.bento-item__header {
+			flex: 1 1 0%;
+			min-height: 0;
+			height: auto;
+		}
+		.bento-item--large .bento-item__header--large {
+			padding: 0;
+			overflow: hidden;
+		}
+		.bento-item--large .bento-item__header--large.bento-item__header--img {
+			background: rgb(var(--color-border) / 0.15);
+		}
+		.bento-item--wide .bento-item__header--wide {
+			flex: 1;
+			min-height: 2.75rem;
+			padding: 0.5rem 0.75rem;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.bento-item--wide .bento-item__header--wide.bento-item__header--img {
+			min-height: 0;
+			padding: 0;
+			overflow: hidden;
+		}
+		.bento-item--wide .bento-item__header .bento-item__visual-label {
+			font-size: 0.75rem;
+		}
+		.bento-item--image .bento-item__header--img {
+			padding: 0;
+			overflow: hidden;
+		}
+		.bento-item--chat .bento-item__header--chat {
+			padding: 1rem;
+			display: flex;
+			align-items: flex-end;
+			background: rgb(var(--color-border) / 0.12);
+			box-sizing: border-box;
+		}
+		.bento-item--chat .bento-chat {
+			width: 100%;
+			min-height: 0;
+			flex: 1;
+			justify-content: flex-end;
+		}
+		.bento-item--code .bento-item__header--code {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: linear-gradient(135deg, rgb(var(--color-accent) / 0.1), rgb(var(--color-border) / 0.2));
+		}
+		.bento-item--tall .bento-item__header--tall-visual {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.bento-item--tall .bento-item__visual-label,
+		.bento-item--wide .bento-item__header .bento-item__visual-label {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: center;
+			gap: 0.25em 0.5em;
+		}
+		.bento-item__body {
+			flex: 0 0 auto;
+			min-height: 0;
+			padding: 0.4rem 0.65rem 0.4rem;
+			gap: 0.15rem;
+		}
+		.bento-item--large .bento-item__body {
+			padding: 0.6rem 0.9rem 0.5rem;
+			gap: 0.2rem;
+		}
+		.bento-item--wide .bento-item__body {
+			padding: 0.4rem 0.85rem 0.4rem;
+			gap: 0.25rem;
+		}
+		.bento-item__title {
+			font-size: 0.9rem;
+			line-height: 1.2;
+		}
+		.bento-item--large .bento-item__title {
+			font-size: 1.05rem;
+		}
+		.bento-item__desc {
+			display: -webkit-box;
+			-webkit-line-clamp: 2;
+			-webkit-box-orient: vertical;
+			overflow: hidden;
+			font-size: 0.7875rem;
+			line-height: 1.3;
+		}
+		.bento-item--large .bento-item__desc {
+			font-size: 0.8125rem;
+		}
+		.bento-item--wide .bento-item__desc {
+			-webkit-line-clamp: 1;
+			font-size: 0.7875rem;
+		}
+	}
+	.bento-item__header-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+	.bento-chat {
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: flex-start;
+	}
+	.bento-chat__bubble {
+		max-width: 95%;
+		padding: 0.5rem 0.75rem;
+		font-size: 0.8rem;
+		line-height: 1.4;
+		border-radius: 0.75rem;
+		margin: 0;
+	}
+	.bento-chat__bubble--them {
+		background: rgb(var(--color-border) / 0.4);
+		color: rgb(var(--color-ink));
+		border-bottom-left-radius: 0.2rem;
+	}
+	.bento-chat__bubble--me {
+		background: rgb(var(--color-accent) / 0.25);
+		color: rgb(var(--color-ink));
+		align-self: flex-end;
+		border-bottom-right-radius: 0.2rem;
+	}
+	.bento-item__visual-label {
+		display: none;
+		font-size: 0.8rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: rgb(var(--color-muted));
+	}
+	.bento-item__visual-word {
+		display: inline-block;
+	}
+	.bento-item__visual-dots {
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		background: radial-gradient(circle at 30% 30%, rgb(var(--color-accent) / 0.35), rgb(var(--color-border) / 0.3));
+	}
+	.bento-code-circle {
+		animation: bento-code-circle-pulse 2.5s ease-in-out infinite;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.bento-code-circle {
+			animation: none;
+		}
+	}
+	@keyframes bento-code-circle-pulse {
+		0%, 100% { transform: scale(1); opacity: 1; }
+		50% { transform: scale(1.08); opacity: 0.85; }
+	}
+
+	.bento-item__body {
+		padding: 1rem 1.25rem 1.25rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		flex: 0 0 auto;
+		min-height: 0;
+	}
+	@media (max-width: 767px) {
+		.bento-item__body {
+			flex: 1;
+		}
+	}
+	.bento-item--large .bento-item__body {
+		padding: 1.25rem 1.5rem 1.5rem;
+		gap: 0.5rem;
+	}
+	.bento-item--wide .bento-item__body {
+		padding: 1rem 1.5rem 1.25rem;
+		flex-direction: row;
+		align-items: center;
+		gap: 1rem;
+	}
+	.bento-item--wide .bento-item__body .bento-item__title {
+		margin: 0;
+	}
+	.bento-item--wide .bento-item__body .bento-item__desc {
+		margin: 0;
+		flex: 1;
+	}
+	.bento-item__title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+		margin: 0;
+		line-height: 1.3;
+	}
+	.bento-item--large .bento-item__title {
+		font-size: 1.2rem;
+	}
+	.bento-item__desc {
+		font-size: 0.85rem;
+		color: rgb(var(--color-muted));
+		line-height: 1.45;
+		margin: 0;
+	}
+	.bento-item--large .bento-item__desc {
+		font-size: 0.95rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.bento-item {
+			transition: none;
+		}
+	}
+
 	.cta-panel {
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background: rgb(var(--color-surface) / 0.7);
@@ -425,6 +1094,202 @@ import StudioBadge from '../components/StudioBadge.astro';
 		display: flex;
 		flex-wrap: wrap;
 		gap: 1rem;
+	}
+
+	/* Featured projects: scroll accordion (no section bg, matches rest of page) */
+	.featured-accordion-section {
+		width: 100%;
+		min-height: 100vh;
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
+	}
+	.featured-accordion__wrapper {
+		width: 100%;
+		max-width: 720px;
+		padding: 2rem 1.5rem 2rem;
+		margin: 0 auto;
+	}
+	.featured-accordion__list {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	.featured-accordion__item {
+		width: 100%;
+		border-radius: var(--radius-xl);
+		overflow: hidden;
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface));
+	}
+	.featured-accordion__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		background: rgb(var(--color-border) / 0.15);
+		padding: 1rem 1.25rem;
+		flex-shrink: 0;
+	}
+	.featured-accordion__header-inner {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		align-items: flex-start;
+		min-width: 0;
+	}
+	.featured-accordion__title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+		margin: 0;
+		line-height: 1.3;
+		font-family: var(--font-display), system-ui, sans-serif;
+	}
+	.featured-accordion__desc {
+		font-size: 0.9rem;
+		color: rgb(var(--color-muted));
+		line-height: 1.5;
+		margin: 0;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.featured-accordion__cta {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		padding: 0.5rem 1rem;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		border-radius: 9999px;
+		background: rgb(var(--color-accent));
+		color: rgb(var(--color-on-accent));
+		text-decoration: none;
+		transition: background 0.2s ease;
+	}
+	.featured-accordion__cta:hover {
+		background: rgb(var(--color-accent-strong));
+	}
+	.featured-accordion__content {
+		overflow: hidden;
+	}
+	.featured-accordion__img-wrap {
+		aspect-ratio: 16/10;
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.2);
+	}
+	.featured-accordion__img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
+		display: block;
+	}
+
+	/* Featured travel photos: polaroid pile */
+	.travel-polaroids__pile {
+		position: relative;
+		min-height: 420px;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		gap: 1.5rem;
+		padding: 1rem 0;
+	}
+
+	@media (min-width: 768px) {
+		.travel-polaroids__pile {
+			min-height: 480px;
+			display: block;
+			padding: 2rem 0;
+		}
+	}
+
+	.travel-polaroid {
+		width: 200px;
+		flex-shrink: 0;
+		background: rgb(var(--color-surface));
+		border: 1px solid rgb(var(--color-border) / 0.8);
+		padding: 0.75rem 0.75rem 2.5rem;
+		border-radius: 2px;
+		box-shadow: var(--shadow-soft);
+		transition: transform 0.25s ease, box-shadow 0.25s ease;
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-touch-callout: none;
+	}
+
+	.travel-polaroid:hover {
+		transform: rotate(0deg) scale(1.02);
+		box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
+	}
+
+	@media (min-width: 768px) {
+		.travel-polaroid {
+			position: absolute;
+			width: 220px;
+			padding: 0.875rem 0.875rem 2.75rem;
+			top: var(--pos-top, 0);
+			left: var(--pos-left, 50%);
+			transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+			cursor: grab;
+			touch-action: none;
+		}
+		.travel-polaroid.is-dragging {
+			cursor: grabbing;
+			z-index: 10;
+		}
+		.travel-polaroid:hover {
+			transform: translateX(-50%) rotate(0deg) scale(1.02) translate(var(--drag-x, 0), var(--drag-y, 0));
+			z-index: 2;
+		}
+		.travel-polaroid.is-dragging:hover {
+			transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+		}
+	}
+
+	.travel-polaroid__img-wrap {
+		aspect-ratio: 1;
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.3);
+		pointer-events: none;
+	}
+
+	.travel-polaroid__img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+		pointer-events: none;
+		-webkit-user-drag: none;
+		user-drag: none;
+	}
+
+	.travel-polaroid__caption {
+		margin-top: 0.75rem;
+		text-align: center;
+		font-size: 1rem;
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+		line-height: 1.3;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.travel-polaroid {
+			transition: none;
+		}
+		.travel-polaroid:hover {
+			transform: translate(var(--drag-x, 0), var(--drag-y, 0));
+		}
+		@media (min-width: 768px) {
+			.travel-polaroid:hover {
+				transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+			}
+		}
 	}
 
 </style>

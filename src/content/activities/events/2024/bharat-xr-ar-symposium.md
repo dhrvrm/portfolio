@@ -1,5 +1,5 @@
 ---
-title: 'Bharat XR — Augmented Reality Symposium'
+title: 'Bharat XR: Augmented Reality Symposium'
 category: 'events'
 role: 'Attendee'
 date: 2024-08-11
@@ -25,6 +25,6 @@ This event wasn't just about showcasing technology; it was about reimagining our
 
 As the lines between physical and digital realities continue to blur, gatherings like this Bharat XR symposium play a crucial role in shaping our understanding and preparation for an immersive future.
 
-The event served as a powerful reminder that true innovation knows no bounds — not even those set by Mother Nature.
+The event served as a powerful reminder that true innovation knows no bounds, not even those set by Mother Nature.
 
 [Post on LinkedIn](https://www.linkedin.com/posts/dhruvv_torrential-rain-couldnt-dampen-the-spirit-activity-7228673439165730816-JQEB)
