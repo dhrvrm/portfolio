@@ -1,8 +1,8 @@
 ---
 title: 'Product Engineer'
 company: 'TUBBR'
-startDate: 'Jun 2019'
-endDate: 'Apr 2022'
+startDate: 2019-06-01
+endDate: 2022-04-01
 order: 4
 achievements:
   - 'Led a team of engineers in web and mobile application development'

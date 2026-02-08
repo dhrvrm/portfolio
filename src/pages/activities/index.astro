@@ -36,15 +36,24 @@ const speakingImages = items
 	.filter((i) => i.data.category === 'speaking')
 	.flatMap((i) => i.data.images ?? []);
 
-// Pool of all activity images (events, hackathons, etc.) for filling galleries
-const pool = items.flatMap((i) => i.data.images ?? []);
+// Pool of all activity images (exclude placeholders) for filling galleries
+const rawPool = items.flatMap((i) => i.data.images ?? []);
+const pool = [...new Set(rawPool.filter((src) => !src.toLowerCase().includes('placeholder')))];
+
+// Deterministic shuffle so each gallery gets a varied mix when filled
+const hash = (s: string) => {
+	let h = 0;
+	for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+	return h;
+};
+const shuffledPool = [...pool].sort((a, b) => hash(a) - hash(b));
 
 const MIN_GALLERY = 8;
 const fillGallery = (categoryImages: string[]) => {
-	const base = categoryImages.length ? categoryImages : pool.slice(0, MIN_GALLERY);
+	const base = categoryImages.length ? categoryImages : shuffledPool.slice(0, MIN_GALLERY);
 	if (base.length >= MIN_GALLERY) return base;
 	const used = new Set(base);
-	const extra = pool.filter((src) => !used.has(src));
+	const extra = shuffledPool.filter((src) => !used.has(src));
 	const need = MIN_GALLERY - base.length;
 	return [...base, ...extra.slice(0, need)];
 };

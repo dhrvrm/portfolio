@@ -59,8 +59,8 @@ const experience = defineCollection({
 	schema: z.object({
 		title: z.string(),
 		company: z.string(),
-		startDate: z.string(),
-		endDate: z.string().optional(),
+		startDate: z.coerce.date(),
+		endDate: z.coerce.date().optional(),
 		order: z.number(),
 		achievements: z.array(z.string()),
 	}),

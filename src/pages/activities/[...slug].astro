@@ -39,17 +39,19 @@ const hackathonLabel: Record<string, string> = {
 	mentored: 'Mentored',
 	judged: 'Judged',
 };
-const showHackathonBadge = item.data.category === 'hackathons' && item.data.hackathonType;
-const hackathonBadgeLabel = showHackathonBadge ? hackathonLabel[item.data.hackathonType!] : '';
-const hackathonBadgeVariant = showHackathonBadge ? item.data.hackathonType! : 'default';
+const isHackathon = item.data.category === 'hackathons';
+const hackathonType = item.data.hackathonType ?? (item.data.role?.toLowerCase().includes('mentor') ? 'mentored' : item.data.role?.toLowerCase().includes('judge') ? 'judged' : undefined);
+const showHackathonBadge = isHackathon && hackathonType;
+const hackathonBadgeLabel = showHackathonBadge ? hackathonLabel[hackathonType!] : '';
+const hackathonBadgeVariant = showHackathonBadge ? hackathonType! : 'default';
 
-const allInCategory = (await getCollection('activities'))
-	.filter((i) => i.data.category === item.data.category)
-	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const idx = allInCategory.findIndex((i) => i.slug === item.slug);
-const prevItem = idx > 0 ? allInCategory[idx - 1] : null;
+const allByDate = (await getCollection('activities')).sort(
+	(a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const idx = allByDate.findIndex((i) => i.slug === item.slug);
+const prevItem = idx > 0 ? allByDate[idx - 1] : null;
 const nextItem =
-	idx >= 0 && idx < allInCategory.length - 1 ? allInCategory[idx + 1] : null;
+	idx >= 0 && idx < allByDate.length - 1 ? allByDate[idx + 1] : null;
 ---
 
 <Layout title={`${item.data.title} - Dhruv Verma`}>
@@ -61,14 +63,14 @@ const nextItem =
 			>
 				&larr; Back to {back.label}
 			</a>
-			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4'>
-				{item.data.title}
-			</h1>
-			{showHackathonBadge && (
-				<div class='mt-3'>
+			<div class='flex flex-wrap items-center gap-3 mt-4'>
+				<h1 class='text-3xl md:text-5xl font-semibold font-display'>
+					{item.data.title}
+				</h1>
+				{showHackathonBadge && (
 					<StudioBadge label={hackathonBadgeLabel} variant={hackathonBadgeVariant} />
-				</div>
-			)}
+				)}
+			</div>
 			<p class='text-lg text-muted mt-3 max-w-2xl'>
 				{item.data.summary}
 			</p>

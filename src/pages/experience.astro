@@ -4,7 +4,7 @@ import ExperienceItem from '../components/ExperienceItem.astro';
 import { getCollection } from 'astro:content';
 
 const entries = (await getCollection('experience')).sort(
-	(a, b) => a.data.order - b.data.order,
+	(a, b) => a.data.startDate.getTime() - b.data.startDate.getTime(),
 );
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: 'Software Engineer'
 company: 'Growth Graphers'
-startDate: 'May 2022'
-endDate: 'Aug 2023'
+startDate: 2022-05-01
+endDate: 2023-08-01
 order: 3
 achievements:
   - 'Engineered high-performance B2B and B2C web applications using React, Redux, and Node.js'

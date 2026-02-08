@@ -127,10 +127,16 @@ const cardClass = [
 	}
 
 	.activity-card__media {
-		border-radius: 0;
 		overflow: hidden;
 		background: rgb(var(--color-border) / 0.2);
 		position: relative;
+		margin: -1px -1px 0 -1px;
+		width: calc(100% + 2px);
+		border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+	}
+
+	.activity-card--asymmetric .activity-card__media {
+		border-radius: var(--radius-lg) var(--radius-xl) 0 0;
 	}
 
 	.activity-card__image,
@@ -175,23 +181,58 @@ const cardClass = [
 		border-radius: 999px;
 	}
 
-	.activity-card--events {
-		border-top: 3px solid rgb(var(--color-accent) / 0.6);
+	.activity-card--events .activity-card__media::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: rgb(var(--color-accent) / 0.6);
+		z-index: 1;
 	}
 
-	.activity-card--hackathons {
-		border-top: 3px solid rgb(var(--color-ink) / 0.3);
+	.activity-card--hackathons .activity-card__media::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: rgb(var(--color-ink) / 0.3);
+		z-index: 1;
 	}
 
-	.activity-card--speaking {
-		border-top: 3px solid rgb(var(--color-accent-strong) / 0.7);
+	.activity-card--speaking .activity-card__media::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: rgb(var(--color-accent-strong) / 0.7);
+		z-index: 1;
 	}
 
-	.activity-card--awards {
-		border-top: 3px solid rgb(var(--color-accent) / 0.8);
+	.activity-card--awards .activity-card__media::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: rgb(var(--color-accent) / 0.8);
+		z-index: 1;
 	}
 
-	.activity-card--travel {
-		border-top: 3px solid rgb(var(--color-muted) / 0.5);
+	.activity-card--travel .activity-card__media::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: rgb(var(--color-muted) / 0.5);
+		z-index: 1;
 	}
 </style>

@@ -1,8 +1,8 @@
 ---
 title: 'Software Engineer I & Founding Partner'
 company: 'Vaayu Digital'
-startDate: 'Sep 2023'
-endDate: 'Apr 2025'
+startDate: 2023-09-01
+endDate: 2025-04-01
 order: 2
 achievements:
   - 'Reduced chunk size using Code splitting, Lazy loading, Minification, and Compression by 60%'
