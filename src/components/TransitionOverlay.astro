@@ -9,9 +9,10 @@
 </div>
 
 <script>
-	import { gsap } from 'gsap';
-
 	document.addEventListener('DOMContentLoaded', () => {
+		const gsap = window.gsap;
+		if (!gsap) return;
+
 		const prefersReducedMotion = window.matchMedia(
 			'(prefers-reduced-motion: reduce)',
 		).matches;

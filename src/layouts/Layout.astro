@@ -263,6 +263,13 @@ const canonicalURL = new URL(
 		</script>
 	</head>
 	<body class='min-h-screen font-sans antialiased'>
+		<script>
+			import { gsap } from 'gsap';
+			import { ScrollTrigger } from 'gsap/ScrollTrigger';
+			gsap.registerPlugin(ScrollTrigger);
+			window.gsap = gsap;
+			window.ScrollTrigger = ScrollTrigger;
+		</script>
 		<a
 			href='#main-content'
 			class='skip-link sr-only bg-surface text-ink border border-border px-4 py-2 rounded-md shadow-lg'
@@ -282,11 +289,5 @@ const canonicalURL = new URL(
 			</main>
 			<Footer />
 		</div>
-		<script>
-			import { gsap } from 'gsap';
-			import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-			gsap.registerPlugin(ScrollTrigger);
-		</script>
 	</body>
 </html>

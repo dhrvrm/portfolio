@@ -147,12 +147,10 @@ const count = deck.length;
 </style>
 
 <script>
-	import { gsap } from 'gsap';
-	import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-	gsap.registerPlugin(ScrollTrigger);
-
 	function initScrollGalleries() {
+		const gsap = window.gsap;
+		const ScrollTrigger = window.ScrollTrigger;
+		if (!gsap || !ScrollTrigger) return;
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
 		document.querySelectorAll<HTMLElement>('[data-sg-pin]').forEach((pin) => {
