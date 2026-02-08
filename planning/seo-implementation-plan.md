@@ -1,7 +1,23 @@
 # SEO Implementation Plan
 
 **Source:** [docs/seo-audit-whole-website.md](../docs/seo-audit-whole-website.md)  
-**Created:** 2025-02-08
+**Created:** 2025-02-08  
+**Last verified:** 2026-02-08
+
+---
+
+## Verification summary (2025-02-08)
+
+| Phase | Status | Notes |
+|-------|--------|--------|
+| **Phase 1** | Done | robots.txt no Crawl-delay; sitemap has lastmod for blog, projects, activities; canonical from pathname; rel prev/next on blog pagination. |
+| **Phase 2** | Done | Layout has imageWidth/imageHeight (default 1200×630 for default OG image); twitter:creator @verma1300; prevHref/nextHref. |
+| **Phase 3** | Done | All key pages have unique title + description. Blog index has sr-only H1 "Blog". Contact title unchanged (optional variant not applied). |
+| **Phase 4** | Done | Person + WebSite on home ✓; Blog index Blog schema ✓; blog post BlogPosting + BreadcrumbList ✓; projects index/detail absolute URLs + BreadcrumbList ✓; Experience Person with worksFor ✓. |
+| **Phase 5** | Done | Blog OG fallback `/og-image.png`; post title suffix " \| Dhruv Verma"; project schema changed to CreativeWork ✓. |
+| **Phase 6** | Done | lastmod for activities in sitemap ✓; og:image dimensions in Layout ✓; RSS feed at `/feed.xml` ✓; FAQ/HowTo optional (skipped). |
+
+**Remaining (optional):** Contact title variant "Contact Dhruv Verma | Hire & Collaborate"; FAQ or HowTo schema on step-by-step posts if you add structured content.
 
 ---
 
@@ -60,10 +76,10 @@
 
 ### Checklist
 
-- [ ] Remove `Crawl-delay: 10` from `public/robots.txt`.
-- [ ] Add `lastmod` to sitemap entries for blog posts and projects (from frontmatter); keep static pages with optional lastmod or omit.
-- [ ] Confirm `Layout.astro` canonical uses `Astro.url.pathname` (no trailing slash) and document convention (no trailing slash site-wide).
-- [ ] (Optional) Add `rel="prev"` / `rel="next"` in `<head>` on blog pagination pages (`/blog/page/[page].astro`) when page > 1 and page < totalPages.
+- [x] Remove `Crawl-delay: 10` from `public/robots.txt`.
+- [x] Add `lastmod` to sitemap entries for blog posts and projects (from frontmatter); keep static pages with optional lastmod or omit.
+- [x] Confirm `Layout.astro` canonical uses `Astro.url.pathname` (no trailing slash) and document convention (no trailing slash site-wide).
+- [x] (Optional) Add `rel="prev"` / `rel="next"` in `<head>` on blog pagination pages (`/blog/page/[page].astro`) when page > 1 and page < totalPages.
 
 **Validation:** robots.txt no Crawl-delay; sitemap XML has `<lastmod>` for at least blog and project URLs.
 
@@ -77,10 +93,10 @@
 
 ### Checklist
 
-- [ ] Add optional Layout props: `imageWidth`, `imageHeight` (numbers, optional). When present, output `<meta property="og:image:width">` and `og:image:height` (e.g. 1200, 630 for default).
-- [ ] Add `twitter:creator` to Layout (e.g. `@verma1300`) — from constant or prop.
-- [ ] Ensure default OG image path `/og-image.png` is correct and file exists (no code change if already correct).
-- [ ] (Optional) Add `twitter:site` if you have a site handle.
+- [x] Add optional Layout props: `imageWidth`, `imageHeight` (numbers, optional). When present, output `<meta property="og:image:width">` and `og:image:height` (e.g. 1200, 630 for default).
+- [x] Add `twitter:creator` to Layout (e.g. `@verma1300`) — from constant or prop.
+- [x] Ensure default OG image path `/og-image.png` is correct and file exists (no code change if already correct).
+- [x] (Optional) Add `twitter:site` if you have a site handle.
 
 **Validation:** View source on a page; confirm og:image and twitter meta present; optional dimensions on a page that passes them.
 
@@ -94,14 +110,14 @@
 
 ### Checklist
 
-- [ ] **Home** (`index.astro`): Pass `description="Software engineer and frontend developer. Portfolio, projects, and writing on React, Node.js, and building products. Based in India."` (or approved copy). Optionally adjust title to "Dhruv Verma — Frontend Developer | Portfolio".
-- [ ] **Blog index** (`blog/index.astro`): Title "Blog – Dhruv Verma | Writing on Node.js, React & Product". Description "Articles and tutorials on Node.js, React, TypeScript, and building products. By Dhruv Verma." Add visible H1 "Writing" or "Blog"; keep "Posts" as H2.
-- [ ] **Blog pagination** (`blog/page/[page].astro`): Title "Blog – Page {N} | Dhruv Verma". Description "Blog posts, page {N}. Articles on Node.js, React, and more."
-- [ ] **Blog tag** (`blog/tag/[tag].astro`): Add description "Posts tagged '{tag}'. By Dhruv Verma." Title already "Tag: {tag} - Dhruv Verma" (optional: "Posts tagged: {tag}" as H1).
-- [ ] **Experience** (`experience.astro`): Title "Experience | Dhruv Verma – Software Engineer". Description "Work history and roles. Dhruv Verma – software engineer, frontend lead, and product builder."
-- [ ] **Activities index** (`activities/index.astro`): Title "Activities | Events, Speaking & Travel – Dhruv Verma". Description one sentence summarizing events, hackathons, speaking, awards, travel.
-- [ ] **Activity detail** (`activities/[...slug].astro`): Pass `description` from `item.data.summary` (truncate to ~155 chars).
-- [ ] **Contact** (`contact.astro`): Description "Get in touch with Dhruv Verma for collaboration, speaking, or hiring. Email and LinkedIn." Optional title "Contact Dhruv Verma | Hire & Collaborate".
+- [x] **Home** (`index.astro`): Pass `description="Software engineer and frontend developer. Portfolio, projects, and writing on React, Node.js, and building products. Based in India."` (or approved copy). Optionally adjust title to "Dhruv Verma — Frontend Developer | Portfolio".
+- [x] **Blog index** (`blog/index.astro`): Title "Blog – Dhruv Verma | Writing on Node.js, React & Product". Description "Articles and tutorials on Node.js, React, TypeScript, and building products. By Dhruv Verma." Add visible H1 "Writing" or "Blog"; keep "Posts" as H2.
+- [x] **Blog pagination** (`blog/page/[page].astro`): Title "Blog – Page {N} | Dhruv Verma". Description "Blog posts, page {N}. Articles on Node.js, React, and more."
+- [x] **Blog tag** (`blog/tag/[tag].astro`): Add description "Posts tagged '{tag}'. By Dhruv Verma." Title already "Tag: {tag} - Dhruv Verma" (optional: "Posts tagged: {tag}" as H1).
+- [x] **Experience** (`experience.astro`): Title "Experience | Dhruv Verma – Software Engineer". Description "Work history and roles. Dhruv Verma – software engineer, frontend lead, and product builder."
+- [x] **Activities index** (`activities/index.astro`): Title "Activities | Events, Speaking & Travel – Dhruv Verma". Description one sentence summarizing events, hackathons, speaking, awards, travel.
+- [x] **Activity detail** (`activities/[...slug].astro`): Pass `description` from `item.data.summary` (truncate to ~155 chars).
+- [x] **Contact** (`contact.astro`): Description "Get in touch with Dhruv Verma for collaboration, speaking, or hiring. Email and LinkedIn." Optional title "Contact Dhruv Verma | Hire & Collaborate".
 
 **Validation:** View source on each page type; confirm unique title and description.
 
@@ -115,12 +131,12 @@
 
 ### Checklist
 
-- [ ] **Home** (`index.astro`): Add Person + WebSite JSON-LD. Person: name, jobTitle, url (site), sameAs (social from constants), description. WebSite: name, url, description (optional).
-- [ ] **Blog index** (`blog/index.astro`): Add Blog or CollectionPage with mainEntity ItemList: list blog posts (name, url absolute, datePublished).
-- [ ] **Blog post** (`blog/[...slug].astro`): Add Article or BlogPosting: headline, description, image (absolute URL from post.data.image or default), datePublished, author (Person name + url). Add BreadcrumbList (Home > Blog > post title).
-- [ ] **Projects index** (`projects/index.astro`): In existing CollectionPage/ItemList, ensure each item’s image and url are absolute (e.g. `new URL(project.data.image, Astro.site).toString()` and same for project URL).
-- [ ] **Project detail** (`projects/[slug].astro`): Fix image in existing schema to absolute URL. Add BreadcrumbList (Home > Projects > project title).
-- [ ] **Experience** (optional): Add Person or ProfilePage with worksFor/jobTitle if desired; lower priority.
+- [x] **Home** (`index.astro`): Add Person JSON-LD (name, jobTitle, url, sameAs, description). [x] WebSite JSON-LD (name, url, description).
+- [x] **Blog index** (`blog/index.astro`): Add Blog or CollectionPage with mainEntity ItemList: list blog posts (name, url absolute, datePublished).
+- [x] **Blog post** (`blog/[...slug].astro`): Add Article or BlogPosting: headline, description, image (absolute URL from post.data.image or default), datePublished, author (Person name + url). Add BreadcrumbList (Home > Blog > post title).
+- [x] **Projects index** (`projects/index.astro`): In existing CollectionPage/ItemList, ensure each item’s image and url are absolute (e.g. `new URL(project.data.image, Astro.site).toString()` and same for project URL).
+- [x] **Project detail** (`projects/[slug].astro`): Fix image in existing schema to absolute URL. Add BreadcrumbList (Home > Projects > project title).
+- [x] **Experience** (optional): Add Person or ProfilePage with worksFor/jobTitle if desired; lower priority.
 
 **Validation:** Rich Results Test / Schema Validator on home, one blog post, one project, blog index. All image and url values must be absolute.
 
@@ -134,9 +150,9 @@
 
 ### Checklist
 
-- [ ] **Blog post OG image** (`blog/[...slug].astro`): Fallback is currently `post.data.image || \`/blogs/${post.slug}.png\``. Change to use default site OG image when `!post.data.image`, or resolve path to existing asset (e.g. .webp if that’s the convention). Document in audit.
-- [ ] **Blog post title:** Optionally append " | Dhruv Verma" to post title in Layout or in page (if not already).
-- [ ] **Project schema type:** Optionally change project detail from Article to CreativeWork if it fits content better (audit suggested this).
+- [x] **Blog post OG image** (`blog/[...slug].astro`): Fallback is currently `post.data.image || \`/blogs/${post.slug}.png\``. Change to use default site OG image when `!post.data.image`, or resolve path to existing asset (e.g. .webp if that’s the convention). Document in audit.
+- [x] **Blog post title:** Optionally append " | Dhruv Verma" to post title in Layout or in page (if not already).
+- [x] **Project schema type:** Optionally change project detail from Article to CreativeWork if it fits content better (audit suggested this).
 
 **Validation:** Share one blog post with and without frontmatter image; confirm OG image correct. Re-run schema validator.
 
@@ -150,9 +166,9 @@
 
 ### Checklist
 
-- [ ] Sitemap: Ensure lastmod for activities (from activity date) if not already in Phase 1.
-- [ ] Add RSS/Atom feed for blog (e.g. `/blog/feed.xml` or `/feed.xml`) listing recent posts with title, link, description, date.
-- [ ] When Layout receives image and imageWidth/imageHeight, output og:image:width and og:image:height (Phase 2 may already cover this).
+- [x] Sitemap: Ensure lastmod for activities (from activity date) if not already in Phase 1.
+- [x] Add RSS/Atom feed for blog (e.g. `/blog/feed.xml` or `/feed.xml`) listing recent posts with title, link, description, date.
+- [x] When Layout receives image and imageWidth/imageHeight, output og:image:width and og:image:height (Phase 2 may already cover this).
 - [ ] (Optional) FAQ or HowTo schema on specific blog posts that are step-by-step guides — only if you add structured FAQ/how-to content.
 
 **Validation:** RSS feed loads and has valid items; sitemap lastmod present where expected.

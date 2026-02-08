@@ -31,6 +31,9 @@ function groupByYear(items: CurrentCategoryItem[]) {
 }
 
 const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItems) : [];
+
+// For events and speaking, sidebar shows only year jump links (no event list). Stays short as content grows.
+const useYearJumpsOnly = current === 'events' || current === 'speaking';
 ---
 
 <nav class='activity-nav' aria-label='Activity categories'>
@@ -38,6 +41,8 @@ const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItem
 		{categories.map((cat) => {
 			const isActive = current === cat.slug;
 			const showExpanded = isActive && byYear.length > 0;
+			const showYearJumps = showExpanded && useYearJumpsOnly;
+			const showEventList = showExpanded && !useYearJumpsOnly;
 			return (
 				<li class='activity-nav__item'>
 					<a
@@ -49,34 +54,56 @@ const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItem
 						<span class='activity-nav__label'>{cat.label}</span>
 						<span class='activity-nav__count'>{cat.count}</span>
 					</a>
-					{showExpanded && (
-						<div class='activity-nav__expand'>
-							<ul class='activity-nav__sublist' role='list'>
+					{showYearJumps && (
+						<div class='activity-nav__expand activity-nav__expand--jumps'>
+							<ul class='activity-nav__year-jumps' role='list'>
 								{byYear.map(([year, entries]) => (
-									<li class='activity-nav__year-group'>
-										<span class='activity-nav__year' aria-hidden='true'>{year}</span>
-										<ul class='activity-nav__item-list' role='list'>
-											{entries.map((entry) => {
-												const d = entry.date instanceof Date ? entry.date : new Date(entry.date as unknown as string);
-												const dateStr = d.toLocaleDateString('en-US', {
-													month: 'short',
-													day: 'numeric',
-													year: 'numeric',
-												});
-												return (
-													<li>
-														<a href={`/activities/${entry.slug}`} class='activity-nav__sublink'>
-															<span class='activity-nav__sublink-title'>{entry.title}</span>
-															<time class='activity-nav__sublink-date' datetime={d.toISOString()}>
-																{dateStr}
-															</time>
-														</a>
-													</li>
-												);
-											})}
-										</ul>
+									<li>
+										<a href={`/activities/${current}#year-${year}`} class='activity-nav__year-link'>
+											{year}
+											<span class='activity-nav__year-count'>{entries.length}</span>
+										</a>
 									</li>
 								))}
+							</ul>
+						</div>
+					)}
+					{showEventList && (
+						<div class='activity-nav__expand'>
+							<ul class='activity-nav__sublist' role='list'>
+								{byYear.map(([year, entries], yearIndex) => {
+									const isFirstYear = yearIndex === 0;
+									return (
+										<li class='activity-nav__year-group'>
+											<details class='activity-nav__details' open={isFirstYear}>
+												<summary class='activity-nav__year-summary'>
+													<span class='activity-nav__year'>{year}</span>
+													<span class='activity-nav__year-count'>{entries.length}</span>
+												</summary>
+												<ul class='activity-nav__item-list' role='list'>
+													{entries.map((entry) => {
+														const d = entry.date instanceof Date ? entry.date : new Date(entry.date as unknown as string);
+														const dateStr = d.toLocaleDateString('en-US', {
+															month: 'short',
+															day: 'numeric',
+															year: 'numeric',
+														});
+														return (
+															<li>
+																<a href={`/activities/${entry.slug}`} class='activity-nav__sublink'>
+																	<span class='activity-nav__sublink-title'>{entry.title}</span>
+																	<time class='activity-nav__sublink-date' datetime={d.toISOString()}>
+																		{dateStr}
+																	</time>
+																</a>
+															</li>
+														);
+													})}
+												</ul>
+											</details>
+										</li>
+									);
+								})}
 							</ul>
 						</div>
 					)}
@@ -109,6 +136,48 @@ const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItem
 		margin-top: 0.25rem;
 		padding-left: 0.5rem;
 		border-left: 2px solid rgb(var(--color-border) / 0.6);
+		max-height: 60vh;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+
+	.activity-nav__expand--jumps {
+		max-height: none;
+		overflow: visible;
+	}
+
+	.activity-nav__year-jumps {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.activity-nav__year-link {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
+		padding: 0.4rem 0.5rem;
+		border-radius: var(--radius-md);
+		font-size: 0.8rem;
+		font-weight: 500;
+		text-decoration: none;
+		color: rgb(var(--color-muted));
+		transition: color 0.2s ease, background 0.2s ease;
+	}
+
+	.activity-nav__year-link:hover,
+	.activity-nav__year-link:focus-visible {
+		color: rgb(var(--color-ink));
+		background: rgb(var(--color-surface) / 0.5);
+	}
+
+	.activity-nav__year-link .activity-nav__year-count {
+		font-size: 0.7rem;
+		opacity: 0.85;
 	}
 
 	.activity-nav__sublist {
@@ -126,19 +195,70 @@ const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItem
 		margin: 0;
 	}
 
-	.activity-nav__year {
-		display: block;
+	.activity-nav__details {
+		margin-top: 0.5rem;
+	}
+
+	.activity-nav__details:first-of-type {
+		margin-top: 0;
+	}
+
+	.activity-nav__year-summary {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.5rem;
 		font-size: 0.65rem;
 		font-weight: 600;
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: rgb(var(--color-muted));
-		margin-bottom: 0.35rem;
-		margin-top: 0.75rem;
+		cursor: pointer;
+		list-style: none;
+		padding: 0.35rem 0;
+		user-select: none;
 	}
 
-	.activity-nav__year:first-child {
-		margin-top: 0;
+	.activity-nav__year-summary::-webkit-details-marker {
+		display: none;
+	}
+
+	.activity-nav__year-summary::marker {
+		content: none;
+	}
+
+	.activity-nav__year-summary:hover {
+		color: rgb(var(--color-ink) / 0.9);
+	}
+
+	.activity-nav__year-summary::after {
+		content: '';
+		flex-shrink: 0;
+		width: 0.4em;
+		height: 0.4em;
+		border-right: 1.5px solid currentColor;
+		border-bottom: 1.5px solid currentColor;
+		transform: rotate(45deg);
+		transition: transform 0.2s ease;
+	}
+
+	.activity-nav__details[open] .activity-nav__year-summary::after {
+		transform: rotate(-135deg);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.activity-nav__year-summary::after {
+			transition: none;
+		}
+	}
+
+	.activity-nav__year-count {
+		font-size: 0.65rem;
+		opacity: 0.85;
+	}
+
+	.activity-nav__year {
+		/* label only */
 	}
 
 	.activity-nav__item-list {
@@ -248,6 +368,10 @@ const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItem
 			padding-left: 1rem;
 			margin-left: 0.35rem;
 			border-left-color: rgb(var(--color-accent) / 0.35);
+		}
+
+		.activity-nav__expand--jumps {
+			padding-left: 1rem;
 		}
 
 		.activity-nav__sublink {

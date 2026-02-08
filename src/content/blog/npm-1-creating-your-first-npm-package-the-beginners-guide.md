@@ -10,6 +10,13 @@ featured: false
 readingTime: 15
 tags: ['JavaScript', 'NPM', 'TypeScript', 'Package Development', 'Rollup']
 slug: 'creating-your-first-npm-package-the-beginners-guide'
+faqs:
+  - question: What do I need to create an NPM package?
+    answer: You need Node.js and npm installed, a package.json (name, version, main/exports), and your source code. TypeScript and a bundler like Rollup are optional but recommended for modern packages.
+  - question: What is the exports field in package.json?
+    answer: The exports field lets you define which entry points your package exposes (e.g. main, module, types) and supports conditional exports for different environments (import vs require, Node vs browser).
+  - question: How long does it take to create a basic NPM package?
+    answer: A minimal package with one entry point can be set up in under an hour. Adding TypeScript, dual CJS/ESM builds, and tests typically takes a few hours for a first package.
 ---
 
 ## **Introduction: Building Your First NPM Package**

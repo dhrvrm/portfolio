@@ -10,6 +10,13 @@ featured: false
 readingTime: 12
 tags: ['JavaScript', 'NPM', 'Package Development', 'Publishing', 'Registry']
 slug: 'publishing-your-npm-package-from-code-to-registry'
+faqs:
+  - question: How do I publish my first NPM package?
+    answer: Create an NPM account, set the files field in package.json, run npm login, then npm publish. Use npm publish --dry-run first to see what will be published.
+  - question: What files get published to NPM?
+    answer: Only files listed in the files field of package.json (e.g. lib). package.json, README.md, and LICENSE are always included. Use npm publish --dry-run to verify.
+  - question: How do I update a published NPM package?
+    answer: Bump the version in package.json (npm version patch|minor|major), then run npm publish again. Never republish the same version.
 ---
 
 ## **Introduction: Publishing Your Package to the World**

@@ -17,8 +17,8 @@ const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
 
 const schema = {
 	'@context': 'https://schema.org',
-	'@type': 'Article',
-	headline: project.data.title,
+	'@type': 'CreativeWork',
+	name: project.data.title,
 	description: project.data.description,
 	image: new URL(project.data.image, site).toString(),
 	datePublished: project.data.publishDate,

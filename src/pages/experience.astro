@@ -2,16 +2,31 @@
 import Layout from '../layouts/Layout.astro';
 import ExperienceItem from '../components/ExperienceItem.astro';
 import { getCollection } from 'astro:content';
+import { AUTHOR } from '../data/constants';
 
 const entries = (await getCollection('experience')).sort(
 	(a, b) => b.data.startDate.getTime() - a.data.startDate.getTime(),
 );
+
+const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
+const personSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: AUTHOR.name,
+	url: site,
+	jobTitle: 'Software Engineer',
+	worksFor: entries.map((e) => ({
+		'@type': 'Organization',
+		name: e.data.company,
+	})),
+};
 ---
 
 <Layout
 	title='Experience | Dhruv Verma - Software Engineer'
 	description='Work history and roles. Dhruv Verma, software engineer, frontend lead, and product builder.'
 >
+	<script type='application/ld+json' set:html={JSON.stringify(personSchema)} />
 	<div class='container mx-auto py-16'>
 		<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Experience</p>
 		<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-12'>

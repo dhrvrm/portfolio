@@ -36,6 +36,7 @@ export async function GET() {
 
 	const entries: UrlEntry[] = [
 		{ loc: `${base}/` },
+		{ loc: `${base}/feed.xml` },
 		{ loc: `${base}/blog` },
 		{ loc: `${base}/contact` },
 		{ loc: `${base}/experience` },

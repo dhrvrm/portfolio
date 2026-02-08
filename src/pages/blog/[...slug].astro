@@ -55,6 +55,41 @@ const articleSchema = {
 	},
 };
 
+// HowTo schema (optional) — for "how to X" rich results
+const howToSchema =
+	post.data.howTo && post.data.howTo.steps?.length
+		? {
+				'@context': 'https://schema.org' as const,
+				'@type': 'HowTo' as const,
+				name: post.data.howTo.name,
+				description: post.data.excerpt,
+				totalTime: `PT${post.data.readingTime}M`,
+				step: post.data.howTo.steps.map((s, i) => ({
+					'@type': 'HowToStep' as const,
+					position: i + 1,
+					name: s.name,
+					text: s.text,
+				})),
+			}
+		: null;
+
+// FAQ schema (optional) — for FAQ rich results
+const faqSchema =
+	post.data.faqs && post.data.faqs.length
+		? {
+				'@context': 'https://schema.org' as const,
+				'@type': 'FAQPage' as const,
+				mainEntity: post.data.faqs.map((q) => ({
+					'@type': 'Question' as const,
+					name: q.question,
+					acceptedAnswer: {
+						'@type': 'Answer' as const,
+						text: q.answer,
+					},
+				})),
+			}
+		: null;
+
 const slugify = (value: string) =>
 	value
 		.toLowerCase()
@@ -69,6 +104,12 @@ const slugify = (value: string) =>
 	article={true}
 >
 	<script type='application/ld+json' set:html={JSON.stringify(articleSchema)} />
+	{howToSchema && (
+		<script type='application/ld+json' set:html={JSON.stringify(howToSchema)} />
+	)}
+	{faqSchema && (
+		<script type='application/ld+json' set:html={JSON.stringify(faqSchema)} />
+	)}
 	<article class='container mx-auto px-6 py-16'>
 		<Breadcrumbs
 			items={[
@@ -78,38 +119,10 @@ const slugify = (value: string) =>
 			]}
 		/>
 
-		{
-			post.data.series && (
-				<div class='mb-8 bg-surface/70 rounded-2xl p-4 border border-border/70'>
-					<p class='text-sm text-muted mb-4'>
-						Part {post.data.seriesPart} of {post.data.series}
-					</p>
-					<div class='flex justify-between'>
-						{prevPost && (
-							<a
-								href={`/blog/${prevPost.slug}`}
-								class='text-accent hover:text-accentStrong flex items-center gap-2 text-sm'
-							>
-								← Previous: {prevPost.data.title}
-							</a>
-						)}
-						{nextPost && (
-							<a
-								href={`/blog/${nextPost.slug}`}
-								class='text-accent hover:text-accentStrong flex items-center gap-2 text-sm'
-							>
-								Next: {nextPost.data.title} →
-							</a>
-						)}
-					</div>
-				</div>
-			)
-		}
-
 		<div class='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12'>
 			<div>
 				<header class='mb-12'>
-					<div class='flex flex-wrap gap-2 mb-6'>
+					<div class='flex flex-wrap gap-2 mb-6 items-center'>
 						{
 							post.data.categories.map((category: string) => (
 								<span class='border border-border/70 text-muted px-4 py-2 rounded-full text-xs font-medium'>
@@ -117,6 +130,19 @@ const slugify = (value: string) =>
 								</span>
 							))
 						}
+						{post.data.series && (
+							<span class='text-xs text-muted font-mono'>
+								· Part {post.data.seriesPart} of {post.data.series}
+								{(prevPost || nextPost) && ' · '}
+								{prevPost && (
+									<a href={`/blog/${prevPost.slug}`} class='text-accent hover:text-accentStrong'>← Prev</a>
+								)}
+								{prevPost && nextPost && ' · '}
+								{nextPost && (
+									<a href={`/blog/${nextPost.slug}`} class='text-accent hover:text-accentStrong'>Next →</a>
+								)}
+							</span>
+						)}
 					</div>
 					<h1 class='text-3xl md:text-5xl font-semibold font-display mb-6'>
 						{post.data.title}
@@ -174,6 +200,20 @@ const slugify = (value: string) =>
 					<Content />
 				</div>
 
+				{post.data.faqs && post.data.faqs.length > 0 && (
+					<section class='mt-12 pt-8 border-t border-border/70' aria-labelledby='faq-heading'>
+						<h2 id='faq-heading' class='text-xl font-semibold font-display mb-6'>Frequently asked questions</h2>
+						<ul class='space-y-6 list-none pl-0'>
+							{post.data.faqs.map((faq) => (
+								<li>
+									<h3 class='text-lg font-medium text-ink mb-2'>{faq.question}</h3>
+									<p class='text-muted'>{faq.answer}</p>
+								</li>
+							))}
+						</ul>
+					</section>
+				)}
+
 				<!-- Share Section -->
 				<div class='mt-12 pt-8 border-t border-border/70'>
 					<div class='flex flex-col items-center gap-4'>
@@ -183,7 +223,7 @@ const slugify = (value: string) =>
 						<div class='flex items-center gap-4'>
 							<button
 								id='shareButton'
-								class='flex items-center gap-2 px-6 py-3 bg-accent text-white rounded-md hover:bg-accentStrong transition-colors'
+								class='flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-onAccent hover:bg-accentStrong transition-colors'
 							>
 								<svg
 									class='w-5 h-5'
@@ -230,34 +270,6 @@ const slugify = (value: string) =>
 			</aside>
 		</div>
 
-		{
-			post.data.series && (
-				<div class='mt-16 mb-8 bg-surface/70 rounded-2xl p-4 border border-border/70'>
-					<p class='text-sm text-muted mb-4'>
-						Part {post.data.seriesPart} of {post.data.series}
-					</p>
-					<div class='flex justify-between'>
-						{prevPost && (
-							<a
-								href={`/blog/${prevPost.slug}`}
-								class='text-accent hover:text-accentStrong flex items-center gap-2 text-sm'
-							>
-								← Previous: {prevPost.data.title}
-							</a>
-						)}
-						{nextPost && (
-							<a
-								href={`/blog/${nextPost.slug}`}
-								class='text-accent hover:text-accentStrong flex items-center gap-2 text-sm'
-							>
-								Next: {nextPost.data.title} →
-							</a>
-						)}
-					</div>
-				</div>
-			)
-		}
-
 		<div class='mt-16 border-t dark:border-gray-800 pt-8'>
 			<div class='bg-gray-50 dark:bg-gray-800 rounded-md p-8'>
 				<div class='flex items-start gap-6'>
@@ -278,7 +290,7 @@ const slugify = (value: string) =>
 										href={url}
 										target='_blank'
 										rel='noopener noreferrer'
-										class='text-gray-600 dark:text-gray-400 hover:text-primary-600'
+										class='text-muted hover:text-accent transition-colors'
 									>
 										<span class='capitalize'>{platform}</span>
 									</a>
@@ -288,7 +300,7 @@ const slugify = (value: string) =>
 						<div class='mt-4'>
 							<a
 								href='/contact'
-								class='inline-flex items-center px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition-colors'
+								class='inline-flex items-center px-4 py-2 rounded-md bg-accent text-onAccent font-medium hover:bg-accentStrong transition-colors'
 							>
 								Get in Touch →
 							</a>
@@ -306,7 +318,7 @@ const slugify = (value: string) =>
 	>
 		<button
 			id='floatingShareButton'
-			class='flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-modern-purple to-modern-indigo text-white rounded-full shadow-lg hover:from-modern-purple/90 hover:to-modern-indigo/90 transition-all duration-200 transform hover:scale-110'
+			class='flex items-center gap-2 px-4 py-3 rounded-full shadow-lg bg-accent text-onAccent hover:bg-accentStrong transition-colors duration-200 hover:scale-105'
 		>
 			<svg
 				class='w-5 h-5'

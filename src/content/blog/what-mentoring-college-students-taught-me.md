@@ -7,6 +7,13 @@ image: '/images/activities/srm-builds-6/srm-1.webp'
 featured: true
 readingTime: 8
 tags: ['mentoring', 'career', 'personal growth', 'boundaries', 'college students']
+faqs:
+  - question: What does mentoring college students teach you?
+    answer: Mentoring teaches you that your job isn't to have all the answers. It's helping someone think clearly, filter signal from noise, and being honest when you don't know something.
+  - question: Why set boundaries as a mentor?
+    answer: You can't genuinely help many people at once. Mentoring is about depth, not volume. Boundaries let you focus, understand context, and give real guidance instead of superficial advice.
+  - question: How do you mentor without sounding like an expert?
+    answer: Stop trying to be the career guru, tech expert, and life coach at once. Know your domain and be useful there; when you don't know something, figure it out with them instead of pretending.
 ---
 
 for two years after college, i didn't write a single line of code professionally.

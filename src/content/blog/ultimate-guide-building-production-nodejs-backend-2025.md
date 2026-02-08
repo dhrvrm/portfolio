@@ -2,7 +2,7 @@
 title: 'The Ultimate Guide to Building a Production-Grade Node.js Backend in 2025'
 publishDate: 2025-08-06
 categories: ['Node.js', 'Backend Development', 'TypeScript']
-excerpt: 'Learn how to set up a robust, scalable, and maintainable Express.js backend with TypeScript, Prisma, and modern best practices for production applications.'
+excerpt: 'A modular backend with clear layers (types, repository, service, controller, routes), Vitest for fast tests, and modern choices like Drizzle or Hono. Updated for how we build backends in 2025.'
 image: '/blogs/ultimate-guide-building-production-nodejs-backend-2025.webp'
 featured: true
 readingTime: 20
@@ -18,54 +18,134 @@ tags:
     'Security',
   ]
 slug: 'ultimate-guide-building-production-nodejs-backend-2025'
+howTo:
+  name: How to build a production-grade Node.js backend in 2025
+  steps:
+    - name: Define a module (types, repository, service, controller, routes)
+      text: Each feature lives in its own slice with strict layer rules. Routes call Controller only; Controller calls Service; Service calls Repository.
+    - name: Add types and validation with Zod
+      text: Put Zod schemas in the module types file; parse input in the controller and throw on invalid data.
+    - name: Implement repository and service layers
+      text: Repository talks to Prisma only. Service holds business logic, uses repo, and throws AppError subclasses.
+    - name: Wire controller and routes
+      text: Controller validates input, calls service, formats response, and passes errors to next(err). Routes mount controller methods only.
+    - name: Add tests with Vitest
+      text: Test types with schema.parse; mock repository in service tests; use vi.mock and vi.hoisted for clean mocks.
+faqs:
+  - question: 'What is the best structure for a Node.js backend in 2025?'
+    answer: 'A module-based structure where each feature has its own types, repository, service, controller, and routes. Layers have strict rules: routes to controller to service to repository to database.'
+  - question: 'Should I use Prisma or Drizzle for my Node.js backend?'
+    answer: 'Both work. Prisma is mature and full-featured; Drizzle is lighter and can be faster. The module pattern in this guide works with either.'
+  - question: 'How do I test a Node.js backend with clear layers?'
+    answer: 'Use Vitest. Test types with Zod parse; mock the repository in service tests; keep controllers thin so integration or e2e tests can cover the HTTP layer.'
 ---
 
-## **Introduction: Building Production-Ready Backends in 2025**
+## Introduction: Better Ways to Build Backends in 2025
 
-Building a production-ready backend in 2025 requires more than just throwing together some Express routes. Modern applications demand type safety, robust error handling, comprehensive testing, and security best practices that go far beyond basic CRUD operations.
+Older guides pushed a single "production" stack: Express, Prisma, Jest, and a flat folder of controllers, services, and repositories. That still works, but we have better options now. Faster tests, clearer boundaries, and tooling that fits how we actually ship.
 
-In this comprehensive guide, we'll build a complete Node.js backend using the Controller-Service-Repository pattern with TypeScript, Prisma ORM, and modern tooling. By the end, you'll have a scalable, maintainable, and production-grade backend that follows industry best practices.
-
-> **Complete Code**: The full source code for this tutorial is available on GitHub: [production-nodejs-backend-2025](https://github.com/dhrvrm/production-nodejs-backend-2025)
+This guide shows a **module-based** backend: each feature lives in its own slice (types, repository, service, controller, routes), with strict rules for who calls whom. We use **Vitest** for tests (faster, native TypeScript), **Zod** for validation, and keep the door open for **Drizzle** or **Hono** if you want a lighter ORM or a different HTTP layer. The ideas here apply no matter which framework you pick.
 
 ---
 
-## **Why This Architecture Matters**
+## Architecture and Testing
 
-Modern backend development requires careful consideration of several critical factors:
+How we build modules (types, repository, service, controller, routes) and how we test them. The codebase uses **TypeScript** (`.ts`). Examples below sometimes show `.js` for brevity; use `.ts` and extension-less imports in practice.
 
-- **Type Safety** - Catch errors at compile time, not runtime
-- **Database Abstraction** - Clean, type-safe database operations
-- **Input Validation** - Prevent security vulnerabilities and data corruption
-- **Error Handling** - Graceful failure management across the application
-- **Testing** - Reliable, maintainable test suites for confidence
-- **Logging** - Comprehensive observability for debugging and monitoring
-- **Security** - Protection against common attacks and vulnerabilities
+### Quick reference
 
-This guide shows you how to build a backend that ticks all these boxes using modern tools and architectural patterns.
+| Layer        | Can call              | Cannot call                    |
+| ------------| --------------------- | ------------------------------ |
+| Routes       | Controllers only      | Services, Repositories         |
+| Controllers  | Services only         | Repositories, other controllers|
+| Services     | Repositories, other services | Other repositories       |
+| Repositories | Prisma only           | Services, other repositories   |
 
 ---
 
-## **Architecture Overview**
+### Part 1: What is a module?
 
-We'll implement the **Controller-Service-Repository Pattern** - a proven architecture that separates concerns and makes your code maintainable and testable:
+A **module** is a slice of the app around one concept (e.g. templates, sites, customers). Each module has:
+
+1. **Types** – validation (Zod) and shared shapes  
+2. **Repository** – database access only (Prisma or Drizzle)  
+3. **Service** – business logic; uses repository, throws shared errors  
+4. **Controller** – HTTP layer; parse input, call service, format response, `next(err)`  
+5. **Routes** – wire paths to controller methods only; live **inside** the module  
+
+Flow:
 
 ```
-┌─────────────────┐
-│   Controller    │ ← HTTP handling, request/response
-├─────────────────┤
-│    Service      │ ← Business logic, orchestration
-├─────────────────┤
-│  Repository     │ ← Data access, database operations
-└─────────────────┘
+HTTP request → Routes → Controller → Service → Repository → Prisma → DB
+                                ↓
+                    (parse, format, errors to middleware)
 ```
 
-### **Why This Pattern?**
+**Rules:** Routes call Controller only. Controller calls Service only. Service calls Repository (and other services). Repository calls Prisma only.
 
-- **Single Responsibility** - Each layer has one job and does it well
-- **Testability** - Easy to mock dependencies for unit testing
-- **Maintainability** - Changes in one layer don't affect others
-- **Scalability** - Easy to add new features without breaking existing code
+---
+
+### Part 2: Building a module
+
+Layout (use **Templates** as the example):
+
+```
+src/modules/templates/
+├── templates.types.ts
+├── templates.repository.ts
+├── templates.service.ts
+├── templates.controller.ts
+├── templates.routes.ts
+├── index.ts
+└── __tests__/
+    ├── templates.types.test.ts
+    └── templates.service.test.ts
+```
+
+- **Types:** Zod schemas; `schema.parse(...)` in controller.  
+- **Repository:** Prisma only; `findAll`, `findById`, `create`, `update`, `delete`.  
+- **Service:** Business logic; uses repo, throws `NotFoundError` / `ValidationError` etc.  
+- **Controller:** `try` → validate (Zod), call service, `res.json(...)`; `catch` → `next(err)`.  
+- **Routes:** `router.get('/', controller.getAll)`, etc. No logic.  
+- **Index:** Export routes, service, repo, controller, types. Server mounts `app.use('/api/templates', templatesRoutes)`.
+
+---
+
+### Part 3: Tests (Vitest)
+
+**Commands:** `npm test`, `npm run test:watch`, `npm run test:coverage`.
+
+- **Types tests:** `schema.parse(valid)` / `expect(() => schema.parse(invalid)).toThrow()`. No mocks.  
+- **Service tests:** Mock repository (and logger) with `vi.mock`, `vi.hoisted`, `vi.fn`. `beforeEach(() => vi.clearAllMocks())`. Assert on mock calls and return values.  
+- **Optional:** Repository tests (real DB), integration tests (supertest). We rely on types plus service tests by default.
+
+---
+
+### Part 4: Checklist for a new module
+
+- [ ] `src/modules/<name>/<name>.types.ts` – Zod schemas  
+- [ ] `src/modules/<name>/<name>.repository.ts` – Prisma only  
+- [ ] `src/modules/<name>/<name>.service.ts` – Uses repo, throws `AppError` subclasses  
+- [ ] `src/modules/<name>/<name>.controller.ts` – Parse, call service, `res.json`, `next(err)`  
+- [ ] `src/modules/<name>/<name>.routes.ts` – Router to controller only; export function that returns router  
+- [ ] `src/modules/<name>/index.ts` – Export routes, service, repo, controller, types  
+- [ ] Mount in `server.ts`: `app.use('/api/<name>', <name>Routes)`  
+- [ ] No global `src/routes/<name>.ts`; routes live in the module  
+- [ ] `__tests__/<name>.types.test.ts`, `__tests__/<name>.service.test.ts`
+
+---
+
+### Part 5: Layer summary
+
+| Layer       | Responsibility       | Test with                    |
+| -----------| -------------------- | ---------------------------- |
+| Types      | Validation (Zod)     | Unit tests, no mocks         |
+| Repository | DB access (Prisma)  | Optional DB tests            |
+| Service    | Business logic       | Unit tests, mock repo        |
+| Controller | HTTP layer          | Optional integration        |
+| Routes     | Wire paths           | Optional integration         |
+
+**Vitest:** `vi.mock`, `vi.hoisted`, `vi.fn`, `vi.clearAllMocks`, `expect(...).toMatchObject`, `toHaveBeenCalledWith`, `toThrow`.
 
 ---
 
@@ -87,20 +167,21 @@ Install the core dependencies for our production backend:
 
 ```bash
 npm install express cors helmet morgan dotenv zod winston prisma @prisma/client
-npm install -D typescript @types/node @types/express @types/cors @types/morgan jest supertest @types/jest ts-jest
+npm install -D typescript @types/node @types/express @types/cors @types/morgan vitest supertest
 ```
 
 ### **Why These Packages?**
 
-- **Express** - The web framework (still the most popular and mature)
-- **CORS** - Handle cross-origin requests securely
-- **Helmet** - Security headers for protection
-- **Morgan** - HTTP request logging for observability
-- **Dotenv** - Environment variable management
-- **Zod** - Runtime type validation (better than Joi in 2025)
-- **Winston** - Structured logging for production
-- **Prisma** - Type-safe database ORM
-- **Jest + Supertest** - Testing framework and HTTP testing
+- **Express** – Web framework. For edge or smaller bundles, consider Hono or Fastify later.
+- **CORS** – Cross-origin requests.
+- **Helmet** – Security headers.
+- **Morgan** – HTTP request logging.
+- **Dotenv** – Environment variables.
+- **Zod** – Runtime validation and shared types. Stays in the types layer.
+- **Winston** – Structured logging.
+- **Prisma** – Type-safe ORM. For a lighter, SQL-first option, Drizzle is a solid alternative.
+- **Vitest** – Fast test runner, native TypeScript and ESM. Replaces Jest for new projects.
+- **Supertest** – Optional HTTP integration tests.
 
 ### **Step 3: Configure TypeScript**
 
@@ -138,35 +219,35 @@ Create a `tsconfig.json` file:
 
 ### **Step 4: Set Up Project Structure**
 
-Create the following directory structure:
+Use a **module-based** layout. Each feature (e.g. users, templates) is a module. Shared config and middleware stay at the top level.
 
 ```
 src/
 ├── config/
-│   ├── database.ts
 │   ├── environment.ts
 │   └── logger.ts
-├── controllers/
-│   └── userController.ts
-├── services/
-│   └── userService.ts
-├── repositories/
-│   └── userRepository.ts
 ├── middleware/
 │   ├── errorHandler.ts
 │   ├── validation.ts
 │   └── auth.ts
-├── routes/
-│   └── userRoutes.ts
-├── types/
-│   └── index.ts
 ├── utils/
 │   └── errors.ts
+├── modules/
+│   └── users/
+│       ├── users.types.ts
+│       ├── users.repository.ts
+│       ├── users.service.ts
+│       ├── users.controller.ts
+│       ├── users.routes.ts
+│       ├── index.ts
+│       └── __tests__/
+│           ├── users.types.test.ts
+│           └── users.service.test.ts
 ├── app.ts
 └── server.ts
 ```
 
-This structure follows the **Separation of Concerns** principle and makes the codebase maintainable and scalable.
+Routes live **inside** each module. The server mounts them: `app.use('/api/users', usersRoutes)`. No global `src/routes/` or `src/controllers/` folder.
 
 ---
 
@@ -262,9 +343,11 @@ export default env;
 
 ### **2. Type Definitions**
 
-Create `src/types/index.ts`:
+Create `src/modules/users/users.types.ts` (or a shared `src/types/index.ts` if you prefer). Per-module types keep the module self-contained. You can also define Zod schemas here (e.g. `createUserSchema`, `updateUserSchema`) and import them in routes and in types tests.
 
 ```typescript
+import { z } from 'zod';
+
 export interface User {
 	id: string;
 	email: string;
@@ -289,6 +372,21 @@ export interface ApiResponse<T> {
 	error?: string;
 	message?: string;
 }
+
+// Zod schemas for validation (used in routes and types tests)
+export const createUserSchema = z.object({
+	body: z.object({
+		email: z.string().email(),
+		name: z.string().min(2).max(100),
+	}),
+});
+export const updateUserSchema = z.object({
+	body: z.object({
+		email: z.string().email().optional(),
+		name: z.string().min(2).max(100).optional(),
+	}),
+	params: z.object({ id: z.string().cuid() }),
+});
 ```
 
 ### **3. Error Handling**
@@ -438,13 +536,13 @@ export const updateUserSchema = z.object({
 
 ### **6. Repository Layer**
 
-Create `src/repositories/userRepository.ts`:
+Create `src/modules/users/users.repository.ts`:
 
 ```typescript
 import { PrismaClient, User } from '@prisma/client';
-import { CreateUserInput, UpdateUserInput } from '../types';
-import { NotFoundError, ConflictError } from '../utils/errors';
-import logger from '../config/logger';
+import { CreateUserInput, UpdateUserInput } from './users.types';
+import { NotFoundError, ConflictError } from '../../utils/errors';
+import logger from '../../config/logger';
 
 export class UserRepository {
 	constructor(private prisma: PrismaClient) {}
@@ -550,13 +648,13 @@ export class UserRepository {
 
 ### **7. Service Layer**
 
-Create `src/services/userService.ts`:
+Create `src/modules/users/users.service.ts`:
 
 ```typescript
 import { User } from '@prisma/client';
-import { CreateUserInput, UpdateUserInput } from '../types';
-import { UserRepository } from '../repositories/userRepository';
-import logger from '../config/logger';
+import { CreateUserInput, UpdateUserInput } from './users.types';
+import { UserRepository } from './users.repository';
+import logger from '../../config/logger';
 
 export class UserService {
 	constructor(private userRepository: UserRepository) {}
@@ -609,14 +707,13 @@ export class UserService {
 
 ### **8. Controller Layer**
 
-Create `src/controllers/userController.ts`:
+Create `src/modules/users/users.controller.ts`:
 
 ```typescript
 import { Request, Response, NextFunction } from 'express';
-import { UserService } from '../services/userService';
-import { ApiResponse } from '../types';
-import { AppError } from '../utils/errors';
-import logger from '../config/logger';
+import { UserService } from './users.service';
+import { ApiResponse } from './users.types';
+import { AppError } from '../../utils/errors';
 
 export class UserController {
 	constructor(private userService: UserService) {}
@@ -846,51 +943,33 @@ export const errorHandler = (
 
 ### **11. Routes**
 
-Create `src/routes/userRoutes.ts`:
+Create `src/modules/users/users.routes.ts`. Routes live in the module and call only the controller.
 
 ```typescript
 import { Router } from 'express';
-import { UserController } from '../controllers/userController';
-import { UserService } from '../services/userService';
-import { UserRepository } from '../repositories/userRepository';
+import { UserController } from './users.controller';
 import {
 	validate,
 	createUserSchema,
 	updateUserSchema,
-} from '../middleware/validation';
-import { PrismaClient } from '@prisma/client';
+} from '../../middleware/validation';
 
-const router = Router();
-const prisma = new PrismaClient();
-const userRepository = new UserRepository(prisma);
-const userService = new UserService(userRepository);
-const userController = new UserController(userService);
-
-// GET /api/users
-router.get('/', (req, res, next) => userController.getAllUsers(req, res, next));
-
-// GET /api/users/:id
-router.get('/:id', (req, res, next) =>
-	userController.getUserById(req, res, next)
-);
-
-// POST /api/users
-router.post('/', validate(createUserSchema), (req, res, next) =>
-	userController.createUser(req, res, next)
-);
-
-// PUT /api/users/:id
-router.put('/:id', validate(updateUserSchema), (req, res, next) =>
-	userController.updateUser(req, res, next)
-);
-
-// DELETE /api/users/:id
-router.delete('/:id', (req, res, next) =>
-	userController.deleteUser(req, res, next)
-);
-
-export default router;
+export function createUserRoutes(controller: UserController) {
+	const router = Router();
+	router.get('/', (req, res, next) => controller.getAllUsers(req, res, next));
+	router.get('/:id', (req, res, next) => controller.getUserById(req, res, next));
+	router.post('/', validate(createUserSchema), (req, res, next) =>
+		controller.createUser(req, res, next)
+	);
+	router.put('/:id', validate(updateUserSchema), (req, res, next) =>
+		controller.updateUser(req, res, next)
+	);
+	router.delete('/:id', (req, res, next) => controller.deleteUser(req, res, next));
+	return router;
+}
 ```
+
+The module `index.ts` can export a function that takes Prisma (or a config) and returns the router so the app only does `app.use('/api/users', createUserRoutes(prisma))`.
 
 ### **12. Main Application**
 
@@ -937,8 +1016,10 @@ app.get('/health', (req, res) => {
 	res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// API routes
-app.use('/api/users', userRoutes);
+// API routes: mount module routes (e.g. createUserRoutes(prisma) from modules/users)
+import { createUserRoutes } from './modules/users';
+const prisma = new PrismaClient();
+app.use('/api/users', createUserRoutes(prisma));
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -997,114 +1078,111 @@ process.on('unhandledRejection', (err) => {
 
 ## **Testing Strategy**
 
-### **Why Testing Matters**
+We rely on **types tests** (Zod schemas, no mocks) and **service tests** (mock the repository). Integration and repository tests are optional.
 
-Testing is crucial for production applications because:
+### **Vitest Setup**
 
-- **Confidence** - Deploy with confidence knowing your code works
-- **Refactoring** - Safe to refactor without breaking functionality
-- **Documentation** - Tests serve as living documentation
-- **Bug Prevention** - Catch issues before they reach production
-
-### **Test Setup**
-
-Create `jest.config.js`:
-
-```javascript
-module.exports = {
-	preset: 'ts-jest',
-	testEnvironment: 'node',
-	roots: ['<rootDir>/src'],
-	testMatch: ['**/__tests__/**/*.ts', '**/?(*.)+(spec|test).ts'],
-	transform: {
-		'^.+\\.ts$': 'ts-jest',
-	},
-	collectCoverageFrom: ['src/**/*.ts', '!src/**/*.d.ts', '!src/server.ts'],
-	coverageDirectory: 'coverage',
-	coverageReporters: ['text', 'lcov', 'html'],
-};
-```
-
-### **API Tests**
-
-Create `src/__tests__/user.test.ts`:
+Add to `package.json` or create `vitest.config.ts`:
 
 ```typescript
-import request from 'supertest';
-import app from '../app';
-import { PrismaClient } from '@prisma/client';
+// vitest.config.ts
+import { defineConfig } from 'vitest/config';
+import path from 'path';
 
-const prisma = new PrismaClient();
+export default defineConfig({
+	test: {
+		globals: true,
+		environment: 'node',
+		include: ['src/**/*.test.ts'],
+		coverage: {
+			provider: 'v8',
+			reporter: ['text', 'lcov', 'html'],
+			exclude: ['node_modules', 'dist', '**/*.test.ts'],
+		},
+	},
+	resolve: {
+		alias: { '@': path.resolve(__dirname, './src') },
+	},
+});
+```
 
-describe('User API', () => {
-	beforeAll(async () => {
-		// Clean database before tests
-		await prisma.user.deleteMany();
+### **Types Tests**
+
+Create `src/modules/users/__tests__/users.types.test.ts`:
+
+```typescript
+import { describe, it, expect } from 'vitest';
+import { createUserSchema } from '../users.types';
+
+describe('users.types', () => {
+	it('accepts valid create payload', () => {
+		const valid = { body: { email: 'a@b.com', name: 'Ab' } };
+		expect(createUserSchema.parse(valid)).toMatchObject(valid);
 	});
 
-	afterAll(async () => {
-		await prisma.$disconnect();
-	});
-
-	describe('POST /api/users', () => {
-		it('should create a new user', async () => {
-			const userData = {
-				email: 'test@example.com',
-				name: 'Test User',
-			};
-
-			const response = await request(app)
-				.post('/api/users')
-				.send(userData)
-				.expect(201);
-
-			expect(response.body.success).toBe(true);
-			expect(response.body.data.email).toBe(userData.email);
-			expect(response.body.data.name).toBe(userData.name);
-			expect(response.body.data.id).toBeDefined();
-		});
-
-		it('should return 400 for invalid email', async () => {
-			const userData = {
-				email: 'invalid-email',
-				name: 'Test User',
-			};
-
-			const response = await request(app)
-				.post('/api/users')
-				.send(userData)
-				.expect(400);
-
-			expect(response.body.success).toBe(false);
-			expect(response.body.error).toContain('Validation failed');
-		});
-	});
-
-	describe('GET /api/users', () => {
-		it('should return all users', async () => {
-			const response = await request(app).get('/api/users').expect(200);
-
-			expect(response.body.success).toBe(true);
-			expect(Array.isArray(response.body.data)).toBe(true);
-		});
+	it('throws on invalid email', () => {
+		expect(() =>
+			createUserSchema.parse({ body: { email: 'invalid', name: 'Ab' } })
+		).toThrow();
 	});
 });
 ```
 
-### **Jest Configuration**
+### **Service Tests (Mock Repository)**
+
+Create `src/modules/users/__tests__/users.service.test.ts`:
+
+```typescript
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UserService } from '../users.service';
+import { UserRepository } from '../users.repository';
+
+const mockRepo = {
+	findAll: vi.fn(),
+	findById: vi.fn(),
+	create: vi.fn(),
+	update: vi.fn(),
+	delete: vi.fn(),
+};
+
+beforeEach(() => vi.clearAllMocks());
+
+describe('UserService', () => {
+	it('getAllUsers returns repo result', async () => {
+		const users = [{ id: '1', email: 'a@b.com', name: 'A', createdAt: new Date(), updatedAt: new Date() }];
+		mockRepo.findAll.mockResolvedValue(users);
+		const service = new UserService(mockRepo as unknown as UserRepository);
+		const result = await service.getAllUsers();
+		expect(result).toMatchObject(users);
+		expect(mockRepo.findAll).toHaveBeenCalledOnce();
+	});
+
+	it('createUser calls repo.create with valid data', async () => {
+		const created = { id: '1', email: 'a@b.com', name: 'Ab', createdAt: new Date(), updatedAt: new Date() };
+		mockRepo.create.mockResolvedValue(created);
+		const service = new UserService(mockRepo as unknown as UserRepository);
+		const result = await service.createUser({ email: 'a@b.com', name: 'Ab' });
+		expect(mockRepo.create).toHaveBeenCalledWith({ email: 'a@b.com', name: 'Ab' });
+		expect(result).toMatchObject(created);
+	});
+});
+```
+
+### **Package Scripts**
 
 Add test scripts to `package.json`:
 
 ```json
 {
 	"scripts": {
-		"test": "jest",
-		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage",
-		"test:e2e": "jest --config jest.e2e.config.js"
+		"test": "vitest",
+		"test:watch": "vitest --watch",
+		"test:coverage": "vitest run --coverage"
 	}
 }
 ```
+
+Optional: use Supertest for integration tests against `app`; keep those in a separate `__tests__/integration` or similar so unit tests stay fast.
 
 ---
 
@@ -1118,9 +1196,9 @@ Add these scripts to your `package.json`:
 		"dev": "ts-node-dev --respawn --transpile-only src/server.ts",
 		"build": "tsc",
 		"start": "node dist/server.js",
-		"test": "jest",
-		"test:watch": "jest --watch",
-		"test:coverage": "jest --coverage",
+		"test": "vitest",
+		"test:watch": "vitest --watch",
+		"test:coverage": "vitest run --coverage",
 		"lint": "eslint src/**/*.ts",
 		"lint:fix": "eslint src/**/*.ts --fix",
 		"db:generate": "prisma generate",
@@ -1228,12 +1306,24 @@ CMD ["npm", "start"]
 
 ### **Modern Tooling Choices**
 
-- **TypeScript** - Type safety and better developer experience
-- **Prisma** - Type-safe database operations
-- **Zod** - Runtime type validation
-- **Winston** - Structured logging
-- **Jest** - Modern testing framework
-- **Express** - Mature, well-supported web framework
+- **TypeScript** – Type safety and better DX.
+- **Prisma** – Type-safe ORM. For a lighter, SQL-first option, **Drizzle** is a strong alternative (smaller bundle, great for serverless).
+- **Zod** – Runtime validation and shared types in the types layer.
+- **Winston** – Structured logging.
+- **Vitest** – Fast tests, native ESM and TypeScript. Prefer it over Jest for new Node backends.
+- **Express** – Mature and well-supported. For edge or smaller footprint, **Hono** or **Fastify** are good alternatives.
+
+---
+
+## **Modern alternatives in 2025**
+
+The layered module pattern (types, repository, service, controller, routes) does not depend on a specific framework. You can swap pieces and still keep the same boundaries.
+
+- **ORM:** Prisma is full-featured and great for teams. If you want a smaller bundle, SQL-first APIs, or better serverless cold starts, **Drizzle** is a strong choice. Schema lives in TypeScript; you keep the same repository layer, just backed by Drizzle instead of Prisma.
+- **HTTP layer:** Express is the default here. **Hono** fits edge and multi-runtime (Node, Bun, Deno) and stays tiny. **Fastify** gives you speed and a solid plugin ecosystem. **Elysia** (Bun-first) is another option if you target Bun. In all cases, routes still call controllers only.
+- **Tests:** **Vitest** is the better default for new Node backends: faster than Jest, native ESM and TypeScript, and the same `expect`/mock mental model. Use `vi.mock` for the repository in service tests and keep types tests free of mocks.
+
+Start with the stack in this guide and switch one piece at a time if you need to (e.g. add Drizzle for a new service or move one app to Hono for edge).
 
 ---
 
@@ -1308,60 +1398,14 @@ curl -X DELETE http://localhost:3000/api/users/cmdx4xjxp0000s3oqfw50f3be
 
 ---
 
-## **Important Disclaimer: Architecture Considerations**
+## **When to Use This (and When to Evolve)**
 
-Before we conclude, it's important to note that this architecture serves as an excellent foundation for beginners and small to medium-sized applications. However, it's not a one-size-fits-all solution for all production scenarios.
+This layout works well for small and medium apps, MVPs, and learning. Routes in modules, clear layers, and Vitest give you a base that is easy to reason about and change.
 
-### **When This Architecture Works Well**
-
-- **Small to medium applications** - Perfect for startups and MVPs
-- **Learning and skill development** - Great foundation for understanding patterns
-- **Rapid prototyping** - Quick to implement and iterate
-- **Team onboarding** - Easy for new developers to understand
-
-### **When You Might Need Different Approaches**
-
-As your application grows in complexity and scale, you might consider:
-
-- **Microservices Architecture** - Separate services for different domains
-- **Monorepo Structure** - Multiple related services in a single repository
-- **Event-Driven Architecture** - Asynchronous communication between services
-- **Domain-Driven Design (DDD)** - More complex domain modeling
-- **CQRS Pattern** - Separate read and write models
-- **Event Sourcing** - Append-only event logs for state reconstruction
-- **OpenAPI/Swagger Documentation** - Auto-generated API documentation and testing
-- **Caching Strategy** - Redis or in-memory caching for frequently accessed data
-
-### **Production Reality Check**
-
-In real-world production environments, you might encounter:
-
-- **Team scaling** - Multiple teams working on different services
-- **Technology diversity** - Different services using different tech stacks
-- **Deployment complexity** - Container orchestration, service mesh, etc.
-- **Data consistency** - Distributed transactions and eventual consistency
-- **Operational overhead** - Monitoring, logging, and debugging across services
-
-> **Quick Tip**: Start with this architecture and evolve it based on your actual needs. Don't over-engineer from day one, but be prepared to refactor when the complexity demands it.
+If you outgrow it, you might add: microservices or a monorepo, event-driven or CQRS-style boundaries, OpenAPI docs, or Redis (or similar) for caching. Start with this, then add complexity only when you need it.
 
 ---
 
 ## **Conclusion**
 
-This setup provides you with a production-grade Node.js backend that's:
-
-- **Type-safe** with TypeScript
-- **Well-architected** with clean separation of concerns
-- **Testable** with comprehensive test coverage
-- **Secure** with proper validation and error handling
-- **Observable** with structured logging
-- **Scalable** with modular design
-- **Maintainable** with clear patterns and conventions
-
-The architecture and patterns used here will scale with your application and make it easy to add new features while maintaining code quality and reliability. Whether you're building a small API or a large-scale application, these foundations will serve you well in 2025 and beyond.
-
-**Remember**: This is a solid foundation, not a rule of thumb. Use it as a starting point and adapt it to your specific needs as your application and team grow.
-
-> **Quick Tip**: Start with this foundation and gradually add features like authentication, rate limiting, caching, and monitoring as your application grows.
-
-> **Next Steps**: Consider adding JWT authentication, Redis caching for API performance, API documentation with OpenAPI/Swagger, and monitoring with tools like Prometheus and Grafana for a complete production setup.
+You get a backend that is type-safe (TypeScript and Zod), layered by module (types, repository, service, controller, routes), and testable with Vitest and clear boundaries. Add auth, rate limiting, caching, or OpenAPI when you need them. Use this as the base and adapt as your app and team grow.

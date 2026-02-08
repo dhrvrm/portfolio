@@ -10,6 +10,16 @@ featured: false
 readingTime: 10
 tags: ['NPM', 'Registry', 'Azure DevOps', 'Artifacts', 'Private Packages']
 slug: 'private-npm-registries-azure-devops-artifacts'
+faqs:
+  - question: What is the best private NPM registry for teams?
+    answer: >-
+      Azure DevOps Artifacts is a strong overall choice: simple PAT-based auth, good free tier, and works well with CI/CD. AWS CodeArtifact and GitHub Packages are good if you're already in those ecosystems.
+  - question: How do I authenticate to a private NPM registry?
+    answer: >-
+      Most registries use a token or PAT in .npmrc (e.g. feed URL with username and password placeholders). Configure it per project or globally.
+  - question: Why use a private NPM registry?
+    answer: >-
+      Design systems, shared UI, internal SDKs, and security patches often stay private. A private registry gives reliable publishing from CI/CD, access control, and fast installs for the team.
 ---
 
 ## **Why Private Artifacts Matter in Real Teams**

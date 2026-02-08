@@ -1,0 +1,39 @@
+---
+description: When creating or editing blog posts, add HowTo and FAQ frontmatter for SEO rich results.
+globs: src/content/blog/**/*.md
+alwaysApply: false
+---
+
+# Blog SEO: How-To and FAQ
+
+When creating or editing a blog post, consider adding optional **howTo** and **faqs** in frontmatter so the site can output HowTo and FAQPage JSON-LD and (for FAQs) a visible "Frequently asked questions" section. See `docs/seo-how-to-and-faq.md` for full guidance.
+
+## When to add
+
+- **faqs**: Add to any post where readers might ask "what is X?", "how do I Y?", or "why Z?". Use 3–8 questions; wording should match likely search queries.
+- **howTo**: Add only to **step-by-step tutorials**. Steps should align with H2s in the body. Include a short `name` and one `step` per main action with `name` and `text`.
+
+## Frontmatter shape
+
+```yaml
+# Optional: for tutorial posts with clear steps
+howTo:
+  name: How to create your first NPM package
+  steps:
+    - name: Set up the project structure
+      text: Create a directory with src/, add package.json with name and version.
+    - name: Add TypeScript and Rollup
+      text: Install TypeScript and Rollup, add tsconfig and rollup.config.js.
+
+# Optional: for any post (FAQ rich results + visible FAQ section)
+faqs:
+  - question: What do I need to get started?
+    answer: You need Node.js, npm, and a package.json with name and version.
+  - question: How long does it take?
+    answer: A minimal package can be set up in under an hour.
+```
+
+## Rules
+
+- Only add schema for content that appears on the page (FAQs are rendered automatically; howTo steps should match your H2s).
+- Keep answers concise (2–4 sentences). Use the same question/answer text in frontmatter as in the doc if you also write an FAQ section in the body.

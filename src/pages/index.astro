@@ -17,6 +17,13 @@ const personSchema = {
 	description: AUTHOR.shortBio,
 	sameAs: Object.values(AUTHOR.social),
 };
+const websiteSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: 'Dhruv Verma',
+	url: site,
+	description: AUTHOR.shortBio,
+};
 const featuredProjects = allProjects
 	.filter((p) => p.data.featured)
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
@@ -33,6 +40,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 	description='Software engineer and frontend developer. Portfolio, projects, and writing on React, Node.js, and building products. Based in India.'
 >
 	<script type='application/ld+json' set:html={JSON.stringify(personSchema)} />
+	<script type='application/ld+json' set:html={JSON.stringify(websiteSchema)} />
 	<section class='hero-section min-h-[calc(100vh-6rem)] flex items-center'>
 		<div class='hero-beam' aria-hidden='true'></div>
 		<div class='container mx-auto py-12 relative z-10'>

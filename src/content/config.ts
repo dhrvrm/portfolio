@@ -32,6 +32,27 @@ const blog = defineCollection({
 		tags: z.array(z.string()),
 		series: z.string().optional(),
 		seriesPart: z.number().optional(),
+		// SEO: HowTo rich results (optional). Steps must match visible H2s in the post.
+		howTo: z
+			.object({
+				name: z.string(),
+				steps: z.array(
+					z.object({
+						name: z.string(),
+						text: z.string(),
+					}),
+				),
+			})
+			.optional(),
+		// SEO: FAQ rich results (optional). Render an FAQ section so content matches schema.
+		faqs: z
+			.array(
+				z.object({
+					question: z.string(),
+					answer: z.string(),
+				}),
+			)
+			.optional(),
 	}),
 });
 

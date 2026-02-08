@@ -178,10 +178,11 @@ const blogSchema = {
 			<div class='space-y-16 min-w-0'>
 				{/* 1. Posts first */}
 				<section aria-label='Blog posts'>
-					<div class='flex items-center justify-between gap-4 mb-6'>
+					<div class='flex items-center justify-between gap-4 mb-6 flex-wrap'>
 						<h2 class='text-xl md:text-2xl font-semibold font-display' id='posts-heading'>Posts</h2>
-						<span class='text-sm text-muted'>
+						<span class='text-sm text-muted flex items-center gap-3'>
 							{allPostsSorted.length} post{allPostsSorted.length !== 1 ? 's' : ''}
+							<a href='/feed.xml' class='text-accent hover:text-accentStrong transition-colors' aria-label='Subscribe to RSS feed'>RSS</a>
 						</span>
 					</div>
 					<div class='grid gap-8 sm:grid-cols-2'>

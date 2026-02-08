@@ -34,11 +34,10 @@ const groupByYear = (list: typeof events) => {
 		Conferences, meetups, and community events I have covered.
 	</p>
 
-	{
-		events.length ? (
+	{events.length ? (
 			<div class='space-y-10'>
 				{groupByYear(events).map(([year, entries]) => (
-					<div>
+					<div id={`year-${year}`} class='scroll-mt-24'>
 						<p class='font-mono text-xs uppercase tracking-[0.12em] text-muted mb-4'>
 							{year}
 						</p>
@@ -54,8 +53,7 @@ const groupByYear = (list: typeof events) => {
 					</div>
 				))}
 			</div>
-		) : (
-			<p class='text-sm text-muted'>No events listed yet.</p>
-		)
-	}
+	) : (
+		<p class='text-sm text-muted'>No events listed yet.</p>
+	)}
 </ActivityLayout>
