@@ -10,13 +10,11 @@ const featuredProjects = allProjects
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 6);
 
-const activities = await getCollection('activities');
-const activityImages = activities
-	.filter((a) => (a.data.images ?? []).length > 0)
-	.flatMap((a) => a.data.images ?? []);
-const bentoImage1 = activityImages[0] ?? '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
-const bentoImage2 = activityImages[1] ?? activityImages[0] ?? '/images/activities/srm-builds-6/srm-1.webp';
-const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
+const bentoImage1 =
+	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
+const bentoImage2 = '/images/activities/srm-builds-6/srm-1.webp';
+const bentoImageTravel =
+	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-3.webp';
 ---
 
 <Layout title='Dhruv Verma - Frontend Developer'>
@@ -28,7 +26,9 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					<p class='text-sm uppercase tracking-[0.3em] text-muted'>
 						Software engineer • builder • traveler
 					</p>
-					<h1 class='text-4xl md:text-6xl lg:text-6xl font-semibold font-display tracking-tight'>
+					<h1
+						class='text-4xl md:text-6xl lg:text-6xl font-semibold font-display tracking-tight'
+					>
 						Engineering thoughtful software while living a curious, human life.
 					</h1>
 					<p class='text-lg text-muted'>
@@ -54,7 +54,7 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					<img
 						src='/images/portraits/dhruv-portrait-1.webp'
 						alt='Portrait of Dhruv Verma'
-						class='hero-image w-full h-[420px] md:h-[520px] object-cover rounded-[var(--radius-md)]'
+						class='hero-image w-full h-[520px] md:h-[640px] object-cover rounded-[var(--radius-md)]'
 						loading='eager'
 						decoding='async'
 					/>
@@ -66,21 +66,35 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					>
 						<defs>
 							<filter id='gooey'>
-								<feGaussianBlur in='SourceGraphic' stdDeviation='18' result='blur' />
+								<feGaussianBlur
+									in='SourceGraphic'
+									stdDeviation='18'
+									result='blur'></feGaussianBlur>
 								<feColorMatrix
 									in='blur'
 									mode='matrix'
 									values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -7'
-									result='goo'
-								/>
-								<feComposite in='SourceGraphic' in2='goo' operator='atop' />
+									result='goo'></feColorMatrix>
+								<feComposite in='SourceGraphic' in2='goo' operator='atop'
+								></feComposite>
 							</filter>
 							<mask id='reveal-mask'>
-								<rect width='100%' height='100%' fill='black' />
+								<rect width='100%' height='100%' fill='black'></rect>
 								<g filter='url(#gooey)'>
-									<circle id='blob-main' cx='600' cy='520' r='140' fill='white' />
-									<circle id='blob-trail-1' cx='560' cy='540' r='90' fill='white' />
-									<circle id='blob-trail-2' cx='520' cy='560' r='70' fill='white' />
+									<circle id='blob-main' cx='600' cy='520' r='220' fill='white'
+									></circle>
+									<circle
+										id='blob-trail-1'
+										cx='560'
+										cy='540'
+										r='160'
+										fill='white'></circle>
+									<circle
+										id='blob-trail-2'
+										cx='520'
+										cy='560'
+										r='120'
+										fill='white'></circle>
 								</g>
 							</mask>
 						</defs>
@@ -103,7 +117,9 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		<div class='container mx-auto'>
 			<div class='flex flex-wrap items-center justify-between gap-6'>
 				<div>
-					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Track record</p>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>
+						Track record
+					</p>
 					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
 						Shipping with care and impact, and mentoring builders along the way
 					</h2>
@@ -118,7 +134,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		</div>
 	</section>
 
-	<section class='py-16 border-t border-border/70 personality-cards' data-studio-cards>
+	<section
+		class='py-16 border-t border-border/70 personality-cards'
+		data-studio-cards
+	>
 		<div class='container mx-auto'>
 			<div class='personality-cards__grid' data-studio-grid>
 				<div class='personality-cards__wrap'>
@@ -145,7 +164,7 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					<StudioCard
 						eyebrow='Community'
 						title='Mentorship without the corporate bingo'
-						body="Workshops, hackathon mentoring, and actually replying to DMs. All free. I do it to help others, not as a gig."
+						body='Workshops, hackathon mentoring, and actually replying to DMs. All free. I do it to help others, not as a gig.'
 						kicker='Growing people, not headcount.'
 						decor='blob-tl'
 						variant='asymmetric'
@@ -156,51 +175,81 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 	</section>
 
 	{featuredProjects.length > 0 && (
-		<section class='featured-accordion-section border-t border-border/70' id='featured-projects' data-accordion-section>
-			<div class='featured-accordion__wrapper'>
-				<div class='flex items-center justify-between flex-wrap gap-4 mb-6'>
+		<section
+			class='projects-strip border-t border-border/70 py-16'
+			id='featured-projects'
+			aria-labelledby='projects-strip-heading'
+		>
+			<div class='container mx-auto'>
+				<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
 					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Work</p>
 					<a href='/projects' class='text-sm font-semibold text-accent'>
 						View all projects →
 					</a>
 				</div>
-				<h2 class='text-2xl md:text-3xl font-semibold font-display mb-8'>Featured projects</h2>
-				<div class='featured-accordion__list'>
-					{featuredProjects.map((entry) => (
-						<div class='featured-accordion__item' data-accordion-item>
-							<div class='featured-accordion__header'>
-								<div class='featured-accordion__header-inner'>
-									<h3 class='featured-accordion__title'>{entry.data.title}</h3>
-									<p class='featured-accordion__desc'>{entry.data.description}</p>
-								</div>
-								<a href={`/projects/${entry.slug}`} class='featured-accordion__cta'>
-									View project
-								</a>
+				<h2
+					id='projects-strip-heading'
+					class='text-2xl md:text-3xl font-semibold font-display mb-8'
+				>
+					Featured projects
+				</h2>
+				<div class='projects-strip__scroll-wrap'>
+					<div class='projects-strip__track' tabindex='0' role='region' aria-label='Featured projects carousel'>
+						{featuredProjects.map((entry) => (
+						<a
+							href={`/projects/${entry.slug}`}
+							class='projects-strip__card group'
+						>
+							<div class='projects-strip__card-img-wrap'>
+								<img
+									src={entry.data.image}
+									alt=''
+									width={360}
+									height={202}
+									loading='lazy'
+									class='projects-strip__card-img'
+								/>
+								<div class='projects-strip__card-overlay' aria-hidden='true' />
 							</div>
-							<div class='featured-accordion__content'>
-								<div class='featured-accordion__img-wrap'>
-									<img
-										src={entry.data.image}
-										alt=''
-										width={800}
-										height={500}
-										loading='lazy'
-										class='featured-accordion__img'
-									/>
-								</div>
+							<div class='projects-strip__card-body'>
+								<h3 class='projects-strip__card-title'>{entry.data.title}</h3>
+								<p class='projects-strip__card-desc'>{entry.data.description}</p>
+								{entry.data.tech?.length > 0 && (
+									<div class='projects-strip__card-tech'>
+										{entry.data.tech.slice(0, 3).map((tech: string) => (
+											<span class='projects-strip__card-tech-pill'>{tech}</span>
+										))}
+										{entry.data.tech.length > 3 && (
+											<span class='projects-strip__card-tech-pill'>+{entry.data.tech.length - 3}</span>
+										)}
+									</div>
+								)}
 							</div>
-						</div>
+						</a>
 					))}
+					</div>
+					<div class='projects-strip__scrollbar' aria-hidden='true' data-projects-scrollbar>
+						<div class='projects-strip__scrollbar-track' data-projects-scrollbar-track>
+							<div class='projects-strip__scrollbar-thumb' data-projects-scrollbar-thumb></div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>
 	)}
 
 	<!-- Highlights: benefits/social proof section. Intent: skimmable bento grid, one primary CTA "View all activities". Responsive, semantic articles. -->
-	<section class='highlights-bento py-16 border-t border-border/70' data-bento-section aria-labelledby='highlights-heading'>
+	<section
+		class='highlights-bento py-16 border-t border-border/70'
+		data-bento-section
+		aria-labelledby='highlights-heading'
+	>
 		<div class='container mx-auto'>
 			<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
-				<h2 id='highlights-heading' class='text-2xl md:text-3xl font-semibold font-display'>
+				<h2
+					id='highlights-heading'
+					class='text-2xl md:text-3xl font-semibold font-display'
+				>
 					Highlights
 				</h2>
 				<a href='/activities' class='text-sm font-semibold text-accent'>
@@ -209,67 +258,168 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 			</div>
 			<div class='bento-grid' data-bento-grid>
 				<article class='bento-item bento-item--large' data-bento-item>
-					<div class='bento-item__header bento-item__header--large bento-item__header--img' aria-hidden='true'>
-						<img src={bentoImage1} alt='' class='bento-item__header-img' width='400' height='240' />
+					<div
+						class='bento-item__header bento-item__header--large bento-item__header--img'
+						aria-hidden='true'
+					>
+						<img
+							src={bentoImage1}
+							alt=''
+							class='bento-item__header-img'
+							width='400'
+							height='240'
+						/>
 					</div>
 					<div class='bento-item__body'>
 						<h3 class='bento-item__title'>Human narratives</h3>
-						<p class='bento-item__desc'>Lessons from places, people, and projects. Travel and stories, same focus on clarity.</p>
+						<p class='bento-item__desc'>
+							Lessons from places, people, and projects. Travel and stories,
+							same focus on clarity.
+						</p>
 					</div>
 				</article>
-				<article class='bento-item bento-item--small bento-item--image' data-bento-item>
-					<div class='bento-item__header bento-item__header--img' aria-hidden='true'>
-						<img src={bentoImage2} alt='' class='bento-item__header-img' width='280' height='160' />
-					</div>
-					<div class='bento-item__body'>
-						<h3 class='bento-item__title'>Impact partnerships</h3>
-						<p class='bento-item__desc'>Supporting teams that build real-world change with engineering.</p>
-					</div>
-				</article>
-				<article class='bento-item bento-item--small bento-item--chat' data-bento-item>
-					<div class='bento-item__header bento-item__header--chat' aria-hidden='true'>
+				<article
+					class='bento-item bento-item--small bento-item--chat'
+					data-bento-item
+				>
+					<div
+						class='bento-item__header bento-item__header--chat'
+						aria-hidden='true'
+					>
 						<div class='bento-chat'>
-							<div class='bento-chat__bubble bento-chat__bubble--them' data-bento-chat-bubble>Can you help us ship faster?</div>
-							<div class='bento-chat__bubble bento-chat__bubble--me' data-bento-chat-bubble>Sure. Let's align on the stack first.</div>
-							<div class='bento-chat__bubble bento-chat__bubble--them' data-bento-chat-bubble>Thanks, that unblocked us.</div>
+							<div
+								class='bento-chat__bubble bento-chat__bubble--them'
+								data-bento-chat-bubble
+							>
+								Can you help us ship faster?
+							</div>
+							<div
+								class='bento-chat__bubble bento-chat__bubble--me'
+								data-bento-chat-bubble
+							>
+								Sure. What are you stuck on?
+							</div>
+							<div
+								class='bento-chat__bubble bento-chat__bubble--them'
+								data-bento-chat-bubble
+							>
+								Deploy pipeline. We keep breaking prod.
+							</div>
+							<div
+								class='bento-chat__bubble bento-chat__bubble--me'
+								data-bento-chat-bubble
+							>
+								Let's fix that first. Quick call?
+							</div>
+							<div
+								class='bento-chat__bubble bento-chat__bubble--them'
+								data-bento-chat-bubble
+							>
+								We're unblocked. Thanks.
+							</div>
 						</div>
 					</div>
 					<div class='bento-item__body'>
 						<h3 class='bento-item__title'>People first</h3>
-						<p class='bento-item__desc'>Free guidance for builders and communities. Not a side gig.</p>
+						<p class='bento-item__desc'>
+							Free guidance for builders and communities. Not a side gig.
+						</p>
 					</div>
 				</article>
-				<article class='bento-item bento-item--small bento-item--code' data-bento-item>
-					<div class='bento-item__header bento-item__header--code' aria-hidden='true'>
-						<div class='bento-item__visual-dots bento-code-circle' aria-hidden='true' data-bento-code-circle></div>
+				<article
+					class='bento-item bento-item--small bento-item--image'
+					data-bento-item
+				>
+					<div
+						class='bento-item__header bento-item__header--img'
+						aria-hidden='true'
+					>
+						<img
+							src={bentoImage2}
+							alt=''
+							class='bento-item__header-img'
+							width='280'
+							height='160'
+						/>
+					</div>
+					<div class='bento-item__body'>
+						<h3 class='bento-item__title'>Impact partnerships</h3>
+						<p class='bento-item__desc'>
+							Supporting teams that build real-world change with engineering.
+						</p>
+					</div>
+				</article>
+				<article
+					class='bento-item bento-item--small bento-item--code'
+					data-bento-item
+				>
+					<div
+						class='bento-item__header bento-item__header--code'
+						aria-hidden='true'
+					>
+						<div
+							class='bento-item__visual-dots bento-code-circle'
+							aria-hidden='true'
+							data-bento-code-circle
+						>
+						</div>
 					</div>
 					<div class='bento-item__body'>
 						<h3 class='bento-item__title'>Code that holds up</h3>
-						<p class='bento-item__desc'>Sensible systems. Fewer 2am fixes, more sleep.</p>
+						<p class='bento-item__desc'>
+							Sensible systems. Fewer 2am fixes, more sleep.
+						</p>
 					</div>
 				</article>
 				<article class='bento-item bento-item--tall' data-bento-item>
-					<div class='bento-item__header bento-item__header--alt bento-item__header--tall-visual' aria-hidden='true'>
+					<div
+						class='bento-item__header bento-item__header--alt bento-item__header--tall-visual'
+						aria-hidden='true'
+					>
 						<span class='bento-item__visual-label' data-bento-visual-label>
-							<span class='bento-item__visual-word' data-bento-label-word>Workshops</span>
-							<span class='bento-item__visual-word' data-bento-label-word>·</span>
-							<span class='bento-item__visual-word' data-bento-label-word>Hackathons</span>
-							<span class='bento-item__visual-word' data-bento-label-word>·</span>
-							<span class='bento-item__visual-word' data-bento-label-word>DMs</span>
+							<span class='bento-item__visual-word' data-bento-label-word
+								>Workshops</span
+							>
+							<span class='bento-item__visual-word' data-bento-label-word
+								>·</span
+							>
+							<span class='bento-item__visual-word' data-bento-label-word
+								>Hackathons</span
+							>
+							<span class='bento-item__visual-word' data-bento-label-word
+								>·</span
+							>
+							<span class='bento-item__visual-word' data-bento-label-word
+								>DMs</span
+							>
 						</span>
 					</div>
 					<div class='bento-item__body'>
 						<h3 class='bento-item__title'>Community</h3>
-						<p class='bento-item__desc'>Workshops, hackathons, and actually replying to DMs.</p>
+						<p class='bento-item__desc'>
+							Workshops, hackathons, and actually replying to DMs.
+						</p>
 					</div>
 				</article>
 				<article class='bento-item bento-item--wide' data-bento-item>
-					<div class='bento-item__header bento-item__header--wide bento-item__header--img' aria-hidden='true'>
-						<img src={bentoImageTravel} alt='' class='bento-item__header-img' width='560' height='280' />
+					<div
+						class='bento-item__header bento-item__header--wide bento-item__header--img'
+						aria-hidden='true'
+					>
+						<img
+							src={bentoImageTravel}
+							alt=''
+							class='bento-item__header-img'
+							width='560'
+							height='280'
+						/>
 					</div>
 					<div class='bento-item__body'>
 						<h3 class='bento-item__title'>Where the wifi is</h3>
-						<p class='bento-item__desc'>Travel as part of the work. Different places, same focus on clarity and good coffee.</p>
+						<p class='bento-item__desc'>
+							Travel as part of the work. Different places, same focus on
+							clarity and good coffee.
+						</p>
 					</div>
 				</article>
 			</div>
@@ -290,7 +440,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 				</a>
 			</div>
 			<div class='travel-polaroids__pile' aria-label='Featured travel photos'>
-				<article class='travel-polaroid' style='--twist: -5deg; --pos-top: 0.5rem; --pos-left: 12%;'>
+				<article
+					class='travel-polaroid'
+					style='--twist: -5deg; --pos-top: 0.5rem; --pos-left: 12%;'
+				>
 					<div class='travel-polaroid__img-wrap'>
 						<img
 							src='https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop'
@@ -302,7 +455,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					</div>
 					<p class='travel-polaroid__caption'>Iceland</p>
 				</article>
-				<article class='travel-polaroid' style='--twist: -7deg; --pos-top: 6rem; --pos-left: 28%;'>
+				<article
+					class='travel-polaroid'
+					style='--twist: -7deg; --pos-top: 6rem; --pos-left: 28%;'
+				>
 					<div class='travel-polaroid__img-wrap'>
 						<img
 							src='https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=800&auto=format&fit=crop'
@@ -314,7 +470,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					</div>
 					<p class='travel-polaroid__caption'>Japan</p>
 				</article>
-				<article class='travel-polaroid' style='--twist: 8deg; --pos-top: 0.25rem; --pos-left: 48%;'>
+				<article
+					class='travel-polaroid'
+					style='--twist: 8deg; --pos-top: 0.25rem; --pos-left: 48%;'
+				>
 					<div class='travel-polaroid__img-wrap'>
 						<img
 							src='https://images.unsplash.com/photo-1421789665209-c9b2a435e3dc?q=80&w=800&auto=format&fit=crop'
@@ -326,7 +485,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					</div>
 					<p class='travel-polaroid__caption'>Norway</p>
 				</article>
-				<article class='travel-polaroid' style='--twist: 10deg; --pos-top: 5rem; --pos-left: 65%;'>
+				<article
+					class='travel-polaroid'
+					style='--twist: 10deg; --pos-top: 5rem; --pos-left: 65%;'
+				>
 					<div class='travel-polaroid__img-wrap'>
 						<img
 							src='https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=800&auto=format&fit=crop'
@@ -338,7 +500,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 					</div>
 					<p class='travel-polaroid__caption'>New Zealand</p>
 				</article>
-				<article class='travel-polaroid' style='--twist: 2deg; --pos-top: 4rem; --pos-left: 82%;'>
+				<article
+					class='travel-polaroid'
+					style='--twist: 2deg; --pos-top: 4rem; --pos-left: 82%;'
+				>
 					<div class='travel-polaroid__img-wrap'>
 						<img
 							src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800&auto=format&fit=crop'
@@ -358,13 +523,15 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		<div class='container mx-auto'>
 			<div class='cta-panel'>
 				<div>
-					<p class='text-sm uppercase tracking-[0.3em] text-muted'>Work together</p>
+					<p class='text-sm uppercase tracking-[0.3em] text-muted'>
+						Work together
+					</p>
 					<h2 class='text-3xl md:text-4xl font-semibold font-display mt-3'>
 						Need a reliable collaborator for your next product sprint?
 					</h2>
 					<p class='text-lg text-muted mt-3 max-w-2xl'>
-						I work with founders and teams who care about clarity, speed, and quality.
-						Let’s talk about a focused engagement.
+						I work with founders and teams who care about clarity, speed, and
+						quality. Let’s talk about a focused engagement.
 					</p>
 				</div>
 				<div class='cta-panel__actions'>
@@ -396,7 +563,7 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		if (!media || !svg) return;
 
 		const prefersReducedMotion = window.matchMedia(
-			'(prefers-reduced-motion: reduce)'
+			'(prefers-reduced-motion: reduce)',
 		).matches;
 		const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 		if (prefersReducedMotion || isCoarse) return;
@@ -455,161 +622,188 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 	});
 
 	// Personality cards: scroll reveal + Comet-style 3D tilt and subtle follow (smooth return on mouse out)
-		document.addEventListener('DOMContentLoaded', () => {
-			const prefersReducedMotion = window.matchMedia(
-				'(prefers-reduced-motion: reduce)'
-			).matches;
-			const isCoarse = window.matchMedia('(pointer: coarse)').matches;
-
-			const section = document.querySelector('[data-studio-cards]');
-			const grid = document.querySelector('[data-studio-grid]');
-			if (section && grid) {
-				const cards = grid.querySelectorAll('.studio-card');
-				if (cards.length) {
-					if (!prefersReducedMotion && !isCoarse) {
-						gsap.from(cards, {
-							scrollTrigger: {
-								trigger: section,
-								start: 'top 85%',
-								toggleActions: 'play none none reverse',
-							},
-							opacity: 0,
-							y: 24,
-							scale: 0.96,
-							rotationY: -4,
-							duration: 0.6,
-							stagger: 0.12,
-							ease: 'power2.out',
-							transformOrigin: 'center center',
-						});
-					}
-					if (!prefersReducedMotion && !isCoarse) {
-						const rotateDepth = 10;
-						const translateDepth = 6;
-						const hoverLift = -4;
-						const followDuration = 0.18;
-						const returnDuration = 0.45;
-						grid.querySelectorAll('.personality-cards__wrap').forEach((wrap) => {
-							const card = wrap.querySelector('.studio-card');
-							if (!card) return;
-							const applyTilt = (xNorm, yNorm) => {
-								gsap.to(card, {
-									duration: followDuration,
-									rotateY: -xNorm * rotateDepth,
-									rotateX: yNorm * rotateDepth,
-									translateX: xNorm * translateDepth,
-									translateY: yNorm * translateDepth + hoverLift,
-									ease: 'power2.out',
-									overwrite: true,
-								});
-							};
-							const returnToCenter = () => {
-								gsap.to(card, {
-									duration: returnDuration,
-									rotateY: 0,
-									rotateX: 0,
-									translateX: 0,
-									translateY: 0,
-									ease: 'power2.out',
-									overwrite: true,
-								});
-							};
-							wrap.addEventListener('mouseenter', () => {
-								wrap.addEventListener('mousemove', onMove);
-							});
-							wrap.addEventListener('mouseleave', () => {
-								wrap.removeEventListener('mousemove', onMove);
-								returnToCenter();
-							});
-							function onMove(e) {
-								const rect = wrap.getBoundingClientRect();
-								const x = (e.clientX - rect.left) / rect.width - 0.5;
-								const y = (e.clientY - rect.top) / rect.height - 0.5;
-								applyTilt(x, y);
-							}
-						});
-					}
-				}
-			}
-
-			// Bento grid: scroll-in once, then loop animations (chat pop-in, label stagger). Respect reduced motion.
-			const bentoSection = document.querySelector('[data-bento-section]');
-			const bentoItems = document.querySelectorAll('[data-bento-item]');
-			if (bentoSection && bentoItems.length && !prefersReducedMotion && !isCoarse) {
-				const headers = bentoSection.querySelectorAll('.bento-item__header');
-				const chatBubbles = bentoSection.querySelectorAll('[data-bento-chat-bubble]');
-				const labelWords = bentoSection.querySelectorAll('[data-bento-label-word]');
-				let loopsStarted = false;
-				function startBentoLoops() {
-					if (loopsStarted) return;
-					loopsStarted = true;
-					if (chatBubbles.length) {
-						const chatLoop = gsap.timeline({ repeat: -1, repeatDelay: 6 });
-						chatLoop
-							.set(chatBubbles, { opacity: 0, y: 14 })
-							.to(chatBubbles, { opacity: 1, y: 0, duration: 1, stagger: 0.4, ease: 'power2.out' });
-					}
-					if (labelWords.length) {
-						const labelLoop = gsap.timeline({ repeat: -1, repeatDelay: 4 });
-						labelLoop
-							.set(labelWords, { opacity: 0, y: 6 })
-							.to(labelWords, { opacity: 1, y: 0, duration: 0.24, stagger: 0.07, ease: 'power2.out' });
-					}
-				}
-				const tl = gsap.timeline({
-					scrollTrigger: {
-						trigger: bentoSection,
-						start: 'top 82%',
-						toggleActions: 'play none none reverse',
-						onEnter: startBentoLoops,
-					},
-				});
-				tl.set(headers, { scaleY: 0.85, opacity: 0.5, transformOrigin: 'center top' })
-					.set(chatBubbles, { opacity: 0, y: 12 })
-					.set(labelWords, { opacity: 0, y: 6 })
-					.from(bentoItems, { opacity: 0, y: 20, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, 0)
-					.to(headers, { scaleY: 1, opacity: 1, duration: 0.4, stagger: 0.06, ease: 'power2.out' }, 0.03)
-					.to(chatBubbles, { opacity: 1, y: 0, duration: 0.85, stagger: 0.32, ease: 'power2.out' }, 0.22)
-					.to(labelWords, { opacity: 1, y: 0, duration: 0.22, stagger: 0.06, ease: 'power2.out' }, 0.35);
-			}
-		});
-
-	// Featured projects: scroll-driven accordion (pin + scrub)
 	document.addEventListener('DOMContentLoaded', () => {
-		const section = document.querySelector('[data-accordion-section]');
-		const wrapper = section?.querySelector('.featured-accordion__wrapper');
-		const contents = section ? (gsap.utils.toArray('.featured-accordion__content') as HTMLElement[]) : [];
+		const prefersReducedMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)',
+		).matches;
+		const isCoarse = window.matchMedia('(pointer: coarse)').matches;
 
-		if (!section || !wrapper || contents.length === 0) return;
-
-		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (prefersReducedMotion) {
-			gsap.set(wrapper, { visibility: 'visible', autoAlpha: 1 });
-			return;
+		const section = document.querySelector('[data-studio-cards]');
+		const grid = document.querySelector('[data-studio-grid]');
+		if (section && grid) {
+			const cards = grid.querySelectorAll('.studio-card');
+			if (cards.length) {
+				if (!prefersReducedMotion && !isCoarse) {
+					gsap.from(cards, {
+						scrollTrigger: {
+							trigger: section,
+							start: 'top 85%',
+							toggleActions: 'play none none reverse',
+						},
+						opacity: 0,
+						y: 24,
+						scale: 0.96,
+						rotationY: -4,
+						duration: 0.6,
+						stagger: 0.12,
+						ease: 'power2.out',
+						transformOrigin: 'center center',
+					});
+				}
+				if (!prefersReducedMotion && !isCoarse) {
+					const rotateDepth = 10;
+					const translateDepth = 6;
+					const hoverLift = -4;
+					const followDuration = 0.18;
+					const returnDuration = 0.45;
+					grid.querySelectorAll('.personality-cards__wrap').forEach((wrap) => {
+						const card = wrap.querySelector('.studio-card');
+						if (!card) return;
+						const applyTilt = (xNorm, yNorm) => {
+							gsap.to(card, {
+								duration: followDuration,
+								rotateY: -xNorm * rotateDepth,
+								rotateX: yNorm * rotateDepth,
+								translateX: xNorm * translateDepth,
+								translateY: yNorm * translateDepth + hoverLift,
+								ease: 'power2.out',
+								overwrite: true,
+							});
+						};
+						const returnToCenter = () => {
+							gsap.to(card, {
+								duration: returnDuration,
+								rotateY: 0,
+								rotateX: 0,
+								translateX: 0,
+								translateY: 0,
+								ease: 'power2.out',
+								overwrite: true,
+							});
+						};
+						wrap.addEventListener('mouseenter', () => {
+							wrap.addEventListener('mousemove', onMove);
+						});
+						wrap.addEventListener('mouseleave', () => {
+							wrap.removeEventListener('mousemove', onMove);
+							returnToCenter();
+						});
+						function onMove(e) {
+							const rect = wrap.getBoundingClientRect();
+							const x = (e.clientX - rect.left) / rect.width - 0.5;
+							const y = (e.clientY - rect.top) / rect.height - 0.5;
+							applyTilt(x, y);
+						}
+					});
+				}
+			}
 		}
 
-		gsap.set(wrapper, { visibility: 'hidden' });
-		gsap.set(contents.slice(1), { height: 0, overflow: 'hidden' });
-
-		const tl = gsap.timeline({
-			scrollTrigger: {
-				trigger: section,
-				start: 'top top',
-				end: () => '+=' + 100 * contents.length + '%',
-				pin: true,
-				scrub: true,
-				invalidateOnRefresh: true,
-			},
-		});
-
-		contents.forEach((item, i) => {
-			const next = contents[i + 1];
-			if (next) {
-				tl.to(item, { height: 0, overflow: 'hidden', duration: 1 }).to(next, { height: 'auto', overflow: 'hidden', duration: 1 }, '<');
+		// Bento grid: scroll-in once, then loop animations (chat pop-in, label stagger). Respect reduced motion.
+		const bentoSection = document.querySelector('[data-bento-section]');
+		const bentoItems = document.querySelectorAll('[data-bento-item]');
+		if (
+			bentoSection &&
+			bentoItems.length &&
+			!prefersReducedMotion &&
+			!isCoarse
+		) {
+			const headers = bentoSection.querySelectorAll('.bento-item__header');
+			const chatBubbles = bentoSection.querySelectorAll(
+				'[data-bento-chat-bubble]',
+			);
+			const labelWords = bentoSection.querySelectorAll(
+				'[data-bento-label-word]',
+			);
+			let loopsStarted = false;
+			function startBentoLoops() {
+				if (loopsStarted) return;
+				loopsStarted = true;
+				if (chatBubbles.length) {
+					const chatLoop = gsap.timeline({ repeat: -1, repeatDelay: 8 });
+					chatLoop
+						.set(chatBubbles, { opacity: 0, y: 14 })
+						.to(chatBubbles, {
+							opacity: 1,
+							y: 0,
+							duration: 1.4,
+							stagger: 0.65,
+							ease: 'power2.out',
+						});
+				}
+				if (labelWords.length) {
+					const labelLoop = gsap.timeline({ repeat: -1, repeatDelay: 4 });
+					labelLoop
+						.set(labelWords, { opacity: 0, y: 6 })
+						.to(labelWords, {
+							opacity: 1,
+							y: 0,
+							duration: 0.24,
+							stagger: 0.07,
+							ease: 'power2.out',
+						});
+				}
 			}
-		});
-
-		gsap.set(wrapper, { autoAlpha: 1 });
+			const tl = gsap.timeline({
+				scrollTrigger: {
+					trigger: bentoSection,
+					start: 'top 82%',
+					toggleActions: 'play none none reverse',
+					onEnter: startBentoLoops,
+				},
+			});
+			tl.set(headers, {
+				scaleY: 0.85,
+				opacity: 0.5,
+				transformOrigin: 'center top',
+			})
+				.set(chatBubbles, { opacity: 0, y: 12 })
+				.set(labelWords, { opacity: 0, y: 6 })
+				.from(
+					bentoItems,
+					{
+						opacity: 0,
+						y: 20,
+						duration: 0.4,
+						stagger: 0.06,
+						ease: 'power2.out',
+					},
+					0,
+				)
+				.to(
+					headers,
+					{
+						scaleY: 1,
+						opacity: 1,
+						duration: 0.4,
+						stagger: 0.06,
+						ease: 'power2.out',
+					},
+					0.03,
+				)
+				.to(
+					chatBubbles,
+					{
+						opacity: 1,
+						y: 0,
+						duration: 1.2,
+						stagger: 0.55,
+						ease: 'power2.out',
+					},
+					0.22,
+				)
+				.to(
+					labelWords,
+					{
+						opacity: 1,
+						y: 0,
+						duration: 0.22,
+						stagger: 0.06,
+						ease: 'power2.out',
+					},
+					0.35,
+				);
+		}
 	});
 
 	// Travel polaroids: draggable on desktop
@@ -643,7 +837,9 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 
 		function onPointerDown(e: PointerEvent) {
 			if (e.button !== 0) return;
-			const el = (e.target as HTMLElement).closest('.travel-polaroid') as HTMLElement;
+			const el = (e.target as HTMLElement).closest(
+				'.travel-polaroid',
+			) as HTMLElement;
 			if (!el) return;
 			e.preventDefault();
 			active = el;
@@ -681,6 +877,80 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		document.addEventListener('pointerup', onPointerUp);
 		document.addEventListener('pointercancel', onPointerUp);
 	});
+
+	// Featured projects: custom horizontal scrollbar (sync thumb, track click, thumb drag)
+	document.addEventListener('DOMContentLoaded', () => {
+		const track = document.querySelector('.projects-strip__track') as HTMLElement | null;
+		const scrollbar = document.querySelector('[data-projects-scrollbar]');
+		const scrollbarTrack = document.querySelector('[data-projects-scrollbar-track]') as HTMLElement | null;
+		const thumb = document.querySelector('[data-projects-scrollbar-thumb]') as HTMLElement | null;
+		if (!track || !scrollbarTrack || !thumb || !scrollbar) return;
+
+		const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		if (prefersReducedMotion) return;
+
+		function updateScrollbar() {
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			if (maxScroll <= 0) {
+				track.removeAttribute('data-can-scroll');
+				return;
+			}
+			track.setAttribute('data-can-scroll', '');
+			const trackRect = scrollbarTrack.getBoundingClientRect();
+			const trackWidth = trackRect.width;
+			const thumbWidth = Math.max(48, (track.clientWidth / track.scrollWidth) * trackWidth);
+			const thumbMaxLeft = trackWidth - thumbWidth;
+			const scrollLeft = track.scrollLeft;
+			const left = maxScroll > 0 ? (scrollLeft / maxScroll) * thumbMaxLeft : 0;
+			thumb.style.width = `${thumbWidth}px`;
+			thumb.style.transform = `translateX(${left}px)`;
+		}
+
+		track.addEventListener('scroll', updateScrollbar);
+		window.addEventListener('resize', updateScrollbar);
+		updateScrollbar();
+
+		scrollbarTrack.addEventListener('click', (e: MouseEvent) => {
+			if ((e.target as HTMLElement).closest('[data-projects-scrollbar-thumb]')) return;
+			const rect = scrollbarTrack.getBoundingClientRect();
+			const x = e.clientX - rect.left;
+			const trackWidth = rect.width;
+			const thumbWidth = thumb.getBoundingClientRect().width;
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			const ratio = Math.max(0, Math.min(1, (x - thumbWidth / 2) / (trackWidth - thumbWidth)));
+			track.scrollLeft = ratio * maxScroll;
+		});
+
+		let thumbDragStartX = 0;
+		let thumbDragStartScroll = 0;
+		function onThumbPointerDown(e: PointerEvent) {
+			if (e.button !== 0) return;
+			e.preventDefault();
+			thumb.classList.add('is-dragging');
+			thumb.setPointerCapture(e.pointerId);
+			thumbDragStartX = e.clientX;
+			thumbDragStartScroll = track.scrollLeft;
+		}
+		function onThumbPointerMove(e: PointerEvent) {
+			if (!thumb.classList.contains('is-dragging')) return;
+			const trackRect = scrollbarTrack.getBoundingClientRect();
+			const trackWidth = trackRect.width;
+			const thumbWidth = thumb.getBoundingClientRect().width;
+			const thumbMaxLeft = trackWidth - thumbWidth;
+			const maxScroll = track.scrollWidth - track.clientWidth;
+			const dx = e.clientX - thumbDragStartX;
+			const scrollDelta = thumbMaxLeft > 0 ? (dx / thumbMaxLeft) * maxScroll : 0;
+			track.scrollLeft = Math.max(0, Math.min(maxScroll, thumbDragStartScroll + scrollDelta));
+		}
+		function onThumbPointerUp(e: PointerEvent) {
+			thumb.classList.remove('is-dragging');
+			thumb.releasePointerCapture(e.pointerId);
+		}
+		thumb.addEventListener('pointerdown', onThumbPointerDown);
+		document.addEventListener('pointermove', onThumbPointerMove);
+		document.addEventListener('pointerup', onThumbPointerUp);
+		document.addEventListener('pointercancel', onThumbPointerUp);
+	});
 </script>
 
 <style>
@@ -701,15 +971,14 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 	:global(:root.dark) .hero-section .hero-beam {
 		display: block;
 		/* Narrow spread, long reach: bright at top-right, long faint tail */
-		background:
-			linear-gradient(
-				225deg,
-				rgba(255, 255, 255, 0.22) 0%,
-				rgba(255, 255, 255, 0.08) 8%,
-				rgba(255, 255, 255, 0.03) 20%,
-				rgba(255, 255, 255, 0.01) 45%,
-				transparent 72%
-			);
+		background: linear-gradient(
+			225deg,
+			rgba(255, 255, 255, 0.22) 0%,
+			rgba(255, 255, 255, 0.08) 8%,
+			rgba(255, 255, 255, 0.03) 20%,
+			rgba(255, 255, 255, 0.01) 45%,
+			transparent 72%
+		);
 		opacity: 1;
 	}
 
@@ -783,23 +1052,103 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		);
 	}
 
-	/* Highlights: Bento grid. Mobile: single column. Desktop: grid-area layout, travel below human narratives (same cols). */
+	/* Highlights: Bento grid. Mobile: single column with min-heights. Small: 2-col grid. Desktop: 4-col grid-area layout. */
 	.bento-grid {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 1rem;
+		gap: 1.25rem;
+	}
+	/* Mobile: give every item a minimum height so the grid has visual presence and doesn't collapse */
+	@media (max-width: 767px) {
+		.bento-item {
+			min-height: 240px;
+		}
+		.bento-item--large {
+			min-height: 320px;
+		}
+		.bento-item--wide {
+			min-height: 280px;
+		}
+		.bento-item--tall {
+			min-height: 220px;
+		}
+		.bento-item__header {
+			min-height: 6rem;
+		}
+		.bento-item--large .bento-item__header {
+			min-height: 12rem;
+		}
+		.bento-item--wide .bento-item__header {
+			min-height: 10rem;
+		}
+		.bento-item--tall .bento-item__header {
+			min-height: 6rem;
+		}
+		.bento-item--chat .bento-item__header {
+			min-height: 8rem;
+			max-height: 12rem;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+		.bento-item--chat .bento-chat {
+			min-height: 0;
+		}
+		.bento-item--code .bento-item__header--code {
+			min-height: 5rem;
+			overflow: hidden;
+		}
+	}
+	/* Small screens: 2-column smaller grid so layout holds and looks intentional */
+	@media (min-width: 480px) and (max-width: 767px) {
+		.bento-grid {
+			grid-template-columns: repeat(2, 1fr);
+			grid-template-rows: auto;
+			gap: 1rem;
+		}
+		.bento-item {
+			min-height: 220px;
+		}
+		.bento-item--large {
+			grid-column: 1 / -1;
+			min-height: 280px;
+		}
+		.bento-item--wide {
+			grid-column: 1 / -1;
+			min-height: 260px;
+		}
+		.bento-item--tall {
+			min-height: 200px;
+		}
+		.bento-item--large .bento-item__header {
+			min-height: 10rem;
+		}
+		.bento-item--wide .bento-item__header {
+			min-height: 8rem;
+		}
+		.bento-item--tall .bento-item__header {
+			min-height: 5rem;
+		}
 	}
 	@media (min-width: 768px) {
 		.bento-grid {
 			grid-template-columns: repeat(4, 1fr);
-			grid-template-rows: 420px 60px 160px 112px;
+			grid-template-rows: 480px 72px 200px 140px;
 			grid-template-areas:
-				'large large image chat'
-				'travel travel image chat'
+				'large large chat image'
+				'travel travel chat image'
 				'travel travel code community'
-				'travel travel code community' ;
+				'travel travel code community';
 			gap: 1rem;
 			align-items: stretch;
+		}
+		.bento-item,
+		.bento-item--large,
+		.bento-item--wide {
+			min-height: 0;
+		}
+		.bento-item--large .bento-item__header,
+		.bento-item--wide .bento-item__header {
+			min-height: 0;
 		}
 		.bento-item--large {
 			grid-area: large;
@@ -835,7 +1184,10 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background: rgb(var(--color-surface) / 0.7);
 		overflow: hidden;
-		transition: border-color 0.25s ease, box-shadow 0.25s ease;
+		transition:
+			border-color 0.25s ease,
+			box-shadow 0.25s ease;
+		isolation: isolate;
 	}
 	.bento-item:hover {
 		border-color: rgb(var(--color-accent) / 0.4);
@@ -852,6 +1204,7 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		);
 		flex-shrink: 0;
 		transform-origin: center top;
+		overflow: hidden;
 	}
 	.bento-item__header--alt {
 		background: linear-gradient(
@@ -908,23 +1261,18 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 			justify-content: flex-end;
 		}
 		.bento-item--code .bento-item__header--code {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			background: linear-gradient(135deg, rgb(var(--color-accent) / 0.1), rgb(var(--color-border) / 0.2));
+			background: linear-gradient(
+				135deg,
+				rgb(var(--color-accent) / 0.1),
+				rgb(var(--color-border) / 0.2)
+			);
 		}
-		.bento-item--tall .bento-item__header--tall-visual {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.bento-item--tall .bento-item__visual-label,
 		.bento-item--wide .bento-item__header .bento-item__visual-label {
 			display: flex;
-			flex-wrap: wrap;
-			align-items: center;
-			justify-content: center;
-			gap: 0.25em 0.5em;
+			font-size: 0.75rem;
+		}
+		.bento-item--tall .bento-item__visual-label {
+			font-size: 0.75rem;
 		}
 		.bento-item__body {
 			flex: 0 0 auto;
@@ -983,6 +1331,8 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		line-height: 1.4;
 		border-radius: 0.75rem;
 		margin: 0;
+		flex-shrink: 0;
+		word-break: break-word;
 	}
 	.bento-chat__bubble--them {
 		background: rgb(var(--color-border) / 0.4);
@@ -995,12 +1345,36 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		align-self: flex-end;
 		border-bottom-right-radius: 0.2rem;
 	}
+	/* Code circle and community label: center content in their headers at all breakpoints */
+	.bento-item--code .bento-item__header--code {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(
+			135deg,
+			rgb(var(--color-accent) / 0.1),
+			rgb(var(--color-border) / 0.2)
+		);
+	}
 	.bento-item__visual-label {
 		display: none;
 		font-size: 0.8rem;
 		font-weight: 600;
 		letter-spacing: 0.04em;
 		color: rgb(var(--color-muted));
+	}
+	/* Community (tall) item: show Workshops · Hackathons · DMs on mobile too */
+	.bento-item--tall .bento-item__header--tall-visual {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.bento-item--tall .bento-item__visual-label {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: center;
+		gap: 0.25em 0.5em;
 	}
 	.bento-item__visual-word {
 		display: inline-block;
@@ -1009,7 +1383,11 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		width: 3rem;
 		height: 3rem;
 		border-radius: 50%;
-		background: radial-gradient(circle at 30% 30%, rgb(var(--color-accent) / 0.35), rgb(var(--color-border) / 0.3));
+		background: radial-gradient(
+			circle at 30% 30%,
+			rgb(var(--color-accent) / 0.35),
+			rgb(var(--color-border) / 0.3)
+		);
 	}
 	.bento-code-circle {
 		animation: bento-code-circle-pulse 2.5s ease-in-out infinite;
@@ -1020,8 +1398,15 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		}
 	}
 	@keyframes bento-code-circle-pulse {
-		0%, 100% { transform: scale(1); opacity: 1; }
-		50% { transform: scale(1.08); opacity: 0.85; }
+		0%,
+		100% {
+			transform: scale(1);
+			opacity: 1;
+		}
+		50% {
+			transform: scale(1.08);
+			opacity: 0.85;
+		}
 	}
 
 	.bento-item__body {
@@ -1096,97 +1481,180 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		gap: 1rem;
 	}
 
-	/* Featured projects: scroll accordion (no section bg, matches rest of page) */
-	.featured-accordion-section {
-		width: 100%;
-		min-height: 100vh;
-		display: flex;
-		justify-content: center;
-		align-items: flex-start;
-	}
-	.featured-accordion__wrapper {
-		width: 100%;
-		max-width: 720px;
-		padding: 2rem 1.5rem 2rem;
-		margin: 0 auto;
-	}
-	.featured-accordion__list {
+	/* Featured projects: horizontal scroll strip. Custom scrollbar; no overflow-y on track. */
+	.projects-strip__scroll-wrap {
 		display: flex;
 		flex-direction: column;
-		gap: 0.5rem;
+		gap: 0.75rem;
 	}
-	.featured-accordion__item {
+	.projects-strip__track {
+		display: flex;
+		gap: 1.25rem;
+		overflow-x: auto;
+		scroll-snap-type: x mandatory;
+		scroll-behavior: smooth;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+		-ms-overflow-style: none;
+	}
+	.projects-strip__track::-webkit-scrollbar {
+		display: none;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__track {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+			overflow: visible;
+			scroll-snap-type: none;
+			scroll-behavior: auto;
+		}
+	}
+	.projects-strip__scrollbar {
+		display: none;
+		height: 6px;
 		width: 100%;
+		border-radius: 9999px;
+		background: rgb(var(--color-border) / 0.25);
+	}
+	.projects-strip__scroll-wrap:has(.projects-strip__track[data-can-scroll]) .projects-strip__scrollbar {
+		display: block;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__scrollbar {
+			display: none !important;
+		}
+	}
+	.projects-strip__scrollbar-track {
+		position: relative;
+		height: 100%;
+		width: 100%;
+		border-radius: inherit;
+		cursor: pointer;
+	}
+	.projects-strip__scrollbar-thumb {
+		position: absolute;
+		top: 0;
+		left: 0;
+		height: 100%;
+		min-width: 48px;
+		border-radius: 9999px;
+		background: rgb(var(--color-accent) / 0.6);
+		transition: background 0.2s ease, transform 0.2s ease;
+		pointer-events: none;
+	}
+	.projects-strip__scrollbar-track:hover .projects-strip__scrollbar-thumb,
+	.projects-strip__scrollbar-thumb.is-dragging {
+		background: rgb(var(--color-accent));
+	}
+	.projects-strip__scrollbar-thumb {
+		pointer-events: auto;
+		cursor: grab;
+	}
+	.projects-strip__scrollbar-thumb:active {
+		cursor: grabbing;
+	}
+	.projects-strip__card {
+		scroll-snap-align: start;
+		flex: 0 0 min(320px, 85vw);
+		display: flex;
+		flex-direction: column;
 		border-radius: var(--radius-xl);
 		overflow: hidden;
 		border: 1px solid rgb(var(--color-border) / 0.7);
-		background: rgb(var(--color-surface));
+		background: rgb(var(--color-surface) / 0.7);
+		text-decoration: none;
+		color: inherit;
+		transition: border-color 0.25s ease, box-shadow 0.25s ease;
 	}
-	.featured-accordion__header {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1rem;
-		background: rgb(var(--color-border) / 0.15);
-		padding: 1rem 1.25rem;
-		flex-shrink: 0;
+	.projects-strip__card:hover {
+		border-color: rgb(var(--color-accent) / 0.4);
+		box-shadow: var(--shadow-soft);
 	}
-	.featured-accordion__header-inner {
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__card {
+			scroll-snap-align: unset;
+		}
+	}
+	.projects-strip__card-img-wrap {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		overflow: hidden;
+		background: rgb(var(--color-border) / 0.2);
+	}
+	.projects-strip__card-img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top;
+		display: block;
+		transition: transform 0.4s ease;
+	}
+	.projects-strip__card:hover .projects-strip__card-img {
+		transform: scale(1.04);
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__card:hover .projects-strip__card-img {
+			transform: none;
+		}
+	}
+	.projects-strip__card-overlay {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, rgb(0 0 0 / 0.4), transparent);
+		opacity: 0;
+		transition: opacity 0.25s ease;
+	}
+	.projects-strip__card:hover .projects-strip__card-overlay {
+		opacity: 1;
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__card-overlay {
+			transition: none;
+		}
+	}
+	.projects-strip__card-body {
+		padding: 1.25rem 1.25rem 1.5rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-		align-items: flex-start;
+		gap: 0.5rem;
+		flex: 1;
 		min-width: 0;
 	}
-	.featured-accordion__title {
-		font-size: 1.25rem;
+	.projects-strip__card-title {
+		font-size: 1.1rem;
 		font-weight: 600;
 		color: rgb(var(--color-ink));
 		margin: 0;
 		line-height: 1.3;
 		font-family: var(--font-display), system-ui, sans-serif;
 	}
-	.featured-accordion__desc {
-		font-size: 0.9rem;
+	.projects-strip__card-desc {
+		font-size: 0.875rem;
 		color: rgb(var(--color-muted));
-		line-height: 1.5;
+		line-height: 1.45;
 		margin: 0;
 		display: -webkit-box;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
 	}
-	.featured-accordion__cta {
-		flex-shrink: 0;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		padding: 0.5rem 1rem;
-		font-size: 0.8125rem;
-		font-weight: 600;
+	.projects-strip__card-tech {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem;
+		margin-top: 0.25rem;
+	}
+	.projects-strip__card-tech-pill {
+		font-size: 0.75rem;
+		padding: 0.25rem 0.6rem;
 		border-radius: 9999px;
-		background: rgb(var(--color-accent));
-		color: rgb(var(--color-on-accent));
-		text-decoration: none;
-		transition: background 0.2s ease;
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		color: rgb(var(--color-muted));
 	}
-	.featured-accordion__cta:hover {
-		background: rgb(var(--color-accent-strong));
-	}
-	.featured-accordion__content {
-		overflow: hidden;
-	}
-	.featured-accordion__img-wrap {
-		aspect-ratio: 16/10;
-		overflow: hidden;
-		background: rgb(var(--color-border) / 0.2);
-	}
-	.featured-accordion__img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		object-position: top;
-		display: block;
+	@media (prefers-reduced-motion: reduce) {
+		.projects-strip__card {
+			transition: none;
+		}
 	}
 
 	/* Featured travel photos: polaroid pile */
@@ -1216,7 +1684,9 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		padding: 0.75rem 0.75rem 2.5rem;
 		border-radius: 2px;
 		box-shadow: var(--shadow-soft);
-		transition: transform 0.25s ease, box-shadow 0.25s ease;
+		transition:
+			transform 0.25s ease,
+			box-shadow 0.25s ease;
 		user-select: none;
 		-webkit-user-select: none;
 		-webkit-touch-callout: none;
@@ -1234,7 +1704,8 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 			padding: 0.875rem 0.875rem 2.75rem;
 			top: var(--pos-top, 0);
 			left: var(--pos-left, 50%);
-			transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+			transform: translateX(-50%) rotate(var(--twist, 0deg))
+				translate(var(--drag-x, 0), var(--drag-y, 0));
 			cursor: grab;
 			touch-action: none;
 		}
@@ -1243,11 +1714,13 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 			z-index: 10;
 		}
 		.travel-polaroid:hover {
-			transform: translateX(-50%) rotate(0deg) scale(1.02) translate(var(--drag-x, 0), var(--drag-y, 0));
+			transform: translateX(-50%) rotate(0deg) scale(1.02)
+				translate(var(--drag-x, 0), var(--drag-y, 0));
 			z-index: 2;
 		}
 		.travel-polaroid.is-dragging:hover {
-			transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+			transform: translateX(-50%) rotate(var(--twist, 0deg))
+				translate(var(--drag-x, 0), var(--drag-y, 0));
 		}
 	}
 
@@ -1287,9 +1760,9 @@ const bentoImageTravel = activityImages[2] ?? activityImages[0] ?? '/images/acti
 		}
 		@media (min-width: 768px) {
 			.travel-polaroid:hover {
-				transform: translateX(-50%) rotate(var(--twist, 0deg)) translate(var(--drag-x, 0), var(--drag-y, 0));
+				transform: translateX(-50%) rotate(var(--twist, 0deg))
+					translate(var(--drag-x, 0), var(--drag-y, 0));
 			}
 		}
 	}
-
 </style>

@@ -32,10 +32,6 @@ const travelImages = items
 	.filter((i) => i.data.category === 'travel')
 	.flatMap((i) => i.data.images ?? []);
 
-const speakingImages = items
-	.filter((i) => i.data.category === 'speaking')
-	.flatMap((i) => i.data.images ?? []);
-
 // Pool of all activity images (exclude placeholders) for filling galleries
 const rawPool = items.flatMap((i) => i.data.images ?? []);
 const pool = [...new Set(rawPool.filter((src) => !src.toLowerCase().includes('placeholder')))];
@@ -60,7 +56,6 @@ const fillGallery = (categoryImages: string[]) => {
 
 const recognitionGalleryImages = fillGallery(awardsImages);
 const travelGalleryImages = fillGallery(travelImages);
-const speakingGalleryImages = fillGallery(speakingImages);
 ---
 
 <Layout title='Activities - Dhruv Verma'>
@@ -99,7 +94,7 @@ const speakingGalleryImages = fillGallery(speakingImages);
 		image={getCategoryImage('speaking')}
 	/>
 
-	<!-- 3 pinned scroll galleries: Recognition, Travel, Speaking -->
+	<!-- Pinned scroll galleries: Recognition, Travel -->
 	<PinnedScrollGallery
 		id='recognition-gallery'
 		title='Recognition'
@@ -111,12 +106,6 @@ const speakingGalleryImages = fillGallery(speakingImages);
 		title='Travel'
 		href='/activities/travel'
 		images={travelGalleryImages.length ? travelGalleryImages : [EVENTS_SECTION_IMAGE]}
-	/>
-	<PinnedScrollGallery
-		id='speaking-gallery'
-		title='Speaking'
-		href='/activities/speaking'
-		images={speakingGalleryImages.length ? speakingGalleryImages : [EVENTS_SECTION_IMAGE]}
 	/>
 </Layout>
 
