@@ -4,14 +4,12 @@ import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 
 const projects = await getCollection('projects');
+const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
 
 // Sort projects: featured first, then by publish date (newest first)
 const sortedProjects = projects.sort((a, b) => {
-	// First sort by featured status
 	if (a.data.featured && !b.data.featured) return -1;
 	if (!a.data.featured && b.data.featured) return 1;
-
-	// Then sort by publish date (newest first)
 	return (
 		new Date(b.data.publishDate).getTime() -
 		new Date(a.data.publishDate).getTime()
@@ -27,6 +25,7 @@ const schema = {
 	author: {
 		'@type': 'Person',
 		name: 'Dhruv Verma',
+		url: site,
 	},
 	mainEntity: {
 		'@type': 'ItemList',
@@ -37,7 +36,8 @@ const schema = {
 				'@type': 'WebPage',
 				name: project.data.title,
 				description: project.data.description,
-				url: `https://dhruvverma.dev/projects/${project.slug}`,
+				url: new URL(`/projects/${project.slug}`, site).toString(),
+				image: new URL(project.data.image, site).toString(),
 			},
 		})),
 	},

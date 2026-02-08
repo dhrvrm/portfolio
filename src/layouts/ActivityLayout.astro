@@ -1,6 +1,7 @@
 ---
 import Layout from './Layout.astro';
 import ActivityNav from '../components/ActivityNav.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 
 interface Props {
@@ -9,6 +10,14 @@ interface Props {
 }
 
 const { title, current } = Astro.props;
+
+const categoryLabel: Record<string, string> = {
+	events: 'Events',
+	hackathons: 'Hackathons',
+	speaking: 'Speaking',
+	awards: 'Recognition',
+	travel: 'Travel',
+};
 
 const allActivities = await getCollection('activities');
 const counts = allActivities.reduce(
@@ -63,6 +72,15 @@ const currentCategoryItems =
 			<ActivityNav categories={categories} current={current} currentCategoryItems={currentCategoryItems} />
 		</aside>
 		<div class='activity-layout__content'>
+			<Breadcrumbs
+				items={[
+					{ label: 'Home', href: '/' },
+					{ label: 'Activities', href: '/activities' },
+					...(current && categoryLabel[current]
+						? [{ label: categoryLabel[current] }]
+						: []),
+				]}
+			/>
 			<slot />
 		</div>
 	</div>

@@ -11,6 +11,3 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /api/
 Disallow: /drafts/
-
-# Rate limiting
-Crawl-delay: 10

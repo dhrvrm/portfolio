@@ -14,14 +14,22 @@ interface Props {
 	title: string;
 	description?: string;
 	image?: string;
+	imageWidth?: number;
+	imageHeight?: number;
 	article?: boolean;
+	prevHref?: string;
+	nextHref?: string;
 }
 
 const {
 	title,
 	description = 'Software engineer building reliable products, mentoring builders, and learning through travel and collaboration.',
-	image = '/og-image.png', // Default OG image
+	image = '/og-image.png',
+	imageWidth,
+	imageHeight,
 	article = false,
+	prevHref,
+	nextHref,
 } = Astro.props;
 
 const canonicalURL = new URL(
@@ -64,6 +72,12 @@ const canonicalURL = new URL(
 
 		<meta name='generator' content={Astro.generator} />
 		<link rel='canonical' href={canonicalURL} />
+		{prevHref && (
+			<link rel='prev' href={new URL(prevHref, Astro.site).toString()} />
+		)}
+		{nextHref && (
+			<link rel='next' href={new URL(nextHref, Astro.site).toString()} />
+		)}
 		<title>{title}</title>
 		<style is:global>
 			/* Critical: overlay covers from first paint so no flash before entrance */
@@ -241,9 +255,22 @@ const canonicalURL = new URL(
 		<meta property='og:title' content={title} />
 		<meta property='og:description' content={description} />
 		<meta property='og:image' content={new URL(image, Astro.site)} />
+		{(imageWidth != null || image === '/og-image.png') && (
+			<meta
+				property='og:image:width'
+				content={String(imageWidth ?? 1200)}
+			/>
+		)}
+		{(imageHeight != null || image === '/og-image.png') && (
+			<meta
+				property='og:image:height'
+				content={String(imageHeight ?? 630)}
+			/>
+		)}
 
 		<!-- Twitter -->
 		<meta property='twitter:card' content='summary_large_image' />
+		<meta property='twitter:creator' content='@verma1300' />
 		<meta property='twitter:url' content={canonicalURL} />
 		<meta property='twitter:title' content={title} />
 		<meta property='twitter:description' content={description} />

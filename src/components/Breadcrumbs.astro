@@ -1,0 +1,48 @@
+---
+interface Crumb {
+	label: string;
+	href?: string;
+}
+
+interface Props {
+	items: Crumb[];
+}
+
+const { items } = Astro.props;
+const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
+
+const breadcrumbSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: items.map((item, i) => {
+		const url = item.href
+			? new URL(item.href, site).toString()
+			: new URL(Astro.url.pathname, site).toString();
+		return {
+			'@type': 'ListItem',
+			position: i + 1,
+			name: item.label,
+			item: url,
+		};
+	}),
+};
+---
+
+<nav class='flex mb-8 text-sm text-muted' aria-label='Breadcrumb'>
+	<ol class='flex items-center flex-wrap gap-x-2'>
+		{items.map((item, i) => (
+			<>
+				{i > 0 && <li class='text-gray-400' aria-hidden='true'>/</li>}
+				<li>
+					{item.href ? (
+						<a href={item.href} class='hover:text-ink transition-colors'>{item.label}</a>
+					) : (
+						<span class='text-ink'>{item.label}</span>
+					)}
+				</li>
+			</>
+		))}
+	</ol>
+</nav>
+
+<script type='application/ld+json' set:html={JSON.stringify(breadcrumbSchema)} />

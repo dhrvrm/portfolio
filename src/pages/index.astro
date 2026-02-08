@@ -3,8 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import StudioCard from '../components/StudioCard.astro';
 import StudioBadge from '../components/StudioBadge.astro';
 import { getCollection } from 'astro:content';
+import { AUTHOR } from '../data/constants';
 
 const allProjects = await getCollection('projects');
+
+const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
+const personSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: AUTHOR.name,
+	jobTitle: 'Frontend Developer',
+	url: site,
+	description: AUTHOR.shortBio,
+	sameAs: Object.values(AUTHOR.social),
+};
 const featuredProjects = allProjects
 	.filter((p) => p.data.featured)
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
@@ -13,11 +25,14 @@ const featuredProjects = allProjects
 const bentoImage1 =
 	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
 const bentoImage2 = '/images/activities/srm-builds-6/srm-1.webp';
-const bentoImageTravel =
-	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-3.webp';
+const bentoImageTravel = '/images/portraits/workation-1.png';
 ---
 
-<Layout title='Dhruv Verma - Frontend Developer'>
+<Layout
+	title='Dhruv Verma - Frontend Developer'
+	description='Software engineer and frontend developer. Portfolio, projects, and writing on React, Node.js, and building products. Based in India.'
+>
+	<script type='application/ld+json' set:html={JSON.stringify(personSchema)} />
 	<section class='hero-section min-h-[calc(100vh-6rem)] flex items-center'>
 		<div class='hero-beam' aria-hidden='true'></div>
 		<div class='container mx-auto py-12 relative z-10'>

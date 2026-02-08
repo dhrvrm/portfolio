@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ImageGallery from '../../components/ImageGallery.astro';
 import StudioBadge from '../../components/StudioBadge.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -52,14 +53,30 @@ const idx = allByDate.findIndex((i) => i.slug === item.slug);
 const prevItem = idx > 0 ? allByDate[idx - 1] : null;
 const nextItem =
 	idx >= 0 && idx < allByDate.length - 1 ? allByDate[idx + 1] : null;
+
+const metaDescription =
+	item.data.summary.length > 155
+		? item.data.summary.slice(0, 152) + '...'
+		: item.data.summary;
 ---
 
-<Layout title={`${item.data.title} - Dhruv Verma`}>
+<Layout
+	title={`${item.data.title} - Dhruv Verma`}
+	description={metaDescription}
+>
 	<section class='py-16'>
 		<div class='container mx-auto'>
+			<Breadcrumbs
+				items={[
+					{ label: 'Home', href: '/' },
+					{ label: 'Activities', href: '/activities' },
+					{ label: back.label, href: back.href },
+					{ label: item.data.title },
+				]}
+			/>
 			<a
 				href={back.href}
-				class='text-sm text-muted hover:text-ink transition-colors'
+				class='text-sm text-muted hover:text-ink transition-colors inline-block mb-4'
 			>
 				&larr; Back to {back.label}
 			</a>

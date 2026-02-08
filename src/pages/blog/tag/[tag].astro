@@ -35,7 +35,10 @@ const sortedPosts = [...tagPosts].sort(
 );
 ---
 
-<Layout title={`Tag: ${tag} - Dhruv Verma`}>
+<Layout
+	title={`Tag: ${tag} - Dhruv Verma`}
+	description={`Posts tagged '${tag}'. By Dhruv Verma.`}
+>
 	<section class='py-16'>
 		<div class='container mx-auto'>
 			<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Tag</p>

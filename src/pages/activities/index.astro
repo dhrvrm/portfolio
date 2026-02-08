@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import ActivitySection from '../../components/ActivitySection.astro';
 import PinnedScrollGallery from '../../components/PinnedScrollGallery.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 
 const items = await getCollection('activities');
@@ -12,11 +13,12 @@ const byDateDesc = (a: (typeof items)[0], b: (typeof items)[0]) =>
 // Static section images (not derived from latest activity)
 const EVENTS_SECTION_IMAGE = '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
 const HACKATHONS_SECTION_IMAGE = '/images/activities/srm-builds-6/srm-1.webp';
+const SPEAKING_SECTION_IMAGE = '/images/portraits/dhruv-speaking.webp';
 
 const getCategoryImage = (slug: string) => {
 	if (slug === 'events') return EVENTS_SECTION_IMAGE;
 	if (slug === 'hackathons') return HACKATHONS_SECTION_IMAGE;
-	if (slug === 'speaking') return EVENTS_SECTION_IMAGE;
+	if (slug === 'speaking') return SPEAKING_SECTION_IMAGE;
 	const list = items.filter((i) => i.data.category === slug).sort(byDateDesc);
 	const first = list[0];
 	const imgs = first?.data.images ?? [];
@@ -58,11 +60,15 @@ const recognitionGalleryImages = fillGallery(awardsImages);
 const travelGalleryImages = fillGallery(travelImages);
 ---
 
-<Layout title='Activities - Dhruv Verma'>
+<Layout
+	title='Activities | Events, Speaking & Travel - Dhruv Verma'
+	description='Events covered, hackathons mentored, talks given, recognition received, and travel for the craft. Dhruv Verma.'
+>
 	<!-- Hero: overview only, no nav, no numbers -->
 	<section class='act-hero'>
 		<div class='act-hero__inner'>
-			<p class='act-hero__eyebrow'>Activities</p>
+			<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Activities' }]} />
+			<p class='act-hero__eyebrow mt-0'>Activities</p>
 			<h1 class='act-hero__title'>Events, mentoring &amp; beyond</h1>
 			<p class='act-hero__desc'>
 				A snapshot of events I've covered, hackathons I've volunteered at as a mentor, talks I've

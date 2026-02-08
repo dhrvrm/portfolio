@@ -66,10 +66,39 @@ const postsForPage = allPostsSorted.slice(0, POSTS_PER_PAGE);
 const SIDEBAR_TAGS_SHOW = 15;
 const tagsPreview = tags.slice(0, SIDEBAR_TAGS_SHOW);
 const tagsMore = tags.length > SIDEBAR_TAGS_SHOW;
+
+const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
+const blogSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Blog',
+	'@id': new URL('/blog', site).toString(),
+	name: 'Dhruv Verma Blog',
+	description: 'Articles and tutorials on Node.js, React, TypeScript, and building products.',
+	url: new URL('/blog', site).toString(),
+	mainEntity: {
+		'@type': 'ItemList',
+		numberOfItems: posts.length,
+		itemListElement: posts
+			.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
+			.slice(0, 20)
+			.map((p, i) => ({
+				'@type': 'ListItem',
+				position: i + 1,
+				url: new URL(`/blog/${p.slug}`, site).toString(),
+				name: p.data.title,
+				datePublished: p.data.publishDate.toISOString(),
+			})),
+	},
+};
 ---
 
-<Layout title='Blog - Dhruv Verma'>
+<Layout
+	title='Blog - Dhruv Verma | Writing on Node.js, React & Product'
+	description='Articles and tutorials on Node.js, React, TypeScript, and building products. By Dhruv Verma.'
+>
+	<script type='application/ld+json' set:html={JSON.stringify(blogSchema)} />
 	<div class='container mx-auto py-16'>
+		<h1 class='sr-only'>Blog</h1>
 		<div class='grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-12'>
 			<aside class='space-y-8' aria-label='Blog categories and navigation'>
 				<div class='bg-surface/70 rounded-2xl p-6 border border-border/70'>
@@ -150,7 +179,7 @@ const tagsMore = tags.length > SIDEBAR_TAGS_SHOW;
 				{/* 1. Posts first */}
 				<section aria-label='Blog posts'>
 					<div class='flex items-center justify-between gap-4 mb-6'>
-						<h2 class='text-xl md:text-2xl font-semibold font-display'>Posts</h2>
+						<h2 class='text-xl md:text-2xl font-semibold font-display' id='posts-heading'>Posts</h2>
 						<span class='text-sm text-muted'>
 							{allPostsSorted.length} post{allPostsSorted.length !== 1 ? 's' : ''}
 						</span>
