@@ -11,7 +11,15 @@ interface Props {
 	variant?: 'default' | 'asymmetric';
 }
 
-const { eyebrow, title, body, kicker, decor, href, variant = 'default' } = Astro.props;
+const {
+	eyebrow,
+	title,
+	body,
+	kicker,
+	decor,
+	href,
+	variant = 'default',
+} = Astro.props;
 
 const baseClass =
 	variant === 'asymmetric'
@@ -22,10 +30,7 @@ const Wrapper = href ? 'a' : 'div';
 const wrapperProps = href ? { href } : { tabindex: 0 };
 ---
 
-<Wrapper
-	class={`${baseClass} ${decorClass}`.trim()}
-	{...wrapperProps}
->
+<Wrapper class={`${baseClass} ${decorClass}`.trim()} {...wrapperProps}>
 	{decor && <span class='studio-card__blob' aria-hidden='true' />}
 	{eyebrow && <span class='studio-card__eyebrow'>{eyebrow}</span>}
 	<h3 class='studio-card__title'>{title}</h3>
@@ -43,7 +48,9 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background: rgb(var(--color-surface) / 0.7);
 		box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
-		transition: transform 0.3s ease, border-color 0.3s ease,
+		transition:
+			transform 0.3s ease,
+			border-color 0.3s ease,
 			box-shadow 0.3s ease;
 		text-decoration: none;
 		color: inherit;
@@ -135,8 +142,9 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 
 	.studio-card__eyebrow {
 		display: inline-block;
+		font-family: var(--font-mono);
 		text-transform: uppercase;
-		letter-spacing: 0.24em;
+		letter-spacing: 0.12em;
 		font-size: 0.7rem;
 		color: rgb(var(--color-muted));
 	}
