@@ -1,4 +1,5 @@
 :root {
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
   --color-bg: 248 250 252;
   --color-surface: 255 255 255;
   --color-ink: 15 23 42;

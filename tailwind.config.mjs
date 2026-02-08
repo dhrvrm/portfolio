@@ -14,6 +14,7 @@ export default {
 			fontFamily: {
 				sans: ['Inter Variable', 'sans-serif'],
 				display: ['Space Grotesk Variable', 'Inter Variable', 'sans-serif'],
+				mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
 			},
 			colors: {
 				ink: 'rgb(var(--color-ink) / <alpha-value>)',

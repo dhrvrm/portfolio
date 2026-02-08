@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Links and CTAs: monospace for consistent signature treatment */
+a {
+  font-family: var(--font-mono);
+}
+
 /* Skip link: visible on focus for keyboard users (Tailwind has no focus:not-sr-only) */
 .skip-link:focus {
 	position: fixed;
