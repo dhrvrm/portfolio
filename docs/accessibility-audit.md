@@ -43,7 +43,7 @@ The portfolio has several accessibility strengths (skip link, focus styles, redu
 | Severity     | Issue                              | Location                                                              | Remediation |
 | ------------ | ---------------------------------- | --------------------------------------------------------------------- | ----------- |
 | **Good**     | `:focus-visible` outline           | `tokens.css`                                                          | ✓           |
-| **Moderate** | `prefers-reduced-motion` respected | CursorFollower, TransitionOverlay, PinnedScrollGallery, ScrollGallery | ✓           |
+| **Moderate** | `prefers-reduced-motion` respected | CursorFollower, TransitionOverlay, PinnedScrollGallery | ✓           |
 
 ---
 
@@ -155,7 +155,7 @@ The portfolio has several accessibility strengths (skip link, focus styles, redu
 
 ### Serious
 
-- [ ] **Alt text for activity and gallery images** – Pass descriptive alt (e.g. activity title + "image N") to `ImageGallery`, `PinnedScrollGallery`, `ScrollGallery`, `ActivitySection`, and `ActivityCard`.
+- [ ] **Alt text for activity and gallery images** – Pass descriptive alt (e.g. activity title + "image N") to `ImageGallery`, `PinnedScrollGallery`, `ActivitySection`, and `ActivityCard`.
 
 ### Moderate
 

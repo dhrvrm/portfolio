@@ -37,7 +37,6 @@
 
 - StudioCard: asymmetric variant, reusable.
 - StudioBadge: pill labels.
-- SectionBlock: section wrapper with eyebrow/title.
 - ActivityCard: asymmetric variant; shared card styles.
 - Index uses StudioCard.
 
@@ -80,3 +79,26 @@
 - Added `experience` collection schema in `config.ts` (title, company, startDate, endDate?, order, achievements).
 - Redesigned `ExperienceItem` as timeline node: vertical line, accent dot (pulsed for current role), card with eyebrow/title/duration-tag/achievements.
 - Deleted old `src/data/experience.ts`.
+
+## 2026-02-08
+
+### SEO implementation ✓
+
+- robots.txt: removed Crawl-delay.
+- Sitemap: added lastmod for blog, projects, activities; pagination URLs start at page 2.
+- Layout: imageWidth/imageHeight, twitter:creator (@verma1300), rel prev/next for pagination, default og:image 1200×630.
+- Unique meta descriptions: Home, Blog index, Experience, Activities, Contact, activity detail, blog pagination, blog tag.
+- Schema: Person on home; Blog + ItemList on blog index; BlogPosting + BreadcrumbList on blog posts; Article + BreadcrumbList on projects; CollectionPage with absolute URLs; Breadcrumbs component with BreadcrumbList JSON-LD site-wide.
+- Blog post OG image fallback: use /og-image.png when no post image.
+- Experience: sort by startDate descending (recent first).
+
+### Content and imagery
+
+- Speaking section: use dhruv-speaking.webp.
+- Travel bento: use workation-1.png.
+- ImageGallery: blurred background fills letterbox space for horizontal images (grid and lightbox).
+
+### Bento animations
+
+- Chat loop: repeatDelay 8s → 2s.
+- Community label loop: duration 0.24s → 0.45s, stagger 0.07s → 0.12s, repeatDelay 5s → 3s.

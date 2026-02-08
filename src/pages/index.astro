@@ -792,7 +792,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						});
 				}
 				if (chatBubbles.length) {
-					const chatLoop = gsap.timeline({ repeat: -1, repeatDelay: 8 });
+					const chatLoop = gsap.timeline({ repeat: -1, repeatDelay: 2 });
 					chatLoop
 						.set(chatBubbles, { opacity: 0, y: 14 })
 						.to(chatBubbles, {
@@ -804,14 +804,14 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						});
 				}
 				if (labelWords.length) {
-					const labelLoop = gsap.timeline({ repeat: -1, repeatDelay: 4 });
+					const labelLoop = gsap.timeline({ repeat: -1, repeatDelay: 3 });
 					labelLoop
 						.set(labelWords, { opacity: 0, y: 6 })
 						.to(labelWords, {
 							opacity: 1,
 							y: 0,
-							duration: 0.24,
-							stagger: 0.07,
+							duration: 0.90,
+							stagger: 0.20,
 							ease: 'power2.out',
 						});
 				}
