@@ -1,5 +1,5 @@
 ---
-title: 'GitTogether Meetup'
+title: 'GitTogether Delhi NCR Meetup - August 2024'
 category: 'events'
 role: 'Attendee'
 date: 2024-08-24

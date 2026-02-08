@@ -20,6 +20,15 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 		<div class:list={['ig', className]} data-image-gallery={id}>
 			{images.map((img, i) => (
 				<button class='ig__cell' type='button' data-ig-open={i}>
+					<img
+						class='ig__cell-bg'
+						src={img.src}
+						alt=''
+						aria-hidden='true'
+						loading='lazy'
+						draggable='false'
+						decoding='async'
+					/>
 					<span class='ig__cell-inner'>
 						<img
 							src={img.src}
@@ -69,6 +78,7 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 		</button>
 
 		<div class='ig-dialog__stage'>
+			<img class='ig-dialog__bg' data-ig-bg alt='' aria-hidden='true' />
 			<img class='ig-dialog__img' data-ig-img alt='' />
 			<p class='ig-dialog__caption' data-ig-caption></p>
 		</div>
@@ -136,7 +146,23 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 		background: rgb(var(--color-border) / 0.2);
 	}
 
+	/* Blurred extension of image fills letterbox space for horizontal images */
+	.ig__cell-bg {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: center;
+		filter: blur(24px);
+		transform: scale(1.15);
+		opacity: 0.9;
+		z-index: 0;
+	}
+
 	.ig__cell-inner {
+		position: relative;
+		z-index: 1;
 		width: 100%;
 		display: flex;
 		align-items: center;
@@ -243,6 +269,7 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 	}
 
 	.ig-dialog__stage {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -250,9 +277,26 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 		max-width: min(85vw, 900px);
 		max-height: 85vh;
 		min-width: 0;
+		overflow: hidden;
+		border-radius: var(--radius-md);
+	}
+
+	/* Blurred image fills empty space around horizontal images in lightbox */
+	.ig-dialog__bg {
+		position: absolute;
+		inset: -20%;
+		width: 140%;
+		height: 140%;
+		object-fit: cover;
+		object-position: center;
+		filter: blur(40px);
+		opacity: 0.85;
+		z-index: 0;
 	}
 
 	.ig-dialog__img {
+		position: relative;
+		z-index: 1;
 		max-width: 100%;
 		max-height: 75vh;
 		object-fit: contain;
@@ -260,6 +304,8 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 	}
 
 	.ig-dialog__caption {
+		position: relative;
+		z-index: 1;
 		font-size: 0.82rem;
 		color: rgb(255 255 255 / 0.7);
 		text-align: center;
@@ -309,6 +355,7 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 				if (!dialog) return;
 
 				const img = dialog.querySelector<HTMLImageElement>('[data-ig-img]');
+				const bgImg = dialog.querySelector<HTMLImageElement>('[data-ig-bg]');
 				const caption = dialog.querySelector<HTMLElement>('[data-ig-caption]');
 				const counter = dialog.querySelector<HTMLElement>('[data-ig-counter]');
 				const closeBtn = dialog.querySelector('[data-ig-close]');
@@ -340,10 +387,12 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 
 				function show(index: number) {
 					current = ((index % total) + total) % total;
+					const src = allImages[current].src;
 					if (img) {
-						img.src = allImages[current].src;
+						img.src = src;
 						img.alt = allImages[current].caption || 'Gallery image';
 					}
+					if (bgImg) bgImg.src = src;
 					if (caption) caption.textContent = allImages[current].caption;
 					if (counter) counter.textContent = `${current + 1} / ${total}`;
 				}
