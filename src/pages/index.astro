@@ -536,6 +536,9 @@ const bentoImageTravel =
 					<p class='travel-polaroid__caption'>Canada</p>
 				</article>
 			</div>
+			<p class='travel-polaroids__hint' aria-hidden='true'>
+				Drag to rearrange
+			</p>
 		</div>
 	</section>
 
@@ -1098,14 +1101,15 @@ const bentoImageTravel =
 		bottom: 0;
 		left: 0;
 		right: 0;
-		padding: 1rem 1.25rem 1.25rem;
+		padding: 1rem 1rem 1.25rem 8rem;
 		font-family: var(--font-mono);
 		font-size: 0.75rem;
 		letter-spacing: 0.2em;
 		text-transform: uppercase;
 		color: white;
-		text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-		background: linear-gradient(to top, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+		text-shadow:
+			0 1px 2px rgba(0, 0, 0, 0.6),
+			0 0 12px rgba(0, 0, 0, 0.4);
 		pointer-events: none;
 	}
 
@@ -1127,6 +1131,9 @@ const bentoImageTravel =
 	.hero-media:hover .hero-caption {
 		opacity: 1;
 		transform: translateY(0);
+		text-shadow:
+			0 1px 3px rgba(0, 0, 0, 0.7),
+			0 0 16px rgba(0, 0, 0, 0.5);
 	}
 
 	@media (prefers-reduced-motion: reduce) {
@@ -1919,6 +1926,23 @@ const bentoImageTravel =
 			min-height: 480px;
 			display: block;
 			padding: 2rem 0;
+		}
+	}
+
+	.travel-polaroids__hint {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: rgb(var(--color-muted));
+		text-align: center;
+		margin: 0;
+		padding-top: 0.5rem;
+		padding-bottom: 0;
+	}
+	@media (max-width: 767px) {
+		.travel-polaroids__hint {
+			display: none;
 		}
 	}
 
