@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
+import { AUTHOR } from '../../data/constants';
 
 const projects = await getCollection('projects');
 const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
@@ -24,8 +25,9 @@ const schema = {
 		'Portfolio of web development and design projects by Dhruv Verma',
 	author: {
 		'@type': 'Person',
-		name: 'Dhruv Verma',
+		name: AUTHOR.name,
 		url: site,
+		sameAs: Object.values(AUTHOR.social),
 	},
 	mainEntity: {
 		'@type': 'ItemList',

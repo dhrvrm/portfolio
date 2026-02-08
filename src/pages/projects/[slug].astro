@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
+import { AUTHOR } from '../../data/constants';
 
 export async function getStaticPaths() {
 	const projects = await getCollection('projects');
@@ -20,12 +21,20 @@ const schema = {
 	'@type': 'CreativeWork',
 	name: project.data.title,
 	description: project.data.description,
+	url: new URL(`/projects/${project.slug}`, site).toString(),
 	image: new URL(project.data.image, site).toString(),
 	datePublished: project.data.publishDate,
+	keywords: project.data.tech.join(', '),
+	...(project.data.website || project.data.repository
+		? {
+				sameAs: [project.data.website, project.data.repository].filter(Boolean),
+			}
+		: {}),
 	author: {
 		'@type': 'Person',
-		name: 'Dhruv Verma',
+		name: AUTHOR.name,
 		url: site,
+		sameAs: Object.values(AUTHOR.social),
 	},
 };
 ---

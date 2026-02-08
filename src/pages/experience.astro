@@ -14,6 +14,7 @@ const personSchema = {
 	'@type': 'Person',
 	name: AUTHOR.name,
 	url: site,
+	sameAs: Object.values(AUTHOR.social),
 	jobTitle: 'Software Engineer',
 	worksFor: entries.map((e) => ({
 		'@type': 'Organization',
