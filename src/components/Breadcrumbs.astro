@@ -32,7 +32,7 @@ const breadcrumbSchema = {
 	<ol class='flex items-center flex-wrap gap-x-2'>
 		{items.map((item, i) => (
 			<>
-				{i > 0 && <li class='text-gray-400' aria-hidden='true'>/</li>}
+				{i > 0 && <li class='text-muted/50' aria-hidden='true'>/</li>}
 				<li>
 					{item.href ? (
 						<a href={item.href} class='hover:text-ink transition-colors'>{item.label}</a>

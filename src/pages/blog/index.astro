@@ -50,8 +50,11 @@ const seriesEntries = Object.entries(seriesMap)
 			(a.posts[a.posts.length - 1]?.data.publishDate?.getTime() ?? 0),
 	);
 
-// All posts: one list, featured first then by date (blogs before series in the feed)
+// All posts: non-series posts first, then featured, then by date
 const allPostsSorted = [...posts].sort((a, b) => {
+	const aSeries = a.data.series ? 1 : 0;
+	const bSeries = b.data.series ? 1 : 0;
+	if (aSeries !== bSeries) return aSeries - bSeries;
 	if (Number(b.data.featured) !== Number(a.data.featured)) {
 		return Number(b.data.featured) - Number(a.data.featured);
 	}
@@ -176,10 +179,46 @@ const blogSchema = {
 			</aside>
 
 			<div class='space-y-16 min-w-0'>
-				{/* 1. Posts first */}
+				{/* 1. Series first - prominent showcase for curated multi-part content */}
+				{seriesEntries.length > 0 && (
+					<section aria-label='Series'>
+						<h2 class='text-xl md:text-2xl font-semibold font-display mb-6'>Series</h2>
+						<div class={seriesEntries.length > 1 ? 'grid gap-6 sm:grid-cols-2' : 'grid gap-6'}>
+							{seriesEntries.map((entry) => (
+								<div class='rounded-2xl border border-border/70 bg-surface/70 p-6 hover:border-accent/60 transition-colors'>
+									<div class='flex items-center justify-between gap-4 mb-4'>
+										<span class='text-xl font-display font-semibold'>{entry.name}</span>
+										<span class='text-xs border border-border/70 text-muted px-2 py-1 rounded-full flex-shrink-0'>
+											{entry.count} part{entry.count !== 1 ? 's' : ''}
+										</span>
+									</div>
+									<ol class='space-y-0'>
+										{entry.posts.map((post) => (
+											<li>
+												<a
+													href={`/blog/${post.slug}`}
+													class='group flex items-baseline gap-3 py-1.5 hover:text-ink transition-colors'
+												>
+													<span class='font-mono text-xs text-muted flex-shrink-0'>
+														Part {post.data.seriesPart}
+													</span>
+													<span class='text-sm font-medium text-muted group-hover:text-ink transition-colors'>
+														{post.data.title}
+													</span>
+												</a>
+											</li>
+										))}
+									</ol>
+								</div>
+							))}
+						</div>
+					</section>
+				)}
+
+				{/* 2. All posts grid */}
 				<section aria-label='Blog posts'>
 					<div class='flex items-center justify-between gap-4 mb-6 flex-wrap'>
-						<h2 class='text-xl md:text-2xl font-semibold font-display' id='posts-heading'>Posts</h2>
+						<h2 class='text-xl md:text-2xl font-semibold font-display' id='posts-heading'>All posts</h2>
 						<span class='text-sm text-muted flex items-center gap-3'>
 							{allPostsSorted.length} post{allPostsSorted.length !== 1 ? 's' : ''}
 							<a href='/feed.xml' class='text-accent hover:text-accentStrong transition-colors' aria-label='Subscribe to RSS feed'>RSS</a>
@@ -222,30 +261,6 @@ const blogSchema = {
 						</nav>
 					)}
 				</section>
-
-				{/* 2. Series below (compact, scalable) */}
-				{seriesEntries.length > 0 && (
-					<section aria-label='Series'>
-						<h2 class='text-xl md:text-2xl font-semibold font-display mb-6'>Series</h2>
-						<ul class='space-y-3'>
-							{seriesEntries.map((entry) => (
-								<li>
-									<a
-										href={`/blog/${entry.first.slug}`}
-										class='flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface/70 px-4 py-3 hover:border-accent/60 transition-colors group'
-									>
-										<span class='font-medium group-hover:text-ink transition-colors'>
-											{entry.name}
-										</span>
-										<span class='text-sm text-muted flex-shrink-0'>
-											{entry.count} part{entry.count !== 1 ? 's' : ''} →
-										</span>
-									</a>
-								</li>
-							))}
-						</ul>
-					</section>
-				)}
 			</div>
 		</div>
 	</div>

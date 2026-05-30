@@ -57,13 +57,15 @@ const cardClass = [
 						class='activity-card__image'
 						src={media[0]}
 						alt={item.data.title}
+						width='360'
+						height='180'
 						loading='lazy'
 					/>
 				)}
 				{media.length > 1 && (
 					<div class='activity-card__thumbs'>
 						{media.slice(1, 3).map((image, i) => (
-							<img src={image} alt={`${item.data.title} — image ${i + 2}`} loading='lazy' />
+							<img src={image} alt={`${item.data.title} — image ${i + 2}`} width='46' height='46' loading='lazy' />
 						))}
 					</div>
 				)}

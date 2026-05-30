@@ -1,6 +1,6 @@
 ---
 title: 'we keep telling women to be careful'
-publishDate: 2026-05-30
+publishDate: 2026-05-25
 categories: ['India', 'Systems', 'Workplace']
 excerpt: "a friend wasn't asking me for help. she was just talking. and listening to her showed me how much i'd never had to think about, and how often i might have been part of what she was quietly scanning for."
 image: '/images/blog/wrong-problems/04-women-safety.webp'

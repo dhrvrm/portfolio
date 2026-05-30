@@ -5,49 +5,54 @@ interface Props {
 	body: string;
 	/** Short personality line (e.g. "One bag. Many time zones.") */
 	kicker?: string;
-	/** Decorative blob position: top-right, bottom-left, top-left */
-	decor?: 'blob-tr' | 'blob-bl' | 'blob-tl';
 	href?: string;
 	variant?: 'default' | 'asymmetric';
 }
 
-const {
-	eyebrow,
-	title,
-	body,
-	kicker,
-	decor,
-	href,
-	variant = 'default',
-} = Astro.props;
+const { eyebrow, title, body, kicker, href, variant = 'default' } = Astro.props;
 
 const baseClass =
 	variant === 'asymmetric'
 		? 'studio-card studio-card--asymmetric'
 		: 'studio-card';
-const decorClass = decor ? `studio-card--${decor}` : '';
 const Wrapper = href ? 'a' : 'div';
 const wrapperProps = href ? { href } : { tabindex: 0 };
 ---
 
-<Wrapper class={`${baseClass} ${decorClass}`.trim()} {...wrapperProps}>
-	{decor && <span class='studio-card__blob' aria-hidden='true' />}
-	{eyebrow && <span class='studio-card__eyebrow'>{eyebrow}</span>}
+<Wrapper class={baseClass} {...wrapperProps}>
+	<span class='studio-card__spotlight' aria-hidden='true'></span>
+	{eyebrow && (
+		<span class='studio-card__eyebrow'>
+			<span class='studio-card__tick' aria-hidden='true'></span>
+			{eyebrow}
+		</span>
+	)}
 	<h3 class='studio-card__title'>{title}</h3>
 	<p class='studio-card__body'>{body}</p>
-	{kicker && <p class='studio-card__kicker'>{kicker}</p>}
+	{kicker && (
+		<p class='studio-card__kicker'>
+			<span>{kicker}</span>
+			<span class='studio-card__arrow' aria-hidden='true'>&rarr;</span>
+		</p>
+	)}
 </Wrapper>
 
 <style>
 	.studio-card {
-		display: block;
+		display: flex;
+		flex-direction: column;
+		height: 100%;
 		position: relative;
+		isolation: isolate;
 		overflow: hidden;
-		padding: 2rem;
+		padding: 1.75rem;
 		border-radius: var(--radius-xl);
 		border: 1px solid rgb(var(--color-border) / 0.7);
 		background: rgb(var(--color-surface) / 0.7);
-		box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05);
+		/* Material depth: lit top edge + soft tinted lift */
+		box-shadow:
+			inset 0 1px 0 rgb(255 255 255 / 0.04),
+			var(--shadow-card);
 		transition:
 			transform 0.3s ease,
 			border-color 0.3s ease,
@@ -57,9 +62,10 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 	}
 
 	.studio-card:hover {
-		transform: translateY(-4px);
 		border-color: rgb(var(--color-accent) / 0.5);
-		box-shadow: 0 28px 60px rgba(15, 23, 42, 0.12);
+		box-shadow:
+			inset 0 1px 0 rgb(255 255 255 / 0.06),
+			var(--shadow-card-hover);
 	}
 
 	.studio-card:focus-visible {
@@ -67,68 +73,31 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		outline-offset: 3px;
 	}
 
-	/* Decorative accent blob: transform only for performance; moves on hover */
-	.studio-card__blob {
-		position: absolute;
-		width: 140%;
-		height: 140%;
-		border-radius: 50%;
-		background: radial-gradient(
-			circle,
-			rgb(var(--color-accent) / 0.12) 0%,
-			transparent 65%
-		);
-		filter: blur(24px);
-		pointer-events: none;
-		transition: transform 0.4s ease;
-	}
-	.studio-card--blob-tr .studio-card__blob {
-		top: -40%;
-		right: -40%;
-	}
-	.studio-card--blob-bl .studio-card__blob {
-		bottom: -40%;
-		left: -40%;
-	}
-	.studio-card--blob-tl .studio-card__blob {
-		top: -40%;
-		left: -40%;
-	}
-	.studio-card:hover .studio-card__blob {
-		transform: scale(1.15);
-	}
-	.studio-card:hover.studio-card--blob-tr .studio-card__blob {
-		transform: scale(1.15) translate(-6%, -6%);
-	}
-	.studio-card:hover.studio-card--blob-bl .studio-card__blob {
-		transform: scale(1.15) translate(6%, 6%);
-	}
-	.studio-card:hover.studio-card--blob-tl .studio-card__blob {
-		transform: scale(1.15) translate(6%, -6%);
-	}
-
 	.studio-card--asymmetric {
 		border-radius: var(--radius-xl) var(--radius-lg) var(--radius-xl)
 			var(--radius-lg);
 	}
 
-	:root.dark .studio-card {
-		box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+	/* Cursor spotlight: lights the surface where the pointer is (desktop only).
+	   Position fed by --spot-x / --spot-y from the personality-cards handler. */
+	.studio-card__spotlight {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		border-radius: inherit;
+		pointer-events: none;
+		opacity: 0;
+		background: radial-gradient(
+			220px circle at var(--spot-x, 50%) var(--spot-y, 0%),
+			rgb(var(--color-accent) / 0.1),
+			transparent 70%
+		);
+		transition: opacity 0.35s ease;
 	}
 
-	:root.dark .studio-card:hover {
-		box-shadow: 0 28px 60px rgba(0, 0, 0, 0.35);
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.studio-card__blob {
-			transition: none;
-		}
-		.studio-card:hover .studio-card__blob,
-		.studio-card:hover.studio-card--blob-tr .studio-card__blob,
-		.studio-card:hover.studio-card--blob-bl .studio-card__blob,
-		.studio-card:hover.studio-card--blob-tl .studio-card__blob {
-			transform: none;
+	@media (hover: hover) and (pointer: fine) {
+		.studio-card:hover .studio-card__spotlight {
+			opacity: 1;
 		}
 	}
 
@@ -141,7 +110,9 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 	}
 
 	.studio-card__eyebrow {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.625rem;
 		font-family: var(--font-mono);
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
@@ -149,10 +120,24 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		color: rgb(var(--color-muted));
 	}
 
+	.studio-card__tick {
+		display: inline-block;
+		width: 1.5rem;
+		height: 1px;
+		background: rgb(var(--color-accent));
+		transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.studio-card:hover .studio-card__tick {
+		width: 2.25rem;
+	}
+
 	.studio-card__title {
-		margin-top: 0.75rem;
-		font-size: 1.15rem;
+		margin-top: 0.85rem;
+		font-size: 1.3rem;
 		font-weight: 600;
+		line-height: 1.25;
+		letter-spacing: -0.01em;
 	}
 
 	.studio-card__body {
@@ -162,11 +147,40 @@ const wrapperProps = href ? { href } : { tabindex: 0 };
 		line-height: 1.6;
 	}
 
+	/* Kicker pinned to the card foot, separated by a hairline */
 	.studio-card__kicker {
-		margin-top: 1rem;
+		margin-top: auto;
+		padding-top: 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		border-top: 1px solid rgb(var(--color-border) / 0.7);
 		font-size: 0.8125rem;
 		font-weight: 500;
 		color: rgb(var(--color-accent));
 		line-height: 1.4;
+	}
+
+	.studio-card__body + .studio-card__kicker {
+		margin-top: 1.5rem;
+	}
+
+	.studio-card__arrow {
+		flex-shrink: 0;
+		transition: transform 0.25s ease;
+	}
+
+	.studio-card:hover .studio-card__arrow {
+		transform: translateX(4px);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.studio-card,
+		.studio-card__tick,
+		.studio-card__arrow,
+		.studio-card__spotlight {
+			transition: none;
+		}
 	}
 </style>

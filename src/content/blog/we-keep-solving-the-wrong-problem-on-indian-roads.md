@@ -1,6 +1,6 @@
 ---
 title: 'we keep solving the wrong problem on indian roads'
-publishDate: 2026-05-30
+publishDate: 2026-05-22
 categories: ['India', 'Systems', 'Public Policy']
 excerpt: "we build flyovers and the traffic comes back. we make golden hour a right but most people never reach a hospital in time. the roads aren't the problem. the way we think about them is."
 image: '/images/blog/wrong-problems/01-roads.webp'
@@ -46,7 +46,7 @@ think about that. four out of five people don't get the one thing that matters m
 
 the reasons aren't mysterious. by most accounts we have roughly one ambulance for every 80,000 to 100,000 people, against a benchmark closer to one for every 50,000. rural areas wait over an hour. many local hospitals have no trauma specialist, no blood bank, no resuscitation kit.
 
-in early 2025, after the supreme court pushed the centre to act, a nationwide cashless treatment scheme for road accident victims took shape, capped at ₹1.5 lakh for seven days. then in may 2026 the court went further and held that timely trauma care is part of the right to life under article 21.
+in mid-2025, after the supreme court pushed the centre to act, a nationwide cashless treatment scheme for road accident victims took shape, capped at ₹1.5 lakh for seven days. then in may 2026 the court went further and held that timely trauma care is part of the right to life under article 21.
 
 that's real progress. a right on paper is a start.
 

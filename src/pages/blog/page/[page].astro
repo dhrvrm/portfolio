@@ -32,34 +32,10 @@ const recentPosts = [...posts]
 	.sort((a, b) => b.data.publishDate.getTime() - a.data.publishDate.getTime())
 	.slice(0, 5);
 
-const seriesMap = posts
-	.filter((p) => p.data.series)
-	.reduce(
-		(acc, post) => {
-			const name = post.data.series!;
-			if (!acc[name]) acc[name] = [];
-			acc[name].push(post);
-			return acc;
-		},
-		{} as Record<string, typeof posts>,
-	);
-Object.values(seriesMap).forEach((arr) =>
-	arr.sort((a, b) => (a.data.seriesPart ?? 0) - (b.data.seriesPart ?? 0)),
-);
-const seriesEntries = Object.entries(seriesMap)
-	.map(([name, seriesPosts]) => ({
-		name,
-		posts: seriesPosts,
-		first: seriesPosts[0],
-		count: seriesPosts.length,
-	}))
-	.sort(
-		(a, b) =>
-			(b.posts[b.posts.length - 1]?.data.publishDate?.getTime() ?? 0) -
-			(a.posts[a.posts.length - 1]?.data.publishDate?.getTime() ?? 0),
-	);
-
 const allPostsSorted = [...posts].sort((a, b) => {
+	const aSeries = a.data.series ? 1 : 0;
+	const bSeries = b.data.series ? 1 : 0;
+	if (aSeries !== bSeries) return aSeries - bSeries;
 	if (Number(b.data.featured) !== Number(a.data.featured)) {
 		return Number(b.data.featured) - Number(a.data.featured);
 	}
@@ -162,7 +138,7 @@ const tagsMore = tags.length > SIDEBAR_TAGS_SHOW;
 			<div class='space-y-16 min-w-0'>
 				<section aria-label='Blog posts'>
 					<div class='flex items-center justify-between gap-4 mb-6'>
-						<h2 class='text-xl md:text-2xl font-semibold font-display'>Posts</h2>
+						<h2 class='text-xl md:text-2xl font-semibold font-display'>All posts</h2>
 						<span class='text-sm text-muted'>
 							{allPostsSorted.length} post{allPostsSorted.length !== 1 ? 's' : ''} · Page {currentPage}
 						</span>
@@ -194,29 +170,6 @@ const tagsMore = tags.length > SIDEBAR_TAGS_SHOW;
 						)}
 					</nav>
 				</section>
-
-				{seriesEntries.length > 0 && (
-					<section aria-label='Series'>
-						<h2 class='text-xl md:text-2xl font-semibold font-display mb-6'>Series</h2>
-						<ul class='space-y-3'>
-							{seriesEntries.map((entry) => (
-								<li>
-									<a
-										href={`/blog/${entry.first.slug}`}
-										class='flex items-center justify-between gap-4 rounded-xl border border-border/70 bg-surface/70 px-4 py-3 hover:border-accent/60 transition-colors group'
-									>
-										<span class='font-medium group-hover:text-ink transition-colors'>
-											{entry.name}
-										</span>
-										<span class='text-sm text-muted flex-shrink-0'>
-											{entry.count} part{entry.count !== 1 ? 's' : ''} →
-										</span>
-									</a>
-								</li>
-							))}
-						</ul>
-					</section>
-				)}
 			</div>
 		</div>
 	</div>

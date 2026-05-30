@@ -73,6 +73,8 @@ const activities = defineCollection({
 		images: z.array(z.string()).optional(),
 		// Optional video (mp4/webm/url) for featured media
 		video: z.string().optional(),
+		// Short label for the homepage travel polaroids (e.g. "Spiti"); falls back to title
+		caption: z.string().optional(),
 	}),
 });
 

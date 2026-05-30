@@ -1,6 +1,6 @@
 ---
 title: 'we never learned to think, or to be seen'
-publishDate: 2026-05-30
+publishDate: 2026-05-27
 categories: ['India', 'Systems', 'Education']
 excerpt: "school graded our attendance and our assignments. it never taught the two things that actually decide where we end up: how to think, and how to be seen. so the diligent get stuck and the visible get ahead, and both were failed by the same system."
 image: '/images/blog/wrong-problems/06-education.webp'

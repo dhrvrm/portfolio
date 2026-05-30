@@ -1,6 +1,6 @@
 ---
 title: 'in india, care depends on who you know'
-publishDate: 2026-05-30
+publishDate: 2026-05-28
 categories: ['India', 'Systems', 'Healthcare']
 excerpt: "we built insurance and private hospitals, ways to pay for care and ways to escape the public system, instead of public care that simply works. so getting treated well comes down to what you can afford and who you can call. i learned that the hard way."
 image: '/images/blog/wrong-problems/07-healthcare.webp'
@@ -12,8 +12,8 @@ faqs:
     answer: A lot. By the National Health Accounts 2022-23, out-of-pocket spending rose to about 43.4% of total health expenditure, up from 39.4% the year before, reversing a decade of slow decline. That is among the highest shares in the world, and it is what pushes families into debt when illness strikes.
   - question: How much does the Indian government spend on health?
     answer: Around 1.9% of GDP by the Economic Survey's measure, well below the 2.5% target the government itself set for 2025. That is one of the lowest levels of public health spending among major economies, which is why so much of the burden falls on households directly.
-  - question: Is India's doctor-population ratio really better than the WHO norm?
-    answer: That claim is misleading. There is no formal WHO doctor-population norm of 1 per 1,000. The official count also includes practitioners who are not allopathic doctors and a register that is never pruned for death or retirement. Estimates of active allopathic doctors put the real ratio closer to 1 per 1,500 to 2,700, and rural areas face specialist shortfalls of around 80%.
+  - question: Does India have enough doctors, especially outside the cities?
+    answer: Not where they are needed most. However the national doctor-to-population numbers are counted, rural areas face severe shortfalls, with specialist vacancies of around 80% at many community health centres. So the doctor or specialist you need may simply not be nearby.
   - question: Why do private hospitals do more procedures?
     answer: Incentives. Peer-reviewed research found the odds of a caesarean section were over four times higher in private facilities than public ones, with an estimated fifth of them avoidable, linked to fee-for-service incentives rather than medical need. It is one of the few well-documented signs of how payment structures can bend care.
 series: 'wrong problems'
@@ -70,7 +70,7 @@ money gets you through the door. but the last stretch, the part where things act
 
 the right call to the right person. the friend who's a doctor. the relative who knows the administrator. the name that turns a queue into a priority.
 
-we even pretend the underlying shortage isn't real. you'll hear that india has met some "who norm" on doctors, that we have more than enough. it doesn't hold up. there's no such formal who norm. the count quietly includes practitioners who aren't allopathic doctors, on a register that's never cleaned up for people who've retired or died. count actual working doctors and the ratio is far thinner, and in rural areas the shortfall of specialists runs around eighty percent.
+and the shortage underneath is real, especially outside the big cities. however you count the national doctor-to-population numbers, rural india faces severe shortfalls, with specialist vacancies running around eighty percent at many community health centres.
 
 so the doctor you need may genuinely not exist near you. and whether you reach one of the few who do can come down to who you know.
 

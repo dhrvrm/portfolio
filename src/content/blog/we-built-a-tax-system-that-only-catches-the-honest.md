@@ -1,8 +1,8 @@
 ---
 title: 'we built a tax system that only catches the honest'
-publishDate: 2026-05-30
+publishDate: 2026-05-24
 categories: ['India', 'Systems', 'Economy']
-excerpt: "only a small slice of india pays income tax, and that slice mostly can't hide from it. so when the government needs more, it leans on the same people again. we keep tightening the net instead of widening it."
+excerpt: "only a small slice of india pays income tax, and that slice mostly can't hide from it. so when more revenue is needed, the same people get leaned on again. we keep tightening the net instead of widening it."
 image: '/images/blog/wrong-problems/03-tax.webp'
 featured: false
 readingTime: 11
@@ -15,7 +15,7 @@ faqs:
   - question: What share of Indians actually pays income tax?
     answer: A small one. Only a few percent of the population files returns and an even smaller share pays meaningful income tax. India's tax-to-GDP ratio sits around 11 to 12%, well below the 30% plus common in developed economies, mainly because the direct-tax base is so narrow.
   - question: Why is agricultural income tax-free in India?
-    answer: Agricultural income is exempt from income tax. The intent was to protect poor farmers, but the exemption also shields large landowners, and it survives because farming is a powerful vote bank no government wants to touch.
+    answer: Agricultural income is exempt from income tax. The intent was to protect poor farmers, but the exemption also shields large landowners, and changing it is politically difficult and rarely attempted.
   - question: What would actually fix India's tax burden?
     answer: Widening the base rather than squeezing those already in it. That means formalising more of the economy, revisiting exemptions that protect the wealthy, fixing leakage in subsidies and spending, and making services visibly worth the tax. Raising pressure on the compliant few is the wrong lever.
 ---
@@ -88,7 +88,7 @@ the contrast is sharpest when you look at who sits comfortably outside.
 
 agricultural income is exempt from income tax. the idea was to protect poor farmers, which is fair. but the exemption doesn't check your bank balance. a large landowner with serious income claims the same shelter as a struggling one.
 
-it survives untouched because farming is a vote bank no government wants to provoke. the politics is simply heavier than the principle.
+it survives largely untouched, because changing it is politically difficult and rarely attempted.
 
 then there's the vast cash economy, where income is whatever you choose to write down. and the genuinely wealthy, who don't evade so much as plan, routing things through structures the salaried person doesn't have access to.
 
@@ -114,7 +114,7 @@ that's the part that turns a tax bill into a grievance. not the amount. the abse
 
 ---
 
-## so what does the government do when it needs more
+## so what happens when more revenue is needed
 
 here's the move that makes this a wrong problem story.
 
@@ -122,11 +122,11 @@ the real issue is plain. the base is too narrow. too few people are in the net, 
 
 the right answer is to widen it. bring more of the economy into the formal fold. revisit the exemptions that shelter wealth rather than poverty. fix the leakage. make the services worth the money.
 
-that's slow, political, and unglamorous. it picks fights with powerful groups.
+that's slow, difficult, and unglamorous, and it means taking on entrenched interests.
 
 so instead, when revenue is short, the system reaches for the easy lever. it tightens on the people already caught.
 
-exemptions that haven't kept pace with inflation, so your real burden creeps up every year without a single rule changing. newer regimes that quietly tax the savings and retirement money that earlier rules protected. more pressure, more precisely applied, on the one group that can't wriggle out.
+exemptions that haven't kept pace with inflation, so your real burden creeps up every year without a single rule changing. the newer tax regime, which sets aside many of the deductions that earlier rules used to protect for savings and retirement. more pressure, more precisely applied, on the one group that can't wriggle out.
 
 **when the net is too small, we don't make it bigger. we pull it tighter around whoever's already inside.**
 

@@ -29,6 +29,32 @@ const featuredProjects = allProjects
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 6);
 
+// Homepage travel polaroids: preset scatter (twist + position) cycled per card.
+const POLAROID_STYLES = [
+	'--twist: -5deg; --pos-top: 0.5rem; --pos-left: 12%;',
+	'--twist: -7deg; --pos-top: 6rem; --pos-left: 28%;',
+	'--twist: 8deg; --pos-top: 0.25rem; --pos-left: 48%;',
+	'--twist: 10deg; --pos-top: 5rem; --pos-left: 65%;',
+	'--twist: 2deg; --pos-top: 4rem; --pos-left: 82%;',
+	'--twist: -3deg; --pos-top: 1.5rem; --pos-left: 38%;',
+];
+// Pin a trip with `featured: true`; its first image becomes the polaroid. Falls
+// back to most recent travel so the pile is never empty while travel exists, and
+// the whole section is hidden when there is no travel content at all.
+const travelEntries = (await getCollection('activities')).filter(
+	(i) => i.data.category === 'travel' && (i.data.images?.length ?? 0) > 0,
+);
+const featuredTravel = travelEntries.filter((i) => i.data.featured);
+const travelPolaroids = (featuredTravel.length ? featuredTravel : travelEntries)
+	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+	.slice(0, POLAROID_STYLES.length)
+	.map((item, i) => ({
+		image: item.data.images![0],
+		caption: item.data.caption ?? item.data.title,
+		alt: `${item.data.caption ?? item.data.title} — travel photo`,
+		style: POLAROID_STYLES[i],
+	}));
+
 const bentoImage1 =
 	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
 const bentoImage2 = '/images/activities/srm-builds-6/srm-1.webp';
@@ -78,6 +104,8 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						src='/images/portraits/dhruv-portrait-1.webp'
 						alt='Portrait of Dhruv Verma'
 						class='hero-image w-full h-[520px] md:h-[640px] object-cover rounded-[var(--radius-md)]'
+						width='480'
+						height='640'
 						loading='eager'
 						decoding='async'
 					/>
@@ -146,10 +174,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		<div class='container mx-auto'>
 			<div class='flex flex-wrap items-center justify-between gap-6'>
 				<div>
-					<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>
-						Track record
-					</p>
-					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
+					<h2 class='text-2xl md:text-3xl font-semibold font-display'>
 						Shipping with care and impact, and mentoring builders along the way
 					</h2>
 				</div>
@@ -175,7 +200,6 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						title="Code that doesn't keep you up at night"
 						body="Clean architecture, sensible defaults, and shipping without the 2am heroics. I'm into boring-in-the-best-way systems."
 						kicker='Less duct tape. More sleep.'
-						decor='blob-tr'
 						variant='asymmetric'
 					/>
 				</div>
@@ -185,7 +209,6 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						title="Where the wifi is (and isn't)"
 						body="Travel isn't a sidebar, it's how I learn. Different places, different users, same obsession with clarity and good coffee."
 						kicker='One bag. Many time zones.'
-						decor='blob-bl'
 						variant='default'
 					/>
 				</div>
@@ -195,7 +218,6 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 						title='Mentorship without the corporate bingo'
 						body='Workshops, hackathon mentoring, and actually replying to DMs. All free. I do it to help others, not as a gig.'
 						kicker='Growing people, not headcount.'
-						decor='blob-tl'
 						variant='asymmetric'
 					/>
 				</div>
@@ -210,18 +232,17 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 			aria-labelledby='projects-strip-heading'
 		>
 			<div class='container mx-auto'>
-				<div class='flex items-center justify-between flex-wrap gap-4 mb-2'>
-					<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Work</p>
+				<div class='flex items-center justify-between flex-wrap gap-4 mb-8'>
+					<h2
+						id='projects-strip-heading'
+						class='text-2xl md:text-3xl font-semibold font-display'
+					>
+						Featured projects
+					</h2>
 					<a href='/projects' class='text-sm font-semibold text-accent'>
 						View all projects →
 					</a>
 				</div>
-				<h2
-					id='projects-strip-heading'
-					class='text-2xl md:text-3xl font-semibold font-display mb-8'
-				>
-					Featured projects
-				</h2>
 				<div class='projects-strip__scroll-wrap'>
 					<div class='projects-strip__track' tabindex='0' role='region' aria-label='Featured projects carousel'>
 						{featuredProjects.map((entry) => (
@@ -455,6 +476,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		</div>
 	</section>
 
+	{travelPolaroids.length > 0 && (
 	<section class='travel-polaroids border-t border-border/70 py-16 md:py-24 relative overflow-hidden'>
 		<!-- Rain animation background (decorative, behind content) -->
 		<div class='travel-polaroids__rain' aria-hidden='true'>
@@ -472,107 +494,43 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		</div>
 		<div class='container mx-auto relative z-[1]'>
 			<div class='flex items-center justify-between flex-wrap gap-4 mb-10'>
-				<div>
-					<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Places</p>
-					<h2 class='text-2xl md:text-3xl font-semibold font-display mt-2'>
-						Featured travel photos
-					</h2>
-				</div>
+				<h2 class='text-2xl md:text-3xl font-semibold font-display'>
+					Featured travel photos
+				</h2>
 				<a href='/activities/travel' class='text-sm font-semibold text-accent'>
 					More travel →
 				</a>
 			</div>
 			<div class='travel-polaroids__pile' aria-label='Featured travel photos'>
-				<article
-					class='travel-polaroid'
-					style='--twist: -5deg; --pos-top: 0.5rem; --pos-left: 12%;'
-				>
-					<div class='travel-polaroid__img-wrap'>
-						<img
-							src='https://images.unsplash.com/photo-1501854140801-50d01698950b?q=80&w=800&auto=format&fit=crop'
-							alt='Iceland'
-							loading='lazy'
-							draggable='false'
-							class='travel-polaroid__img'
-						/>
-					</div>
-					<p class='travel-polaroid__caption'>Iceland</p>
-				</article>
-				<article
-					class='travel-polaroid'
-					style='--twist: -7deg; --pos-top: 6rem; --pos-left: 28%;'
-				>
-					<div class='travel-polaroid__img-wrap'>
-						<img
-							src='https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?q=80&w=800&auto=format&fit=crop'
-							alt='Japan'
-							loading='lazy'
-							draggable='false'
-							class='travel-polaroid__img'
-						/>
-					</div>
-					<p class='travel-polaroid__caption'>Japan</p>
-				</article>
-				<article
-					class='travel-polaroid'
-					style='--twist: 8deg; --pos-top: 0.25rem; --pos-left: 48%;'
-				>
-					<div class='travel-polaroid__img-wrap'>
-						<img
-							src='https://images.unsplash.com/photo-1421789665209-c9b2a435e3dc?q=80&w=800&auto=format&fit=crop'
-							alt='Norway'
-							loading='lazy'
-							draggable='false'
-							class='travel-polaroid__img'
-						/>
-					</div>
-					<p class='travel-polaroid__caption'>Norway</p>
-				</article>
-				<article
-					class='travel-polaroid'
-					style='--twist: 10deg; --pos-top: 5rem; --pos-left: 65%;'
-				>
-					<div class='travel-polaroid__img-wrap'>
-						<img
-							src='https://images.unsplash.com/photo-1505142468610-359e7d316be0?q=80&w=800&auto=format&fit=crop'
-							alt='New Zealand'
-							loading='lazy'
-							draggable='false'
-							class='travel-polaroid__img'
-						/>
-					</div>
-					<p class='travel-polaroid__caption'>New Zealand</p>
-				</article>
-				<article
-					class='travel-polaroid'
-					style='--twist: 2deg; --pos-top: 4rem; --pos-left: 82%;'
-				>
-					<div class='travel-polaroid__img-wrap'>
-						<img
-							src='https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=800&auto=format&fit=crop'
-							alt='Canada'
-							loading='lazy'
-							draggable='false'
-							class='travel-polaroid__img'
-						/>
-					</div>
-					<p class='travel-polaroid__caption'>Canada</p>
-				</article>
+				{travelPolaroids.map((p) => (
+					<article class='travel-polaroid' style={p.style}>
+						<div class='travel-polaroid__img-wrap'>
+							<img
+								src={p.image}
+								alt={p.alt}
+								width='800'
+								height='800'
+								loading='lazy'
+								draggable='false'
+								class='travel-polaroid__img'
+							/>
+						</div>
+						<p class='travel-polaroid__caption'>{p.caption}</p>
+					</article>
+				))}
 			</div>
 			<p class='travel-polaroids__hint' aria-hidden='true'>
 				Drag to rearrange
 			</p>
 		</div>
 	</section>
+	)}
 
 	<section class='py-16 border-t border-border/70'>
 		<div class='container mx-auto'>
 			<div class='cta-panel'>
 				<div>
-					<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>
-						Work together
-					</p>
-					<h2 class='text-3xl md:text-4xl font-semibold font-display mt-3'>
+					<h2 class='text-3xl md:text-4xl font-semibold font-display'>
 						Need a reliable collaborator for your next product sprint?
 					</h2>
 					<p class='text-lg text-muted mt-3 max-w-2xl'>
@@ -740,6 +698,15 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 							const x = (e.clientX - rect.left) / rect.width - 0.5;
 							const y = (e.clientY - rect.top) / rect.height - 0.5;
 							applyTilt(x, y);
+							// Cursor spotlight: light the card surface where the pointer is
+							(card as HTMLElement).style.setProperty(
+								'--spot-x',
+								`${e.clientX - rect.left}px`,
+							);
+							(card as HTMLElement).style.setProperty(
+								'--spot-y',
+								`${e.clientY - rect.top}px`,
+							);
 						}
 					});
 				}
@@ -1039,7 +1006,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		position: relative;
 	}
 
-	.hero-beam {
+.hero-beam {
 		display: none;
 		position: fixed;
 		inset: 0;

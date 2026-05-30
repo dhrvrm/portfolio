@@ -8,6 +8,9 @@ const entries = (await getCollection('experience')).sort(
 	(a, b) => b.data.startDate.getTime() - a.data.startDate.getTime(),
 );
 
+const roleCount = entries.length;
+const companyCount = new Set(entries.map((e) => e.data.company)).size;
+
 const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
 const personSchema = {
 	'@context': 'https://schema.org',
@@ -29,40 +32,70 @@ const personSchema = {
 >
 	<script type='application/ld+json' set:html={JSON.stringify(personSchema)} />
 	<div class='container mx-auto py-16'>
-		<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Experience</p>
-		<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-12'>
-			Building products with clarity and craft
-		</h1>
+		<div class='grid lg:grid-cols-[320px_1fr] gap-12 lg:gap-16'>
+			<!-- Left: sticky intro column -->
+			<div class='lg:sticky lg:top-28 self-start'>
+				<h1 class='text-3xl md:text-5xl font-semibold font-display mb-4'>
+					Building products with clarity and craft
+				</h1>
+				<p class='text-lg text-muted max-w-2xl mb-4'>
+					A timeline of the teams I have built with, the products I shipped, and what each role taught me.
+				</p>
+				<p class='text-sm text-muted font-mono'>
+					{roleCount} roles · {companyCount} companies
+				</p>
+			</div>
 
-		<section aria-label='Work history' class='experience-timeline'>
-			<ol class='experience-timeline__list' start={1}>
-				{
-					entries.map((entry, i) => (
-						<ExperienceItem
-							itemId={`exp-${i}`}
-							title={entry.data.title}
-							company={entry.data.company}
-							startDate={entry.data.startDate}
-							endDate={entry.data.endDate}
-							achievements={entry.data.achievements}
-							isFirst={i === 0}
-							isLast={i === entries.length - 1}
-						/>
-					))
-				}
-			</ol>
-		</section>
+			<!-- Right: timeline -->
+			<section aria-label='Work history'>
+				<ol class='experience-timeline__list' id='exp-timeline' start={1}>
+					{
+						entries.map((entry, i) => (
+							<ExperienceItem
+								itemId={`exp-${i}`}
+								title={entry.data.title}
+								company={entry.data.company}
+								startDate={entry.data.startDate}
+								endDate={entry.data.endDate}
+								achievements={entry.data.achievements}
+								isFirst={i === 0}
+								isLast={i === entries.length - 1}
+							/>
+						))
+					}
+				</ol>
+			</section>
+		</div>
 	</div>
 </Layout>
 
 <style>
-	.experience-timeline {
-		max-width: 640px;
-	}
-
 	.experience-timeline__list {
 		list-style: none;
 		padding: 0;
 		margin: 0;
 	}
 </style>
+
+<script>
+	const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+	const coarse = window.matchMedia('(pointer: coarse)');
+
+	if (!mql.matches && !coarse.matches && window.gsap && window.ScrollTrigger) {
+		const items = document.querySelectorAll('#exp-timeline .tl-item');
+		if (items.length) {
+			window.gsap.from(items, {
+				y: 24,
+				opacity: 0,
+				duration: 0.5,
+				ease: 'power2.out',
+				stagger: 0.1,
+				scrollTrigger: {
+					trigger: '#exp-timeline',
+					start: 'top 85%',
+					toggleActions: 'play none none none',
+				},
+			});
+		}
+	}
+</script>

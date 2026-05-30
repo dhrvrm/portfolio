@@ -1,6 +1,6 @@
 ---
 title: 'in india, the biker is treated like the problem'
-publishDate: 2026-05-30
+publishDate: 2026-05-23
 categories: ['India', 'Systems', 'Public Policy']
 excerpt: "two-wheeler riders are the most common road user and the most likely to die. so the system bans them, fines them, and parks them next to the staff. we are solving how to remove bikers, not how to keep them alive."
 image: '/images/blog/wrong-problems/02-bikers.webp'
@@ -78,9 +78,9 @@ in november 2024 the delhi high court upheld the nhai ban on two-wheelers on acc
 
 the reason given is safety. but there's no evidence-based policy that separates a small commuter bike from a high-capacity touring motorcycle. it's one blunt line for every two-wheeler.
 
-now the strange part. on some expressways, motorcycles are legally allowed and even charged toll. and riders there still get stopped, abused, and threatened with their bikes being seized.
+now the strange part. on some expressways, motorcycles are legally allowed and even charged toll. and riders there still report being stopped and turned back regardless.
 
-so you're either banned, or allowed and harassed anyway.
+so you're either banned, or allowed but still waved off.
 
 india is the largest two-wheeler market on earth. the policy still treats the motorcycle as something to be kept off the good roads.
 
@@ -90,7 +90,7 @@ india is the largest two-wheeler market on earth. the policy still treats the mo
 
 then there's road rage, and how normal it has become to take it out on a rider.
 
-near a gurugram toll, a group of eleven bikers out early on a sunday was chased by men in an suv. baseball bats came out. a kawasaki z900 worth around 9 lakh was smashed. it was half past seven in the morning.
+near a gurugram toll, a group of eleven bikers out early on a sunday was chased by men in an suv. baseball bats came out. a kawasaki z900 worth around 10 lakh was smashed. it was half past seven in the morning.
 
 and that's just one that made the news. road rage cases against riders surface again and again, in city after city, often after the most minor collision, sometimes ending in hospital.
 
@@ -102,19 +102,15 @@ we've started treating violence against riders as a normal hazard of the road. i
 
 ---
 
-## stopped for revenue, not for safety
+## enforced unevenly, not where it counts
 
-police enforcement adds another layer, and it rarely lands where the actual danger is.
+enforcement adds another layer, and it rarely lands where the real danger is.
 
-helmet violations carry steep fines and licence suspension. fair enough on paper. the issue is how it's applied.
+helmet rules carry steep fines and licence suspension. fair enough on paper. the issue is how unevenly they land.
 
-there are clips of officers snatching a rider's keys and helmet before even writing the challan, one heard saying "now issue challan." riders refusing to sign, accusing officers of dishonesty. e-challan machines everywhere, and the bribe culture surviving anyway.
+too often it falls on the easy, visible stop rather than the behaviour that actually causes crashes. and the system leaks at the other end too, with a large share of issued fines never actually collected.
 
-the pattern underneath it is selective enforcement. police tend to stop the riders they think will pay. not the violations that actually kill people.
-
-and the system leaks at the end too. across cities, a large share of the challans that do get issued are never actually recovered.
-
-so it's aggressive at the roadside and toothless at the result. harassment without safety. the worst of both.
+so it can be heavy at the roadside and weak on outcomes. a lot of friction, and not much added safety.
 
 ---
 

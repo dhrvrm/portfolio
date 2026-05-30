@@ -65,7 +65,7 @@ const endDatetime = endDate ? toISOMonth(endDate) : undefined;
 		<h3 id={`tl-title-${itemId}`} class='tl-item__title'>{title}</h3>
 		<span class='tl-item__duration'>
 			<time datetime={startDatetime}>{startLabel}</time>
-			{' – '}
+			{' - '}
 			{endDate ? (
 				<time datetime={endDatetime}>{endLabel}</time>
 			) : (

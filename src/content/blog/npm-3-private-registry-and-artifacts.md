@@ -5,7 +5,7 @@ categories: ['JavaScript', 'NPM', 'Package Development']
 excerpt: 'A practical, opinionated ranking of private npm registries, with Azure DevOps Artifacts as the most balanced choice for real teams.'
 series: 'NPM Package Development'
 seriesPart: 3
-image: '/blogs/npm/creating-your-first-npm-package-the-beginners-guide.webp'
+image: '/blogs/npm/private-npm-registries-azure-devops-on-top.webp'
 featured: false
 readingTime: 10
 tags: ['NPM', 'Registry', 'Azure DevOps', 'Artifacts', 'Private Packages']

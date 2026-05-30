@@ -1,6 +1,6 @@
 ---
 title: 'we let people buy their own clean air and water'
-publishDate: 2026-05-30
+publishDate: 2026-05-26
 categories: ['India', 'Systems', 'Environment']
 excerpt: "the air is a winter emergency and the water is a tap count. meanwhile we quietly sell people purifiers and bottled water so they can escape a shared system we never fixed. the escape is the wrong problem."
 image: '/images/blog/wrong-problems/05-pollution.webp'

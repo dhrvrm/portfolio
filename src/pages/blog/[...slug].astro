@@ -325,7 +325,7 @@ const slugify = (value: string) =>
 	<!-- Floating Share Button -->
 	<div
 		id='floatingShare'
-		class='fixed bottom-6 right-6 z-50 opacity-0 pointer-events-none transition-all duration-300'
+		class='fixed bottom-6 right-6 z-[var(--z-floating)] opacity-0 pointer-events-none transition-all duration-300'
 	>
 		<button
 			id='floatingShareButton'
@@ -483,7 +483,7 @@ const slugify = (value: string) =>
 			// Create toast notification
 			const toast = document.createElement('div');
 			toast.className =
-				'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-md shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+				'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-md shadow-lg z-[var(--z-floating)] transform translate-x-full transition-transform duration-300';
 			toast.textContent = message;
 			document.body.appendChild(toast);
 

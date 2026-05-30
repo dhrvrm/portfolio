@@ -1,6 +1,6 @@
 ---
 title: "you can't get justice, and you can't take it yourself"
-publishDate: 2026-05-30
+publishDate: 2026-05-29
 categories: ['India', 'Systems', 'Justice']
 excerpt: "report a theft and the system often won't move. find the thief yourself and the law treats you as the problem. the citizen ends up squeezed between an institution that won't act and a rule that won't let them act either."
 image: '/images/blog/wrong-problems/08-policing.webp'
@@ -14,10 +14,10 @@ faqs:
     answer: Yes. In Lalita Kumari v. Government of Uttar Pradesh (2013), the Supreme Court held that registering an FIR is mandatory when the information discloses a cognizable offence. Despite that, surveys like the Status of Policing in India Report have found roughly one in four people who approached the police could not get their complaint registered.
   - question: Can you take back your own stolen property if you find it?
     answer: Generally no, not by force. Recovered stolen goods are treated as evidence, and the law routes their seizure and return through the police and a magistrate rather than the owner. Taking it back yourself can expose you to legal trouble and can damage the case. The correct path is to report it and let the police recover and produce it before the court.
-  - question: How common is paying a bribe to police in India?
-    answer: According to Transparency International's Global Corruption Barometer for Asia in 2020, about 42% of Indians who interacted with the police reported paying a bribe, and 46% said they used personal connections to get things done. Police were among the most bribe-prone services surveyed.
+  - question: Why do small theft cases so often go unsolved?
+    answer: Mostly capacity. Police forces run well below their sanctioned strength, with around a fifth of posts vacant, so low-value property crimes sit near the bottom of an overloaded list. Recovery rates for stolen property are correspondingly low.
   - question: Why is the justice system so slow in India?
-    answer: Capacity and backlog. India has fewer police per capita than its own sanctioned strength, with around a fifth of posts vacant. Courts carry roughly 5 crore pending cases, about three quarters of prisoners are undertrials awaiting verdicts rather than convicted, and the overall conviction rate sits near a third.
+    answer: Capacity and backlog. India has fewer police per capita than its own sanctioned strength, with around a fifth of posts vacant. Courts carry roughly 5 crore pending cases, about three quarters of prisoners are undertrials awaiting verdicts rather than convicted, and the overall conviction rate for serious crimes sits only around half.
 ---
 
 this is the eighth piece in a series about how india keeps solving the wrong problem.
@@ -74,9 +74,9 @@ this isn't usually one lazy officer. it's a system running on empty.
 
 india has fewer police per person than its own sanctioned strength calls for, with around a fifth of posts sitting vacant, year after year. the people who are there are overworked. so triage is brutal, and a stolen phone or bike is near the bottom of it.
 
-then the money problem. by transparency international's 2020 survey, about forty-two percent of indians who dealt with the police reported paying a bribe, and nearly half said they leaned on personal connections to get anything done. that's the same theme from the healthcare piece in this series. the official channel stalls, so an unofficial one, cash or contacts, quietly takes over.
+stretched that thin, the whole system runs on triage, and a low-value theft is almost never the priority. it's less that nobody cares and more that there isn't enough of anyone to go round.
 
-and even if your case somehow moves, look at where it's headed. courts are carrying something like five crore pending cases. around three quarters of people sitting in indian prisons are undertrials, not convicted, just waiting. the overall conviction rate hovers near a third. property recovery, in the data that exists, is low.
+and even if your case somehow moves, look at where it's headed. courts are carrying something like five crore pending cases. around three quarters of people sitting in indian prisons are undertrials, not convicted, just waiting. the overall conviction rate for serious crimes hovers around half. property recovery, in the data that exists, is low.
 
 so the honest math for a stolen bike is grim. report it and it likely goes nowhere. and even the system working would mean years of waiting for a one-in-three shot.
 
@@ -92,11 +92,11 @@ what we never built was the capacity to honour them. the staffing, the incentive
 
 so the rules, without the delivery behind them, invert. they stop protecting the citizen and start trapping them. you're held to the part that constrains you, the no self-help rule, while the part that's supposed to serve you, the duty to act, quietly lapses.
 
-and the burden lands where it always lands in this series. on the individual. you eat the loss, or you pay the bribe, or you break a rule trying to fix it yourself and become the offender.
+and the burden lands where it always lands in this series. on the individual. you absorb the loss, or you break a rule trying to fix it yourself and become the offender.
 
-**we built a justice system that's strict about what you can't do and soft about what it owes you.**
+**we built a system that's strict about what you can't do and slow about what it owes you.**
 
-a rule that only binds the powerless isn't really a rule. it's just pressure pointed in one direction.
+a rule works only when the duty behind it is delivered too. take away the delivery and the rule stops protecting you.
 
 ---
 
@@ -104,8 +104,8 @@ a rule that only binds the powerless isn't really a rule. it's just pressure poi
 
 i want to be precise here, because this is sensitive ground.
 
-i'm not saying every officer is corrupt or lazy. most are understaffed and buried, and plenty are decent people in a broken setup. the failure i'm describing is the system's, not a verdict on individuals. and i've kept names, places, and specifics out of this on purpose.
+i'm not pointing at the officers themselves. most are understaffed and buried, and plenty are decent people in a stretched setup. the gap i'm describing is structural, not a verdict on individuals. and i've kept names, places, and specifics out of this on purpose.
 
-the fix isn't anger at the constable in front of you. it's the unglamorous stuff, more police, better paid and less burdened, real consequences for refusing to register a complaint, courts that don't take a decade. the structure, not the scapegoat.
+the fix isn't anger at the constable in front of you. it's the unglamorous stuff, more police, better resourced and less burdened, real follow-through on complaints, courts that don't take a decade. the structure, not the scapegoat.
 
-next, the one i hesitated most to write. what happens to all of this when people stop feeling safe enough to say it out loud.
+next, the last one, and the quietest. the hard conversation we keep avoiding, and what it costs when we choose the comfortable silence.
