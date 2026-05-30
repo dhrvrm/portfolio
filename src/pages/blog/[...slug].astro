@@ -156,6 +156,9 @@ const slugify = (value: string) =>
 								<img
 									src={post.data.image}
 									alt={`Featured image for ${post.data.title}`}
+									width='1200'
+									height='630'
+									decoding='async'
 									class='w-full h-64 md:h-80 lg:h-96 object-cover hover:scale-105 transition-transform duration-700'
 								/>
 							</div>
@@ -165,7 +168,10 @@ const slugify = (value: string) =>
 						<div class='flex items-center gap-3'>
 							<img
 								src={AUTHOR.avatar}
-								alt={AUTHOR.name}
+								alt={`Portrait of ${AUTHOR.name}`}
+								width='40'
+								height='40'
+								decoding='async'
 								class='w-10 h-10 rounded-full'
 							/>
 							<div>
@@ -276,7 +282,11 @@ const slugify = (value: string) =>
 				<div class='flex items-start gap-6'>
 					<img
 						src={AUTHOR.avatar}
-						alt={AUTHOR.name}
+						alt={`Portrait of ${AUTHOR.name}`}
+						width='96'
+						height='96'
+						loading='lazy'
+						decoding='async'
 						class='w-24 h-24 rounded-full'
 					/>
 					<div class='flex-1'>

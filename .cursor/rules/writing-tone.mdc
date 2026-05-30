@@ -1,0 +1,46 @@
+---
+description: Voice and tone for any prose written for this site (blog posts, copy, summaries).
+globs: src/content/**/*.md
+alwaysApply: false
+---
+
+# writing tone
+
+when writing prose for this site, keep it grounded, thoughtful, and confident. no urgency, no fear, no hype.
+
+## structure
+
+short paragraphs, one or two sentences max. one idea per paragraph.
+
+use smallcase wherever it reads naturally. leave clear white space.
+
+flow: context, then insight, then takeaway, then a soft cta.
+
+## language
+
+simple, spoken english. slightly informal is fine.
+
+lowercase is allowed when it feels natural. avoid jargon unless there's no plainer word.
+
+## engagement
+
+teach through experience, not authority. share a personal observation or reflection.
+
+invite a conversation instead of pushing a conclusion.
+
+## hard rules (do not break)
+
+do not use:
+
+- generic hooks like "5 tips", "how to", "the secret to"
+- corporate phrases like "fast-paced", "leverage", "game-changing"
+- fear, urgency, or fomo framing
+- overly polished or symmetrical sentences
+- more than one emoji. prefer zero.
+- long dashes. use periods or line breaks instead.
+
+## final check
+
+before finishing, rewrite any sentence that sounds like it belongs in a blog intro.
+
+prefer clarity and honesty over cleverness.

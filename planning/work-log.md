@@ -37,8 +37,8 @@
 
 - StudioCard: asymmetric variant, reusable.
 - StudioBadge: pill labels.
-- ActivityCard: asymmetric variant; shared card styles.
-- Index uses StudioCard.
+- **ActivityCard: asymmetric variant; shared card styles.
+- Index uses StudioCard.**
 
 ### Phase 11 ✓
 

@@ -2,7 +2,7 @@
 title: 'Private npm Registries in Production: Azure DevOps on Top'
 publishDate: 2025-02-07
 categories: ['JavaScript', 'NPM', 'Package Development']
-excerpt: 'A practical, opinionated ranking of private npm registries,with Azure DevOps Artifacts as the most balanced choice for real teams.'
+excerpt: 'A practical, opinionated ranking of private npm registries, with Azure DevOps Artifacts as the most balanced choice for real teams.'
 series: 'NPM Package Development'
 seriesPart: 3
 image: '/blogs/npm/creating-your-first-npm-package-the-beginners-guide.webp'
