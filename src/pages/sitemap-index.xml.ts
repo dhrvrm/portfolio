@@ -1,4 +1,6 @@
 import { getCollection } from 'astro:content';
+import { slugify } from '../utils/content';
+import { ACTIVITY_CATEGORIES } from '../utils/activities';
 
 const SITE = import.meta.env.SITE ?? 'https://dhruvverma.dev';
 
@@ -28,12 +30,6 @@ export async function GET() {
 		getCollection('activities'),
 	]);
 
-	const slugify = (v: string) =>
-		v
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/(^-|-$)/g, '');
-
 	const entries: UrlEntry[] = [
 		{ loc: `${base}/` },
 		{ loc: `${base}/feed.xml` },
@@ -42,11 +38,7 @@ export async function GET() {
 		{ loc: `${base}/experience` },
 		{ loc: `${base}/projects` },
 		{ loc: `${base}/activities` },
-		{ loc: `${base}/activities/events` },
-		{ loc: `${base}/activities/hackathons` },
-		{ loc: `${base}/activities/speaking` },
-		{ loc: `${base}/activities/awards` },
-		{ loc: `${base}/activities/travel` },
+		...ACTIVITY_CATEGORIES.map((c) => ({ loc: `${base}/activities/${c.slug}` })),
 	];
 
 	for (const post of blog) {

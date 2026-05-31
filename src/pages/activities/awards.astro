@@ -1,16 +1,9 @@
 ---
 import ActivityLayout from '../../layouts/ActivityLayout.astro';
 import AwardsGallery from '../../components/AwardsGallery.astro';
-import { getCollection } from 'astro:content';
+import { getActivities, inCategory } from '../../utils/activities';
 
-const items = await getCollection('activities');
-const awards = items
-	.filter((i) => i.data.category === 'awards')
-	.sort((a, b) => {
-		if (b.data.featured !== a.data.featured)
-			return Number(b.data.featured) - Number(a.data.featured);
-		return b.data.date.getTime() - a.data.date.getTime();
-	});
+const awards = inCategory(await getActivities(), 'awards');
 ---
 
 <ActivityLayout title='Recognition - Dhruv Verma' current='awards'>

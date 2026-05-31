@@ -12,7 +12,7 @@ const personSchema = {
 	'@context': 'https://schema.org',
 	'@type': 'Person',
 	name: AUTHOR.name,
-	jobTitle: 'Frontend Developer',
+	jobTitle: AUTHOR.jobTitle,
 	url: site,
 	description: AUTHOR.shortBio,
 	sameAs: Object.values(AUTHOR.social),

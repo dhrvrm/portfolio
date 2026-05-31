@@ -2,7 +2,13 @@
 import Layout from './Layout.astro';
 import ActivityNav from '../components/ActivityNav.astro';
 import Breadcrumbs from '../components/Breadcrumbs.astro';
-import { getCollection } from 'astro:content';
+import {
+	ACTIVITY_CATEGORIES,
+	categoryLabel,
+	getActivities,
+	inCategory,
+	categoryCounts,
+} from '../utils/activities';
 
 interface Props {
 	title: string;
@@ -11,41 +17,22 @@ interface Props {
 
 const { title, current } = Astro.props;
 
-const categoryLabel: Record<string, string> = {
-	events: 'Events',
-	hackathons: 'Hackathons',
-	speaking: 'Speaking',
-	awards: 'Recognition',
-	travel: 'Travel',
-};
+const allActivities = await getActivities();
+const counts = categoryCounts(allActivities);
 
-const allActivities = await getCollection('activities');
-const counts = allActivities.reduce(
-	(acc, item) => {
-		acc[item.data.category] = (acc[item.data.category] || 0) + 1;
-		return acc;
-	},
-	{} as Record<string, number>,
-);
-
-const categories = [
-	{ slug: 'events', label: 'Events', count: counts.events || 0 },
-	{ slug: 'hackathons', label: 'Hackathons', count: counts.hackathons || 0 },
-	{ slug: 'speaking', label: 'Speaking', count: counts.speaking || 0 },
-	{ slug: 'awards', label: 'Recognition', count: counts.awards || 0 },
-	{ slug: 'travel', label: 'Travel', count: counts.travel || 0 },
-];
+const categories = ACTIVITY_CATEGORIES.map((c) => ({
+	slug: c.slug,
+	label: c.label,
+	count: counts[c.slug] || 0,
+}));
 
 const currentCategoryItems =
 	current && (counts[current] ?? 0) > 0
-		? allActivities
-				.filter((i) => i.data.category === current)
-				.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
-				.map((i) => ({
-					slug: i.slug,
-					title: i.data.title,
-					date: i.data.date,
-				}))
+		? inCategory(allActivities, current).map((i) => ({
+				slug: i.slug,
+				title: i.data.title,
+				date: i.data.date,
+			}))
 		: [];
 ---
 
@@ -76,9 +63,7 @@ const currentCategoryItems =
 				items={[
 					{ label: 'Home', href: '/' },
 					{ label: 'Activities', href: '/activities' },
-					...(current && categoryLabel[current]
-						? [{ label: categoryLabel[current] }]
-						: []),
+					...(current ? [{ label: categoryLabel(current) }] : []),
 				]}
 			/>
 			<slot />

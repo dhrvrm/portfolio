@@ -6,15 +6,39 @@ import { getCollection } from 'astro:content';
 import { AUTHOR } from '../../data/constants';
 
 export async function getStaticPaths() {
-	const projects = await getCollection('projects');
-	return projects.map((project) => ({
+	const projects = (await getCollection('projects')).sort(
+		(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
+	);
+	return projects.map((project, i) => ({
 		params: { slug: project.slug },
-		props: { project },
+		props: {
+			project,
+			prev: projects[i - 1] ?? null, // newer
+			next: projects[i + 1] ?? null, // older
+		},
 	}));
 }
 
-const { project } = Astro.props;
+const { project, prev, next } = Astro.props;
 const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
+
+const categoryLabel =
+	project.data.category === 'client' ? 'Client work' : 'Personal project';
+const year = project.data.publishDate.getFullYear();
+
+const facts = [
+	{ label: 'Role', value: project.data.role },
+	{ label: 'Timeline', value: project.data.duration },
+	project.data.client ? { label: 'Client', value: project.data.client } : null,
+	{ label: 'Type', value: categoryLabel },
+	{ label: 'Year', value: String(year) },
+].filter(Boolean) as { label: string; value: string }[];
+
+const story = [
+	{ label: 'Challenge', body: project.data.challenge },
+	{ label: 'Solution', body: project.data.solution },
+	{ label: 'Impact', body: project.data.impact },
+];
 
 const schema = {
 	'@context': 'https://schema.org',
@@ -42,6 +66,7 @@ const schema = {
 <Layout
 	title={`${project.data.title} - Project by Dhruv Verma`}
 	description={project.data.description}
+	image={project.data.image}
 >
 	<div class='container mx-auto py-16'>
 		<Breadcrumbs
@@ -52,84 +77,146 @@ const schema = {
 			]}
 		/>
 
-		<article class='max-w-4xl mx-auto'>
-			<header class='mb-12'>
-				<h1 class='text-3xl md:text-5xl font-semibold font-display mb-4'>
+		<article>
+			<header class='mb-10'>
+				<h1
+					class='text-3xl md:text-5xl font-semibold font-display tracking-tight text-balance'
+				>
 					{project.data.title}
 				</h1>
-				<div class='flex flex-wrap gap-4 items-center text-sm text-muted'>
-					<span>{project.data.category}</span>
-					<span>•</span>
-					<span>{project.data.duration}</span>
-					<span>•</span>
-					<span>{project.data.role}</span>
-				</div>
+				<p class='mt-5 text-lg md:text-xl text-muted leading-relaxed text-pretty max-w-[55ch]'>
+					{project.data.description}
+				</p>
 			</header>
 
 			<div
-				class='aspect-video mb-12 rounded-2xl overflow-hidden border border-border/70 group'
+				class='aspect-video mb-14 rounded-2xl overflow-hidden border border-border/70 group'
 			>
 				<Image
-					width={800}
-					height={450}
+					width={1000}
+					height={563}
 					src={project.data.image}
-					alt={project.data.title}
+					alt={`${project.data.title}, ${categoryLabel.toLowerCase()} by ${AUTHOR.name}`}
 					loading='eager'
-					class='w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out'
+					class='w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100'
 				/>
 			</div>
 
-			<div class='grid md:grid-cols-3 gap-8 mb-12'>
-				<div class='space-y-2'>
-					<h2 class='font-semibold'>Challenge</h2>
-					<p class='text-sm text-muted'>{project.data.challenge}</p>
-				</div>
-				<div class='space-y-2'>
-					<h2 class='font-semibold'>Solution</h2>
-					<p class='text-sm text-muted'>{project.data.solution}</p>
-				</div>
-				<div class='space-y-2'>
-					<h2 class='font-semibold'>Impact</h2>
-					<p class='text-sm text-muted'>{project.data.impact}</p>
-				</div>
-			</div>
+			<div class='grid lg:grid-cols-[260px_1fr] gap-10 lg:gap-16'>
+				<!-- Fact sheet: sticky on desktop, leads on mobile so the CTAs sit near the top -->
+				<aside class='lg:sticky lg:top-28 self-start space-y-8'>
+					<dl class='grid grid-cols-2 lg:grid-cols-1 gap-x-6 gap-y-5'>
+						{
+							facts.map((fact) => (
+								<div>
+									<dt class='font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted'>
+										{fact.label}
+									</dt>
+									<dd class='mt-1 text-sm font-medium text-ink'>{fact.value}</dd>
+								</div>
+							))
+						}
+					</dl>
 
-			<div class='flex flex-wrap gap-4 mb-12'>
-				{
-					project.data.tech.map((tech) => (
-						<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
-							{tech}
-						</span>
-					))
-				}
+					<div class='border-t border-border/60 pt-6'>
+						<h2 class='font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted'>
+							Stack
+						</h2>
+						<div class='mt-3 flex flex-wrap gap-2'>
+							{
+								project.data.tech.map((tech) => (
+									<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
+										{tech}
+									</span>
+								))
+							}
+						</div>
+					</div>
+
+					{
+						(project.data.website || project.data.repository) && (
+							<div class='flex flex-col gap-3 border-t border-border/60 pt-6'>
+								{project.data.website && (
+									<a
+										href={project.data.website}
+										target='_blank'
+										rel='noopener noreferrer'
+										class='inline-flex items-center justify-center px-4 py-2.5 rounded-md bg-accent text-onAccent text-sm font-semibold hover:bg-accentStrong transition-colors active:scale-[0.98]'
+										aria-label='Visit the live website (opens in new tab)'
+									>
+										Visit live site
+									</a>
+								)}
+								{project.data.repository && (
+									<a
+										href={project.data.repository}
+										target='_blank'
+										rel='noopener noreferrer'
+										class='inline-flex items-center justify-center px-4 py-2.5 rounded-md border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors active:scale-[0.98]'
+										aria-label='View the code repository (opens in new tab)'
+									>
+										View code
+									</a>
+								)}
+							</div>
+						)
+					}
+				</aside>
+
+				<!-- Narrative: the case study reads as a sequence, not three tiny equal columns -->
+				<div class='min-w-0'>
+					{
+						story.map((part) => (
+							<section class='py-8 border-t border-border/60 first:border-t-0 first:pt-0'>
+								<h2 class='font-mono text-xs uppercase tracking-[0.15em] text-accent'>
+									{part.label}
+								</h2>
+								<p class='mt-4 text-base md:text-lg leading-relaxed text-muted text-pretty max-w-[62ch]'>
+									{part.body}
+								</p>
+							</section>
+						))
+					}
+				</div>
 			</div>
 
 			{
-				(project.data.website || project.data.repository) && (
-					<div class='flex gap-4 flex-wrap'>
-						{project.data.website && (
+				(prev || next) && (
+					<nav
+						class='mt-16 pt-8 border-t border-border/60 grid sm:grid-cols-2 gap-6'
+						aria-label='More projects'
+					>
+						{prev ? (
 							<a
-								href={project.data.website}
-								target='_blank'
-								rel='noopener noreferrer'
-								class='inline-flex items-center px-4 py-2 rounded-md bg-accent text-white hover:bg-accentStrong transition-colors'
-								aria-label='Visit website (opens in new tab)'
+								href={`/projects/${prev.slug}`}
+								class='group rounded-xl border border-border/70 bg-surface/70 p-5 hover:border-accent/60 transition-colors'
 							>
-								Visit Website
+								<span class='font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted'>
+									&larr; Newer project
+								</span>
+								<p class='mt-1.5 font-semibold font-display group-hover:text-accent transition-colors'>
+									{prev.data.title}
+								</p>
 							</a>
+						) : (
+							<span />
 						)}
-						{project.data.repository && (
+						{next ? (
 							<a
-								href={project.data.repository}
-								target='_blank'
-								rel='noopener noreferrer'
-								class='inline-flex items-center px-4 py-2 rounded-md border border-border/70 text-ink hover:border-accent hover:text-accent transition-colors'
-								aria-label='View code repository (opens in new tab)'
+								href={`/projects/${next.slug}`}
+								class='group rounded-xl border border-border/70 bg-surface/70 p-5 hover:border-accent/60 transition-colors sm:text-right'
 							>
-								View Code
+								<span class='font-mono text-[0.7rem] uppercase tracking-[0.12em] text-muted'>
+									Older project &rarr;
+								</span>
+								<p class='mt-1.5 font-semibold font-display group-hover:text-accent transition-colors'>
+									{next.data.title}
+								</p>
 							</a>
+						) : (
+							<span />
 						)}
-					</div>
+					</nav>
 				)
 			}
 		</article>

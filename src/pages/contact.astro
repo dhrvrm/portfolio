@@ -1,51 +1,370 @@
 ---
 import Layout from '../layouts/Layout.astro';
+
+const EMAIL = 'dhruvv@live.com';
+
+const elsewhere = [
+	{
+		name: 'LinkedIn',
+		handle: 'linkedin.com/in/dhruvv',
+		url: 'https://www.linkedin.com/in/dhruvv/',
+	},
+	{
+		name: 'GitHub',
+		handle: 'github.com/dhrvrm',
+		url: 'https://github.com/dhrvrm',
+	},
+	{
+		name: 'X',
+		handle: '@verma1300',
+		url: 'https://x.com/verma1300',
+	},
+];
 ---
 
 <Layout
 	title='Contact - Dhruv Verma'
-	description='Get in touch with Dhruv Verma for collaboration, speaking, or hiring. Email and LinkedIn.'
+	description='Get in touch with Dhruv Verma for collaboration, speaking, or mentoring. India-based: Delhi, Bengaluru, and on the move in between.'
 >
 	<div class='container mx-auto py-16'>
-		<div class='max-w-2xl mx-auto'>
-			<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Contact</p>
-			<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-8'>
-				Let’s connect
+		<header class='max-w-3xl'>
+			<h1
+				class='text-3xl md:text-5xl font-semibold font-display tracking-tight text-balance'
+			>
+				Let&rsquo;s work together
 			</h1>
+			<p class='mt-5 text-lg md:text-xl text-muted leading-relaxed text-pretty max-w-[58ch]'>
+				I&rsquo;m based in India: Delhi up north, Bengaluru down south, and on
+				the move in between. For collaboration, speaking, or mentoring, email is
+				the fastest way to reach me.
+			</p>
+		</header>
 
+		<div class='contact-grid'>
+			<!-- Reach: email is the one primary action, socials are secondary -->
 			<div class='space-y-6'>
-				<a
-					href='mailto:dhruvv@live.com'
-					class='block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group'
-					aria-label='Send email to dhruvv@live.com'
-				>
-					<div class='relative z-10'>
-						<h2 class='text-xl font-semibold mb-2'>Email</h2>
-						<p
-							class='text-base text-muted group-hover:text-ink transition-colors'
+				<div class='reach-card'>
+					<div class='flex items-start justify-between gap-4'>
+						<div class='min-w-0'>
+							<p class='reach-card__label'>Email</p>
+							<a href={`mailto:${EMAIL}`} class='reach-card__email'>{EMAIL}</a>
+						</div>
+						<button
+							type='button'
+							id='copy-email'
+							data-email={EMAIL}
+							class='reach-card__copy'
+							aria-label='Copy email address'
 						>
-							dhruvv@live.com
-						</p>
+							Copy
+						</button>
 					</div>
-				</a>
+					<span class='sr-only' role='status' aria-live='polite' id='copy-status'></span>
+				</div>
 
-				<a
-					href='https://www.linkedin.com/in/dhruvv'
-					target='_blank'
-					rel='noopener noreferrer'
-					class='block p-8 bg-surface/70 rounded-2xl border border-border/70 hover:border-accent/60 transition-all group'
-					aria-label='LinkedIn profile (opens in new tab)'
-				>
-					<div class='relative z-10'>
-						<h2 class='text-xl font-semibold mb-2'>LinkedIn</h2>
-						<p
-							class='text-base text-muted group-hover:text-ink transition-colors'
-						>
-							linkedin.com/in/dhruvv
-						</p>
-					</div>
-				</a>
+				<ul class='links'>
+					{
+						elsewhere.map((item) => (
+							<li>
+								<a
+									href={item.url}
+									target='_blank'
+									rel='noopener noreferrer'
+									class='links__row group'
+									aria-label={`${item.name} profile (opens in new tab)`}
+								>
+									<span class='links__name'>{item.name}</span>
+									<span class='links__handle'>{item.handle}</span>
+									<span class='links__arrow' aria-hidden='true'>
+										&#8599;
+									</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
 			</div>
+
+			<!-- The roaming concept: a route from Delhi (north) to Bengaluru (south),
+			     roaming everywhere in between. The middle marker pulses to read as "now". -->
+			<figure class='loc'>
+				<figcaption class='loc__cap'>Based in India</figcaption>
+				<div class='loc__rail'>
+					<div class='loc__node'>
+						<span class='loc__dot' aria-hidden='true'></span>
+						<div>
+							<p class='loc__city'>Delhi</p>
+							<p class='loc__dir'>North</p>
+						</div>
+					</div>
+
+					<div class='loc__node loc__node--now'>
+						<span class='loc__pulse' aria-hidden='true'></span>
+						<div>
+							<p class='loc__city'>On the move</p>
+							<p class='loc__dir'>Everywhere in between</p>
+						</div>
+					</div>
+
+					<div class='loc__node'>
+						<span class='loc__dot' aria-hidden='true'></span>
+						<div>
+							<p class='loc__city'>Bengaluru</p>
+							<p class='loc__dir'>South</p>
+						</div>
+					</div>
+				</div>
+			</figure>
 		</div>
 	</div>
 </Layout>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const btn = document.getElementById('copy-email');
+		if (!(btn instanceof HTMLButtonElement)) return;
+		const email = btn.dataset.email || '';
+		let timer = 0;
+		btn.addEventListener('click', async () => {
+			try {
+				await navigator.clipboard.writeText(email);
+				btn.textContent = 'Copied';
+				btn.dataset.copied = 'true';
+				const status = document.getElementById('copy-status');
+				if (status) status.textContent = 'Email address copied to clipboard';
+				window.clearTimeout(timer);
+				timer = window.setTimeout(() => {
+					btn.textContent = 'Copy';
+					delete btn.dataset.copied;
+					if (status) status.textContent = '';
+				}, 2000);
+			} catch {
+				// Clipboard unavailable: the mailto link beside this button still works.
+			}
+		});
+	});
+</script>
+
+<style>
+	.contact-grid {
+		margin-top: 3.5rem;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 2.5rem;
+		align-items: start;
+	}
+	@media (min-width: 1024px) {
+		.contact-grid {
+			grid-template-columns: 1fr 0.85fr;
+			gap: 4rem;
+		}
+	}
+
+	/* Primary email action (elevation earns the card here) */
+	.reach-card {
+		padding: 1.75rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+		transition: border-color 0.25s ease;
+	}
+	.reach-card:hover {
+		border-color: rgb(var(--color-accent) / 0.5);
+	}
+	.reach-card__label {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: rgb(var(--color-muted));
+	}
+	.reach-card__email {
+		display: inline-block;
+		margin-top: 0.4rem;
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: clamp(1.25rem, 1rem + 1.6vw, 1.875rem);
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		color: rgb(var(--color-ink));
+		text-decoration: none;
+		word-break: break-word;
+		transition: color 0.25s ease;
+	}
+	.reach-card__email:hover,
+	.reach-card__email:focus-visible {
+		color: rgb(var(--color-accent));
+	}
+	.reach-card__copy {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		min-height: 2.5rem;
+		padding: 0.4rem 0.9rem;
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		color: rgb(var(--color-muted));
+		background: rgb(var(--color-bg) / 0.8);
+		border: 1px solid rgb(var(--color-border));
+		border-radius: var(--radius-md);
+		cursor: pointer;
+		transition: color 0.2s ease, border-color 0.2s ease;
+	}
+	.reach-card__copy:hover,
+	.reach-card__copy:focus-visible {
+		color: rgb(var(--color-ink));
+		border-color: rgb(var(--color-accent) / 0.5);
+	}
+	.reach-card__copy[data-copied='true'] {
+		color: rgb(var(--color-accent));
+		border-color: rgb(var(--color-accent) / 0.5);
+	}
+
+	/* Secondary links: a divided list, not boxed cards */
+	.links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+	.links__row {
+		display: grid;
+		grid-template-columns: 5.5rem 1fr auto;
+		align-items: center;
+		gap: 0.5rem 1rem;
+		padding: 1rem 0.25rem;
+		border-top: 1px solid rgb(var(--color-border) / 0.6);
+		text-decoration: none;
+		/* transform, not padding: avoid animating a layout property */
+		transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.links li:last-child .links__row {
+		border-bottom: 1px solid rgb(var(--color-border) / 0.6);
+	}
+	.links__row:hover,
+	.links__row:focus-visible {
+		transform: translateX(6px);
+	}
+	.links__name {
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+	}
+	.links__handle {
+		min-width: 0;
+		overflow-wrap: anywhere;
+		font-family: var(--font-mono);
+		font-size: 0.85rem;
+		color: rgb(var(--color-muted));
+		transition: color 0.2s ease;
+	}
+	.links__row:hover .links__handle {
+		color: rgb(var(--color-ink));
+	}
+	.links__arrow {
+		color: rgb(var(--color-muted));
+		transition: color 0.2s ease, transform 0.25s ease;
+	}
+	.links__row:hover .links__arrow {
+		color: rgb(var(--color-accent));
+		transform: translate(2px, -2px);
+	}
+
+	/* Location concept */
+	.loc {
+		margin: 0;
+		padding: 1.75rem;
+		border-radius: var(--radius-xl);
+		border: 1px solid rgb(var(--color-border) / 0.7);
+		background: rgb(var(--color-surface) / 0.7);
+	}
+	.loc__cap {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: rgb(var(--color-muted));
+		margin-bottom: 1.5rem;
+	}
+	.loc__rail {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1.75rem;
+	}
+	/* The route line connecting the points (dashed = a path across the country) */
+	.loc__rail::before {
+		content: '';
+		position: absolute;
+		left: 7px;
+		top: 0.5rem;
+		bottom: 0.5rem;
+		width: 0;
+		border-left: 1px dashed rgb(var(--color-border));
+	}
+	.loc__node {
+		position: relative;
+		display: grid;
+		grid-template-columns: 16px 1fr;
+		gap: 1rem;
+		align-items: start;
+	}
+	.loc__dot {
+		margin-top: 0.3rem;
+		width: 14px;
+		height: 14px;
+		border-radius: 9999px;
+		border: 2px solid rgb(var(--color-accent) / 0.7);
+		background: rgb(var(--color-surface));
+	}
+	.loc__pulse {
+		position: relative;
+		margin-top: 0.35rem;
+		margin-left: 2px;
+		width: 10px;
+		height: 10px;
+		border-radius: 9999px;
+		background: rgb(var(--color-accent));
+	}
+	.loc__pulse::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		box-shadow: 0 0 0 0 rgb(var(--color-accent) / 0.45);
+		animation: loc-pulse 2.4s ease-out infinite;
+	}
+	@keyframes loc-pulse {
+		to {
+			box-shadow: 0 0 0 12px rgb(var(--color-accent) / 0);
+		}
+	}
+	.loc__city {
+		font-family: 'Space Grotesk Variable', system-ui, sans-serif;
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+		line-height: 1.2;
+	}
+	.loc__node--now .loc__city {
+		color: rgb(var(--color-accent));
+	}
+	.loc__dir {
+		margin-top: 0.15rem;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: rgb(var(--color-muted));
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.reach-card,
+		.reach-card__email,
+		.reach-card__copy,
+		.links__row,
+		.links__handle,
+		.links__arrow {
+			transition: none;
+		}
+		.loc__pulse::after {
+			animation: none;
+		}
+	}
+</style>

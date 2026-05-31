@@ -1,21 +1,47 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { Image } from 'astro:assets';
+import ProjectCard from '../../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
 import { AUTHOR } from '../../data/constants';
+import { featuredThenNewest } from '../../utils/content';
 
 const projects = await getCollection('projects');
 const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
 
-// Sort projects: featured first, then by publish date (newest first)
-const sortedProjects = projects.sort((a, b) => {
-	if (a.data.featured && !b.data.featured) return -1;
-	if (!a.data.featured && b.data.featured) return 1;
-	return (
-		new Date(b.data.publishDate).getTime() -
-		new Date(a.data.publishDate).getTime()
-	);
-});
+// Featured first, then newest first.
+const sortedProjects = projects.sort(
+	featuredThenNewest(
+		(p) => p.data.featured,
+		(p) => p.data.publishDate,
+	),
+);
+
+// Mixed rhythm: one big feature, then repeating [trio, asymmetric duo].
+// A trailing single becomes another big feature so no row is ever orphaned.
+const [feature, ...others] = sortedProjects;
+const cycle = [3, 2];
+type Row =
+	| { type: 'trio'; items: typeof others }
+	| { type: 'duo'; items: typeof others; flip: boolean }
+	| { type: 'feature'; items: typeof others };
+const rows: Row[] = [];
+let i = 0;
+let step = 0;
+let duoCount = 0;
+while (i < others.length) {
+	const size = cycle[step % cycle.length];
+	const items = others.slice(i, i + size);
+	if (items.length === 1) {
+		rows.push({ type: 'feature', items });
+	} else if (items.length === 2) {
+		rows.push({ type: 'duo', items, flip: duoCount % 2 === 1 });
+		duoCount++;
+	} else {
+		rows.push({ type: 'trio', items });
+	}
+	i += size;
+	step++;
+}
 
 const schema = {
 	'@context': 'https://schema.org',
@@ -51,66 +77,78 @@ const schema = {
 	description='Explore my portfolio of web development projects, including React applications, e-commerce platforms, and B2B solutions.'
 >
 	<div class='container mx-auto py-16'>
-		<p class='font-mono text-sm uppercase tracking-[0.12em] text-muted'>Work</p>
-		<h1 class='text-3xl md:text-5xl font-semibold font-display mt-4 mb-4'>
+		<h1
+			class='text-3xl md:text-5xl font-semibold font-display tracking-tight text-balance'
+		>
 			Selected projects
 		</h1>
-		<p class='text-muted mb-12 max-w-2xl'>
-			A collection of my work, including client projects and personal
+		<p class='text-lg text-muted mt-4 mb-12 max-w-2xl text-pretty'>
+			A collection of my work, across client engagements and personal
 			experiments.
 		</p>
 
-		<div class='grid gap-8 md:grid-cols-2 lg:grid-cols-3'>
-			{
-				sortedProjects.length > 0 ? (
-					sortedProjects.map((project) => (
-						<a
-							href={`/projects/${project.slug}`}
-							class='group relative bg-surface/70 rounded-2xl overflow-hidden border border-border/70 hover:border-accent/60 transition-all duration-300'
-						>
-							<div class='relative aspect-video overflow-hidden'>
-								<Image
-									width={390}
-									height={220}
-									src={project.data.image}
-									alt={project.data.title}
-									class='w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out'
-								/>
-								<div class='absolute inset-0 bg-gradient-to-t from-black/45 to-transparent opacity-0 group-hover:opacity-100 transition-opacity' />
+		{
+			sortedProjects.length === 0 ? (
+				<p class='text-muted'>No projects yet. Check back soon.</p>
+			) : (
+				<div class='space-y-8'>
+					{feature && <ProjectCard project={feature} feature eager />}
+
+					{rows.map((row) =>
+						row.type === 'trio' ? (
+							<div class='row-trio'>
+								{row.items.map((p) => (
+									<ProjectCard project={p} />
+								))}
 							</div>
-
-							<div class='p-6'>
-								<h2 class='text-xl font-semibold mb-2 group-hover:text-ink transition-colors'>
-									{project.data.title}
-								</h2>
-
-								<p class='text-muted mb-4 line-clamp-2'>
-									{project.data.description}
-								</p>
-
-								<div class='flex flex-wrap gap-2'>
-									{project.data.tech.slice(0, 3).map((tech) => (
-										<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
-											{tech}
-										</span>
-									))}
-									{project.data.tech.length > 3 && (
-										<span class='px-3 py-1 rounded-full text-xs border border-border/70 text-muted'>
-											+{project.data.tech.length - 3} more
-										</span>
-									)}
-								</div>
+						) : row.type === 'duo' ? (
+							<div class:list={['row-duo', { 'row-duo--flip': row.flip }]}>
+								{row.items.map((p) => (
+									<ProjectCard project={p} />
+								))}
 							</div>
-						</a>
-					))
-				) : (
-					<div class='col-span-full text-center py-12'>
-						<p class='text-muted'>No projects found.</p>
-					</div>
-				)
-			}
-		</div>
+						) : (
+							row.items.map((p) => <ProjectCard project={p} feature />)
+						),
+					)}
+				</div>
+			)
+		}
 	</div>
 </Layout>
 
 <script type='application/ld+json' set:html={JSON.stringify(schema)} />
+
+<style>
+	/* Trio: three equal columns (2 on tablet, 1 on mobile) */
+	.row-trio {
+		display: grid;
+		gap: 2rem;
+		grid-template-columns: 1fr;
+	}
+	@media (min-width: 640px) {
+		.row-trio {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (min-width: 1024px) {
+		.row-trio {
+			grid-template-columns: repeat(3, 1fr);
+		}
+	}
+
+	/* Asymmetric duo: unequal columns on desktop, flipping wide side each time */
+	.row-duo {
+		display: grid;
+		gap: 2rem;
+		grid-template-columns: 1fr;
+	}
+	@media (min-width: 768px) {
+		.row-duo {
+			grid-template-columns: 1.6fr 1fr;
+		}
+		.row-duo--flip {
+			grid-template-columns: 1fr 1.6fr;
+		}
+	}
+</style>

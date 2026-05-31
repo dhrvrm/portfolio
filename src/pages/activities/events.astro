@@ -1,29 +1,10 @@
 ---
 import ActivityLayout from '../../layouts/ActivityLayout.astro';
 import ActivityCard from '../../components/ActivityCard.astro';
-import { getCollection } from 'astro:content';
+import { getActivities, inCategory } from '../../utils/activities';
+import { groupByYear } from '../../utils/content';
 
-const items = await getCollection('activities');
-const events = items
-	.filter((i) => i.data.category === 'events')
-	.sort((a, b) => {
-		if (b.data.featured !== a.data.featured)
-			return Number(b.data.featured) - Number(a.data.featured);
-		return b.data.date.getTime() - a.data.date.getTime();
-	});
-
-const groupByYear = (list: typeof events) => {
-	const groups = list.reduce(
-		(acc, item) => {
-			const year = String(item.data.date.getFullYear());
-			if (!acc[year]) acc[year] = [];
-			acc[year].push(item);
-			return acc;
-		},
-		{} as Record<string, typeof events>,
-	);
-	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
-};
+const events = inCategory(await getActivities(), 'events');
 ---
 
 <ActivityLayout title='Events - Dhruv Verma' current='events'>
@@ -36,7 +17,7 @@ const groupByYear = (list: typeof events) => {
 
 	{events.length ? (
 			<div class='space-y-10'>
-				{groupByYear(events).map(([year, entries]) => (
+				{groupByYear(events, (i) => i.data.date).map(([year, entries]) => (
 					<div id={`year-${year}`} class='scroll-mt-24'>
 						<p class='font-mono text-xs uppercase tracking-[0.12em] text-muted mb-4'>
 							{year}

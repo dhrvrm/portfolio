@@ -46,13 +46,17 @@ const showHackathonBadge = isHackathon && hackathonType;
 const hackathonBadgeLabel = showHackathonBadge ? hackathonLabel[hackathonType!] : '';
 const hackathonBadgeVariant = showHackathonBadge ? hackathonType! : 'default';
 
-const allByDate = (await getCollection('activities')).sort(
-	(a, b) => b.data.date.getTime() - a.data.date.getTime()
-);
-const idx = allByDate.findIndex((i) => i.slug === item.slug);
-const prevItem = idx > 0 ? allByDate[idx - 1] : null;
+// Prev/next stays within the current category so travel links to travel,
+// events to events, etc. Adjacent-by-date items of other types must not leak in.
+const sameCategoryByDate = (await getCollection('activities'))
+	.filter((i) => i.data.category === item.data.category)
+	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+const idx = sameCategoryByDate.findIndex((i) => i.slug === item.slug);
+const prevItem = idx > 0 ? sameCategoryByDate[idx - 1] : null;
 const nextItem =
-	idx >= 0 && idx < allByDate.length - 1 ? allByDate[idx + 1] : null;
+	idx >= 0 && idx < sameCategoryByDate.length - 1
+		? sameCategoryByDate[idx + 1]
+		: null;
 
 const metaDescription =
 	item.data.summary.length > 155

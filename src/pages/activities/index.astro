@@ -1,155 +1,351 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import ActivitySection from '../../components/ActivitySection.astro';
-import PinnedScrollGallery from '../../components/PinnedScrollGallery.astro';
+import ActivityCard from '../../components/ActivityCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
+import {
+	ACTIVITY_CATEGORIES,
+	categoryLabel,
+	categoryCounts,
+} from '../../utils/activities';
 
 const items = await getCollection('activities');
+const counts = categoryCounts(items);
+const total = items.length;
 
 const byDateDesc = (a: (typeof items)[0], b: (typeof items)[0]) =>
 	b.data.date.getTime() - a.data.date.getTime();
 
-// Static section images (not derived from latest activity)
-const EVENTS_SECTION_IMAGE = '/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
-const HACKATHONS_SECTION_IMAGE = '/images/activities/srm-builds-6/srm-1.webp';
-const SPEAKING_SECTION_IMAGE = '/images/portraits/dhruv-speaking.webp';
+const EVENTS_IMAGE =
+	'/images/activities/gittogether-meetup-aug-2024/gittogether-aug-24-1.webp';
+const HACKATHONS_IMAGE = '/images/activities/srm-builds-6/srm-1.webp';
+const SPEAKING_IMAGE = '/images/portraits/dhruv-speaking.webp';
 
-const getCategoryImage = (slug: string) => {
-	if (slug === 'events') return EVENTS_SECTION_IMAGE;
-	if (slug === 'hackathons') return HACKATHONS_SECTION_IMAGE;
-	if (slug === 'speaking') return SPEAKING_SECTION_IMAGE;
-	const list = items.filter((i) => i.data.category === slug).sort(byDateDesc);
-	const first = list[0];
-	const imgs = first?.data.images ?? [];
-	return imgs[0] ?? null;
+// De-duplicated pool of real activity images (no placeholders) for categories without their own.
+const pool = [
+	...new Set(
+		items
+			.flatMap((i) => i.data.images ?? [])
+			.filter((src) => !src.toLowerCase().includes('placeholder')),
+	),
+];
+
+const firstCategoryImage = (slug: string) => {
+	const list = items
+		.filter((i) => i.data.category === slug)
+		.sort(byDateDesc);
+	return list[0]?.data.images?.[0] ?? null;
 };
 
-// Category-specific images for galleries
-const awardsImages = items
-	.filter((i) => i.data.category === 'awards')
-	.flatMap((i) => i.data.images ?? []);
-
-const travelImages = items
-	.filter((i) => i.data.category === 'travel')
-	.flatMap((i) => i.data.images ?? []);
-
-// Pool of all activity images (exclude placeholders) for filling galleries
-const rawPool = items.flatMap((i) => i.data.images ?? []);
-const pool = [...new Set(rawPool.filter((src) => !src.toLowerCase().includes('placeholder')))];
-
-// Deterministic shuffle so each gallery gets a varied mix when filled
-const hash = (s: string) => {
-	let h = 0;
-	for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-	return h;
-};
-const shuffledPool = [...pool].sort((a, b) => hash(a) - hash(b));
-
-const MIN_GALLERY = 8;
-const fillGallery = (categoryImages: string[]) => {
-	const base = categoryImages.length ? categoryImages : shuffledPool.slice(0, MIN_GALLERY);
-	if (base.length >= MIN_GALLERY) return base;
-	const used = new Set(base);
-	const extra = shuffledPool.filter((src) => !used.has(src));
-	const need = MIN_GALLERY - base.length;
-	return [...base, ...extra.slice(0, need)];
+const representativeImage = (slug: string) => {
+	if (slug === 'events') return EVENTS_IMAGE;
+	if (slug === 'hackathons') return HACKATHONS_IMAGE;
+	if (slug === 'speaking') return SPEAKING_IMAGE;
+	return firstCategoryImage(slug) ?? pool[0] ?? EVENTS_IMAGE;
 };
 
-const recognitionGalleryImages = fillGallery(awardsImages);
-const travelGalleryImages = fillGallery(travelImages);
+const descriptions: Record<string, string> = {
+	events:
+		'Conferences and meetups I attend and cover, with notes shared back to the community.',
+	hackathons: 'Coaching teams, judging, and building under deadline.',
+	speaking: 'Talks and workshops on frontend, design systems, and motion.',
+	awards: 'Recognition from the teams and communities I work with.',
+	travel: 'Places I have worked from, and what each one taught me.',
+};
+
+const categories = ACTIVITY_CATEGORIES.map((c) => {
+	const count = counts[c.slug] ?? 0;
+	return {
+		slug: c.slug,
+		label: categoryLabel(c.slug),
+		count,
+		countLabel:
+			count > 0 ? `${count} ${count === 1 ? 'entry' : 'entries'}` : 'Soon',
+		desc: descriptions[c.slug],
+		image: representativeImage(c.slug),
+	};
+});
+
+const recent = [...items].sort(byDateDesc).slice(0, 3);
 ---
 
 <Layout
 	title='Activities | Events, Speaking & Travel - Dhruv Verma'
-	description='Events covered, hackathons mentored, talks given, recognition received, and travel for the craft. Dhruv Verma.'
+	description='Events covered, hackathons coached, talks given, recognition received, and travel for the craft. By Dhruv Verma.'
 >
-	<!-- Hero: overview only, no nav, no numbers -->
-	<section class='act-hero'>
-		<div class='act-hero__inner'>
-			<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Activities' }]} />
-			<p class='act-hero__eyebrow mt-0'>Activities</p>
-			<h1 class='act-hero__title'>Events, mentoring &amp; beyond</h1>
+	<div class='container mx-auto py-16'>
+		<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Activities' }]} />
+
+		<header class='act-hero'>
+			<h1 class='act-hero__title'>Beyond the desk</h1>
 			<p class='act-hero__desc'>
-				A snapshot of events I've covered, hackathons I've volunteered at as a mentor, talks I've
-				given, recognition received, and places I've traveled for the craft.
+				Events I cover, hackathons I coach, talks I give, and the places I work
+				from. The community side of the craft.
 			</p>
-		</div>
-	</section>
+			<p class='act-hero__meta'>{total} entries across five strands</p>
+		</header>
 
-	<!-- 3 alternating text + image sections -->
-	<ActivitySection
-		title='Events covered'
-		description="Conferences, meetups, and community events I've attended and covered. Story-led highlights and takeaways shared with the community."
-		href='/activities/events'
-		align='left'
-		image={getCategoryImage('events')}
-	/>
-	<ActivitySection
-		title='Hackathons'
-		description='Where I volunteer as coach, judge, or participant. Helping teams with frontend strategy, product storytelling, and rapid prototyping.'
-		href='/activities/hackathons'
-		align='right'
-		image={getCategoryImage('hackathons')}
-	/>
-	<ActivitySection
-		title='Speaking'
-		description='Talks, workshops, and panel discussions on design systems, scalable frontend architecture, and motion in product design.'
-		href='/activities/speaking'
-		align='left'
-		image={getCategoryImage('speaking')}
-	/>
+		<!-- Category bento: sized by what's real (Events and Travel lead). -->
+		<nav class='cat-grid' aria-label='Activity categories'>
+			{
+				categories.map((cat) => (
+					<a
+						href={`/activities/${cat.slug}`}
+						class:list={[
+							'cat-tile',
+							`cat-tile--${cat.slug}`,
+							{ 'cat-tile--soon': cat.count === 0 },
+						]}
+					>
+						<img
+							class='cat-tile__img'
+							src={cat.image}
+							alt=''
+							aria-hidden='true'
+							loading={cat.slug === 'events' ? 'eager' : 'lazy'}
+							decoding='async'
+						/>
+						<span class='cat-tile__scrim' aria-hidden='true' />
+						<span class='cat-tile__content'>
+							<span class='cat-tile__count'>{cat.countLabel}</span>
+							<span class='cat-tile__label'>{cat.label}</span>
+							<span class='cat-tile__desc'>{cat.desc}</span>
+							<span class='cat-tile__cta'>
+								Explore
+								<span class='cat-tile__arrow' aria-hidden='true'>
+									&rarr;
+								</span>
+							</span>
+						</span>
+					</a>
+				))
+			}
+		</nav>
 
-	<!-- Pinned scroll galleries: Recognition, Travel -->
-	<PinnedScrollGallery
-		id='recognition-gallery'
-		title='Recognition'
-		href='/activities/awards'
-		images={recognitionGalleryImages.length ? recognitionGalleryImages : [EVENTS_SECTION_IMAGE]}
-	/>
-	<PinnedScrollGallery
-		id='travel-gallery'
-		title='Travel'
-		href='/activities/travel'
-		images={travelGalleryImages.length ? travelGalleryImages : [EVENTS_SECTION_IMAGE]}
-	/>
+		{
+			recent.length > 0 && (
+				<section class='act-recent' aria-labelledby='recent-heading'>
+					<h2 id='recent-heading' class='act-recent__title'>
+						Recently
+					</h2>
+					<div class='act-recent__grid'>
+						{recent.map((item) => (
+							<ActivityCard item={item} />
+						))}
+					</div>
+				</section>
+			)
+		}
+	</div>
 </Layout>
 
 <style>
 	.act-hero {
-		padding: 4rem 0 5rem;
-		border-bottom: 1px solid rgb(var(--color-border) / 0.5);
+		max-width: 46rem;
+		margin-bottom: 3.5rem;
 	}
-
-	.act-hero__inner {
-		max-width: 42rem;
-		margin: 0;
-		padding: 0 1.5rem;
-	}
-
-	.act-hero__eyebrow {
-		font-family: var(--font-mono);
-		font-size: 0.75rem;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
-		color: rgb(var(--color-muted));
-		margin: 0 0 0.75rem;
-	}
-
 	.act-hero__title {
-		font-family:
-			'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
-		font-size: clamp(2rem, 5vw, 3rem);
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: clamp(2.25rem, 1.6rem + 3vw, 3.5rem);
 		font-weight: 600;
-		letter-spacing: -0.02em;
-		line-height: 1.2;
-		margin: 0 0 1rem;
+		letter-spacing: -0.03em;
+		line-height: 1.1;
+		text-wrap: balance;
+		color: rgb(var(--color-ink));
+		margin: 0.5rem 0 0;
 	}
-
 	.act-hero__desc {
-		font-size: 1.1rem;
+		margin-top: 1.25rem;
+		font-size: 1.15rem;
 		line-height: 1.6;
 		color: rgb(var(--color-muted));
-		margin: 0;
+		text-wrap: pretty;
+		max-width: 40ch;
+	}
+	.act-hero__meta {
+		margin-top: 1.25rem;
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		letter-spacing: 0.04em;
+		color: rgb(var(--color-muted));
+	}
+
+	/* ── Category bento ── */
+	.cat-grid {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: 1fr;
+	}
+	@media (min-width: 640px) {
+		.cat-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+	@media (min-width: 1024px) {
+		.cat-grid {
+			grid-template-columns: repeat(3, 1fr);
+			grid-template-rows: 230px 230px 230px;
+			grid-template-areas:
+				'events events speaking'
+				'events events hackathons'
+				'travel travel recognition';
+		}
+		.cat-tile--events {
+			grid-area: events;
+		}
+		.cat-tile--speaking {
+			grid-area: speaking;
+		}
+		.cat-tile--hackathons {
+			grid-area: hackathons;
+		}
+		.cat-tile--travel {
+			grid-area: travel;
+		}
+		.cat-tile--awards {
+			grid-area: recognition;
+		}
+	}
+
+	.cat-tile {
+		position: relative;
+		isolation: isolate;
+		display: block;
+		overflow: hidden;
+		min-height: 220px;
+		border-radius: var(--radius-xl);
+		text-decoration: none;
+		color: #fff;
+	}
+	.cat-tile:focus-visible {
+		outline: 2px solid rgb(var(--color-accent));
+		outline-offset: 3px;
+	}
+
+	.cat-tile__img {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.cat-tile:hover .cat-tile__img,
+	.cat-tile:focus-visible .cat-tile__img {
+		transform: scale(1.05);
+	}
+	.cat-tile--soon .cat-tile__img {
+		filter: grayscale(0.5);
+	}
+
+	.cat-tile__scrim {
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: linear-gradient(
+			to top,
+			rgb(0 0 0 / 0.82) 0%,
+			rgb(0 0 0 / 0.45) 42%,
+			rgb(0 0 0 / 0.08) 100%
+		);
+		transition: background 0.3s ease;
+	}
+	.cat-tile:hover .cat-tile__scrim {
+		background: linear-gradient(
+			to top,
+			rgb(0 0 0 / 0.88) 0%,
+			rgb(0 0 0 / 0.5) 48%,
+			rgb(0 0 0 / 0.12) 100%
+		);
+	}
+
+	.cat-tile__content {
+		position: relative;
+		z-index: 2;
+		height: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+		gap: 0.35rem;
+		padding: 1.5rem;
+	}
+	.cat-tile__count {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		text-transform: uppercase;
+		letter-spacing: 0.14em;
+		color: rgb(255 255 255 / 0.85);
+	}
+	.cat-tile--soon .cat-tile__count {
+		color: rgb(var(--color-accent));
+		filter: brightness(1.6);
+	}
+	.cat-tile__label {
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+		line-height: 1.1;
+	}
+	.cat-tile--events .cat-tile__label {
+		font-size: clamp(2rem, 1.4rem + 2vw, 2.75rem);
+	}
+	.cat-tile--travel .cat-tile__label {
+		font-size: clamp(1.75rem, 1.3rem + 1.5vw, 2.25rem);
+	}
+	.cat-tile__desc {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		color: rgb(255 255 255 / 0.82);
+		max-width: 42ch;
+		display: -webkit-box;
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+	}
+	.cat-tile__cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 0.5rem;
+		font-size: 0.8125rem;
+		font-weight: 600;
+		color: #fff;
+	}
+	.cat-tile__arrow {
+		transition: transform 0.25s ease;
+	}
+	.cat-tile:hover .cat-tile__arrow {
+		transform: translateX(4px);
+	}
+
+	/* ── Recent feed ── */
+	.act-recent {
+		margin-top: 4rem;
+	}
+	.act-recent__title {
+		font-size: 1.5rem;
+		font-weight: 600;
+		font-family: 'Space Grotesk Variable', 'Inter Variable', system-ui, sans-serif;
+		letter-spacing: -0.01em;
+		margin-bottom: 1.5rem;
+	}
+	.act-recent__grid {
+		display: grid;
+		gap: 1.5rem;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cat-tile__img,
+		.cat-tile__scrim,
+		.cat-tile__arrow {
+			transition: none;
+		}
+		.cat-tile:hover .cat-tile__img,
+		.cat-tile:focus-visible .cat-tile__img {
+			transform: none;
+		}
 	}
 </style>

@@ -1,13 +1,9 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { slugify } from '../../../utils/content';
 
 export async function getStaticPaths() {
-	const slugify = (v: string) =>
-		v
-			.toLowerCase()
-			.replace(/[^a-z0-9]+/g, '-')
-			.replace(/(^-|-$)/g, '');
 	const posts = await getCollection('blog');
 	const tagMap = posts.reduce(
 		(acc, post) => {

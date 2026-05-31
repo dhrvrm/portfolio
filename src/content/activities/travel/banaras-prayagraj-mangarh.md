@@ -8,6 +8,25 @@ caption: 'Kashi'
 summary: 'Two days with my school friend Sachin: a train into Banaras at dawn, the old lanes and Kashi Vishwanath, five aartis watched from the water because the river was too high, a sunrise at the Sangam in Prayagraj on sharad purnima, and a temple at Mangarh that turned out to be closed. The road back was the real story.'
 narrative: 'Reached Kashi at 5:30 in the morning with my school friend Sachin and no plan, ate our way through Godowlia, and saw Kashi Vishwanath. Then Prayagraj at sunrise on the Sangam during sharad purnima, and on to Mangarh, which was shut for a festival. Getting home through a closed road on Eid Milad-un-Nabi was the part I remember most.'
 featured: false
+images:
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-01.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-02.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-03.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-04.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-05.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-06.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-07.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-08.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-09.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-10.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-11.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-12.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-13.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-14.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-15.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-16.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-17.webp'
+  - '/images/activities/travel/banaras-prayagraj-mangarh/banaras-18.webp'
 ---
 
 i reached banaras the way you probably should. half-awake, off a train, at 5:30 in the morning, with no real plan.

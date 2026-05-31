@@ -1,4 +1,6 @@
 ---
+import { groupByYear } from '../utils/content';
+
 interface Category {
 	slug: string;
 	label: string;
@@ -19,18 +21,13 @@ interface Props {
 
 const { categories, current, currentCategoryItems = [] } = Astro.props;
 
-function groupByYear(items: CurrentCategoryItem[]) {
-	const groups: Record<string, CurrentCategoryItem[]> = {};
-	for (const item of items) {
-		const d = item.date instanceof Date ? item.date : new Date(item.date as unknown as string);
-		const year = String(d.getFullYear());
-		if (!groups[year]) groups[year] = [];
-		groups[year].push(item);
-	}
-	return Object.entries(groups).sort(([a], [b]) => Number(b) - Number(a));
-}
+const toDate = (d: Date) =>
+	d instanceof Date ? d : new Date(d as unknown as string);
 
-const byYear = currentCategoryItems.length > 0 ? groupByYear(currentCategoryItems) : [];
+const byYear =
+	currentCategoryItems.length > 0
+		? groupByYear(currentCategoryItems, (i) => toDate(i.date))
+		: [];
 
 // For events and speaking, sidebar shows only year jump links (no event list). Stays short as content grows.
 const useYearJumpsOnly = current === 'events' || current === 'speaking';

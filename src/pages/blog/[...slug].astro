@@ -4,6 +4,7 @@ import TableOfContents from '../../components/TableOfContents.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import { getCollection } from 'astro:content';
 import { AUTHOR } from '../../data/constants';
+import { slugify } from '../../utils/content';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
@@ -90,12 +91,6 @@ const faqSchema =
 				})),
 			}
 		: null;
-
-const slugify = (value: string) =>
-	value
-		.toLowerCase()
-		.replace(/[^a-z0-9]+/g, '-')
-		.replace(/(^-|-$)/g, '');
 ---
 
 <Layout
