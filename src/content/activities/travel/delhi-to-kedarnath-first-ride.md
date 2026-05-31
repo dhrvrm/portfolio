@@ -108,10 +108,14 @@ we found a restaurant willing to give us shelter for the night. and the view fro
 
 then back down to the parking. on the way we crossed a water snake, and noticed dhari devi, the protector of uttarakhand, watching over the road, so we stopped there too before riding on.
 
+a little further down we stopped at devprayag, where the alaknanda and the bhagirathi run into each other and the river first takes the name ganga. you can stand at the sangam and watch the two different-coloured waters fold into one. a quiet last stop, the kind that lets a trip settle a little before it's over.
+
 ## home
 
 then delhi, non-stop.
 
 my legs were dead, my back was killing me, and by the end the only thing left in my head was reaching home. i pulled into delhi on the afternoon of the 19th of october.
+
+the whole thing was jugaad from the first hour to the last. the bike was my friend's, brand new, paid off with his own earnings. the camera hanging around my neck the whole climb i'd borrowed from the company i was working for at the time, and i kept it and used it for a long while after, until i handed it back when i eventually resigned. my entire share of the trip came to about six thousand rupees. you don't need much for something like this. you need the nerve to leave.
 
 it was my first ride. four hundred kilometres there and back, a borrowed dream of a bike, a mountain that took everything and handed some of it back changed. i didn't come down the same.
