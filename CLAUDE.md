@@ -59,3 +59,32 @@ JSON-LD structured data is emitted per page (Breadcrumbs, index, blog, projects,
 - **Tabs** for indentation across `.astro`/`.ts` files.
 - **Planning docs** in `planning/` follow a phased checklist structure (scope → phases → validation); `work-log.md` is the running log. See `.cursor/rules/planning-optimizer.mdc`.
 - Static assets go in `public/`; routes are file-based under `src/pages/`.
+
+## Media & images
+
+There is **no AI image-generation tool** in this environment. Produce images with code, and process photos with `sharp` (already a dependency). Available tools: `sharp`, Chrome at `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`. **Not** available: ImageMagick/`magick`, `cwebp`, `exiftool`; `mdls` is unreliable (Spotlight indexing off).
+
+### "Create an image" → render from code, not generation
+
+When asked to create a cover/hero/graphic (e.g. blog series covers), build it as an **HTML/CSS document → headless Chrome screenshot → `sharp` webp**. Do not claim to generate photographic/AI art.
+
+- Reusable generator: **`scripts/covers/generate.mjs`** (run `node scripts/covers/generate.mjs`). It renders one editorial cover per item and is the template — to add a cover, add an entry to its `POSTS` array and re-run.
+- Match the design system: pull tokens from `src/styles/tokens.css` and embed the real brand fonts from `node_modules/@fontsource*` (Space Grotesk display, Inter sans, JetBrains Mono) via `@font-face` `file://` URLs. Use semantic colors, not invented hex.
+- Render at 2× device scale, then `sharp` resize → `.webp({ quality: 82 })`.
+- Chrome flags: `--headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files --force-device-scale-factor=2 --window-size=W,H --screenshot=out.png file://page.html`.
+
+### Convert photos to webp (the compression step)
+
+`sharp(src).rotate().resize(2400, 2400, { fit: 'inside', withoutEnlargement: true }).webp({ quality: 82 }).toFile(dst)`
+
+- `.rotate()` with no args bakes in EXIF orientation **before** metadata is dropped.
+- **EXIF/GPS/IPTC/XMP are stripped automatically** — `sharp` does not copy metadata to output unless you call `.withMetadata()`. So never call `.withMetadata()` on user photos; the default removes personal data (GPS especially). Verify with a metadata scan (`m.exif || m.iptc || m.xmp` should be falsy).
+- ~2400px longest edge + q82 is the house default ("visually lossless" for galleries). True lossless balloons photos past the JPEG size — only use if explicitly asked.
+
+### Naming, ordering, rearranging galleries
+
+- **Name:** `<slug>-NN.webp`, zero-padded (`banaras-01.webp`, `kedarnath-07.webp`), in the same folder as the source: `public/images/activities/<category>/<slug>/`.
+- **Order = chronological by capture time.** Read EXIF `DateTimeOriginal` to sort (no parser is installed; use `npm install --no-save exif-reader` transiently — do **not** add it to `package.json`). Cameras with an unset clock (dates read as e.g. 2011) need manual narrative placement; flag that to the user as approximate.
+- **Delete the original JPEGs** after encoding (this is a rename, not a copy).
+- **Wire into frontmatter:** the gallery + poster come from the `images:` string array (`images: z.array(z.string()).optional()` in the `activities` collection; `src/pages/activities/[...slug].astro` reads `item.data.images`). Display order follows the array order, so re-ordering = editing the array, no re-encode needed.
+- When **adding** photos to an existing gallery: stage existing webp aside, merge new + old by true capture time, then renumber the whole set `01..N` — rename existing webp into place (don't re-encode them) and only encode the new sources.
