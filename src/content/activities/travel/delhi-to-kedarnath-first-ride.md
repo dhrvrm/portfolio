@@ -17,6 +17,11 @@ images:
   - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-06.webp'
   - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-07.webp'
   - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-08.webp'
+  - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-09.webp'
+  - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-10.webp'
+  - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-11.webp'
+  - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-12.webp'
+  - '/images/activities/travel/delhi-to-kedarnath-first-ride/kedarnath-13.webp'
 ---
 
 i was already late for my train.
