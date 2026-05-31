@@ -42,7 +42,7 @@ next morning we didn't ask again. we packed our bags and sneaked out around 5:30
 
 it was all one day. we left before sunrise and didn't stop properly until the dormitory that night.
 
-we reached haridwar by 10:30, borrowed a hotel's washroom without staying, didn't stop for anything more, and pushed straight on into the hills. and then we just kept riding, hour after hour, the day draining out of the sky around us.
+we reached haridwar by 10:30, borrowed a hotel's washroom without staying, didn't stop for anything more, and pushed straight on into the hills. rishikesh came and went, and after that the road took up the river and didn't let go, following the alaknanda through devprayag and srinagar down to rudraprayag, where we left the main line and turned up the mandakini valley toward agastyamuni, kund, and guptkashi. the names came and passed in a blur, hour after hour, the day draining out of the sky around us.
 
 by night my legs had locked up and gone frozen on the footrests, and i couldn't feel them anymore. the road from guptkashi to sonprayag turned to mud and the bike kept slipping under us, in the dark, in traffic that didn't thin out the way mountain traffic is supposed to. it is a stretch i won't forget.
 
