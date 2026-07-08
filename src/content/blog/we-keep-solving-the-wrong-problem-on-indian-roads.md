@@ -96,6 +96,43 @@ we keep building more room for cars and calling it a traffic solution.
 
 **a flyover doesn't reduce cars. it just gives them a faster way to reach the next jam.**
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-flyover-title doodle-flyover-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-flyover-title">A flyover doesn't reduce cars — it delivers them to the next jam faster.</title>
+	<desc id="doodle-flyover-desc">A queue of cars, a proud flyover arcing over it, and an identical queue waiting on the other side.</desc>
+	<g id="road" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M40 268 Q150 264 300 268 T560 266"/>
+	</g>
+	<g id="jam1" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M64 262 q1 -11 12 -11 l5 -1 q9 0 10 12"/>
+		<path d="M96 261 q1 -11 12 -11 l5 -1 q9 0 10 13"/>
+		<path d="M128 262 q1 -11 12 -11 l5 -1 q9 0 10 12"/>
+		<path d="M160 261 q1 -11 12 -11 l5 -1 q9 0 10 13"/>
+	</g>
+	<g id="flyover" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M198 266 C245 168 345 166 392 266" stroke-width="3"/>
+		<path d="M248 214 L248 264 M342 213 L342 263" stroke-width="1.75" stroke-opacity=".5"/>
+		<path d="M272 197 q1 -10 11 -10 l5 -1 q8 0 9 11" stroke-width="2.5"/>
+		<path d="M254 191 l-8 -3 M256 184 l-7 -5" stroke-width="1.5" stroke-opacity=".5"/>
+	</g>
+	<g id="jam2" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M420 262 q1 -11 12 -11 l5 -1 q9 0 10 12"/>
+		<path d="M452 261 q1 -11 12 -11 l5 -1 q9 0 10 13"/>
+		<path d="M484 262 q1 -11 12 -11 l5 -1 q9 0 10 12"/>
+		<path d="M516 261 q1 -11 12 -11 l5 -1 q9 0 10 13"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="72" y="302" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">THE JAM</text>
+		<text x="238" y="130" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">THE FLYOVER</text>
+		<text x="418" y="302" style="fill:rgb(var(--color-accent, 245 158 11))">THE NEXT JAM</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="90" cy="220" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="530" cy="200" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M446 128 v8 M442 132 h8" stroke-opacity=".4"/>
+		<path d="M150 328 l4 -3 M480 330 l3 3" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 ---
 
 ## the bus we never put on the road

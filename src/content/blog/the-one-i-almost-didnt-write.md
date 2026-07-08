@@ -40,6 +40,38 @@ the catch is that the cost doesn't vanish. it just moves, and it shows up later,
 
 the product ships the flaw everyone in the room had noticed. the team repeats the pattern nobody named. the friend keeps walking into the same wall because no one who cared about them said "stop." the cost of the unsaid thing always gets paid. usually by future people, with interest.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-cost-title doodle-cost-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-cost-title">The unsaid thing compounds — saying it early is cheap.</title>
+	<desc id="doodle-cost-desc">A cost-over-time curve that stays flat where a small speech bubble sits, then compounds into a huge tangled scribble.</desc>
+	<g id="axes" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M70 70 Q73 130 69 200 T71 330"/>
+		<path d="M70 330 Q160 333 260 329 T450 331 Q495 333 540 330"/>
+		<path d="M66 78 L70 69 L75 77 M532 325 L541 330 L533 335"/>
+	</g>
+	<g id="curve" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M85 314 Q180 310 270 296 C350 284 420 220 462 138" stroke-width="3"/>
+	</g>
+	<g id="blob" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M448 120 q14 -24 38 -20 q26 4 24 28 q22 -6 24 16 q2 20 -20 22 q6 18 -14 22 q-18 4 -24 -10 q-18 10 -28 -4 q-10 -12 2 -24 q-16 -10 -2 -30"/>
+		<path d="M456 116 q20 -10 34 2 q-18 0 -30 8 q22 -4 34 6 q-18 2 -30 10 q20 -2 30 8 q-16 4 -28 2" stroke-width="1.5" stroke-opacity=".6"/>
+		<path d="M508 88 l4 -8 M524 96 l7 -5 M534 112 l8 -2" stroke-width="1.5" stroke-opacity=".5"/>
+	</g>
+	<g id="bubble" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M138 268 a17 15 0 1 0 20 -4 M148 296 l-3 10 l10 -7" stroke-width="2.5"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="52" y="110" transform="rotate(-90 52 110)" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">COST</text>
+		<text x="498" y="356" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">TIME</text>
+		<text x="104" y="246" style="fill:rgb(var(--color-accent, 245 158 11))">SAY IT NOW</text>
+		<text x="380" y="66" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">PAID LATER</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="220" cy="150" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="330" cy="360" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M250 180 l4 3" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 ---
 
 ## the wrong problem, in a meeting room

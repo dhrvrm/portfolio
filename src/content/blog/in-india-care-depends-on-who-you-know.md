@@ -32,6 +32,56 @@ we had a few of those calls to make. and even while making them, i kept thinking
 
 **what happens to the person who has no one to call.**
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-call-title doodle-call-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-call-title">Care arrives for whoever can make the call.</title>
+	<desc id="doodle-call-desc">Outside a hospital door, one person's phone call threads up to a distant contact while another person waits holding a queue ticket.</desc>
+	<g id="door" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M268 300 L269 152 Q269 143 278 143 L322 142 Q331 142 331 151 L332 300" stroke-width="2.5"/>
+		<path d="M300 108 v20 M290 118 h20" stroke-width="2.5"/>
+		<path d="M240 302 Q300 306 362 302" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="caller" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M158 176 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="165" cy="183" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="170" cy="182" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M156 196 Q149 220 153 250 Q154 260 161 262"/>
+		<path d="M172 196 Q179 218 176 248 Q175 259 169 262"/>
+		<path d="M174 204 Q188 196 196 186"/>
+		<path d="M193 172 l11 3 l-4 15 l-11 -3 z" stroke-width="2"/>
+		<path d="M155 210 Q146 222 145 234"/>
+		<path d="M161 262 l-2 20 l8 1 M170 262 l2 20 l8 1"/>
+		<path d="M152 240 Q162 242 174 241 Q162 245 154 245 Q164 248 172 248" stroke-width="1.5"/>
+		<path d="M128 288 Q162 292 198 288" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="waiter" data-step data-beat="0.2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M432 184 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="436" cy="191" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="441" cy="190" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M430 204 Q423 226 427 254 Q428 264 435 266"/>
+		<path d="M446 204 Q452 224 449 252 Q448 263 442 266"/>
+		<path d="M429 216 Q420 228 421 240"/>
+		<path d="M447 216 Q456 226 456 238"/>
+		<path d="M450 240 l16 -2 l2 16 l-16 2 z" stroke-width="1.75"/>
+		<path d="M435 266 l-2 20 l8 1 M443 266 l2 20 l8 1"/>
+		<path d="M426 244 Q436 246 448 245 Q436 249 428 249 Q438 252 446 252" stroke-width="1.5"/>
+		<path d="M404 292 Q438 296 472 292" stroke-width="1.5" stroke-opacity=".35"/>
+		<path d="M496 196 a7 7 0 1 0 4 -2 M520 200 a6 6 0 1 0 4 -2 M500 210 q-2 14 0 26 M523 212 q-2 12 0 22" stroke-width="1.75" stroke-opacity=".45"/>
+	</g>
+	<g id="thread" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M206 178 C250 120 360 92 490 84" stroke-width="2.5"/>
+		<path d="M498 78 a8 8 0 1 0 4 -2.2 M492 94 q10 6 20 0" stroke-width="2"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="132" y="340" style="fill:rgb(var(--color-accent, 245 158 11))">A CALL</text>
+		<text x="406" y="340" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">A QUEUE</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="90" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="546" cy="260" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M236 96 v8 M232 100 h8" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 ---
 
 ## the system that makes the call necessary

@@ -104,6 +104,63 @@ each time, the shared system fails, and the burden quietly slides onto the indiv
 
 it isn't. it's the problem, privatised.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-bubble-title doodle-bubble-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-bubble-title">When the shared air fails, we sell each family its own bubble.</title>
+	<desc id="doodle-bubble-desc">Three people stand under a haze of scribbled air while one person stands inside a purchased clear bubble.</desc>
+	<g id="haze" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M48 70 q30 -10 60 -2 t62 0 t60 2 t62 -2 t58 0" stroke-opacity=".3"/>
+		<path d="M60 96 q28 -8 58 -2 t60 2 t62 -2 t58 2 t50 -2" stroke-opacity=".3"/>
+		<path d="M50 122 q32 -8 62 0 t60 0 t62 0 t56 -2" stroke-opacity=".3"/>
+		<path d="M84 84 q14 -6 28 0 M210 108 q16 -6 30 -2 M330 78 q14 -4 28 2" stroke-opacity=".25"/>
+	</g>
+	<g id="crowd" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M112 196 a8 8 0 1 0 4 -2.3"/>
+		<circle cx="117" cy="202" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="122" cy="201" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M110 214 Q104 234 107 258"/>
+		<path d="M124 214 Q129 232 126 256"/>
+		<path d="M108 258 l-2 22 l7 1 M125 256 l2 22 l7 1"/>
+		<path d="M106 238 Q115 240 124 239 Q114 243 107 243" stroke-width="1.5"/>
+		<path d="M222 190 a8 8 0 1 0 4 -2.3"/>
+		<circle cx="227" cy="196" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="232" cy="195" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M220 208 Q214 228 217 252"/>
+		<path d="M234 208 Q239 226 236 250"/>
+		<path d="M218 252 l-2 24 l7 1 M235 250 l2 24 l7 1"/>
+		<path d="M216 232 Q225 234 234 233 Q224 237 217 237" stroke-width="1.5"/>
+		<path d="M330 198 a8 8 0 1 0 4 -2.3"/>
+		<circle cx="335" cy="204" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="340" cy="203" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M328 216 Q322 236 325 260"/>
+		<path d="M342 216 Q347 234 344 258"/>
+		<path d="M326 260 l-2 22 l7 1 M343 258 l2 22 l7 1"/>
+		<path d="M324 240 Q333 242 342 241 Q332 245 325 245" stroke-width="1.5"/>
+		<path d="M80 296 Q220 302 370 296" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="buyer" data-step data-beat="0.25" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M472 192 a8 8 0 1 0 4 -2.3"/>
+		<circle cx="477" cy="198" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="482" cy="197" r="1.8" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M470 210 Q464 230 467 254"/>
+		<path d="M484 210 Q489 228 486 252"/>
+		<path d="M468 254 l-2 22 l7 1 M485 252 l2 22 l7 1"/>
+		<path d="M466 234 Q475 236 484 235 Q474 239 467 239" stroke-width="1.5"/>
+		<path d="M452 292 Q478 296 506 292" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="bubble" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M452 164 a64 66 0 1 0 8 -5"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="60" y="168" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">SHARED AIR</text>
+		<text x="436" y="352" style="fill:rgb(var(--color-accent, 245 158 11))">THE ESCAPE</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M420 140 q8 -4 16 0 M424 156 q8 -4 14 2" stroke-opacity=".3"/>
+		<circle cx="390" cy="330" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="60" cy="330" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+	</g>
+</svg>
+
 ---
 
 ## what fixing the shared thing would mean

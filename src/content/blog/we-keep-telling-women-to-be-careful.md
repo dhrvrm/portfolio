@@ -46,6 +46,58 @@ and the part that actually floored me. it doesn't switch off. not at the office.
 
 i had genuinely never thought about this. not once. that's not a neutral fact about me. that's a measure of how much room i've been given that she never had.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-scan-title doodle-scan-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-scan-title">The safety scan she can never switch off.</title>
+	<desc id="doodle-scan-desc">Two people walk the same street; one head is quiet, the other carries a thought bubble crammed with constant calculation.</desc>
+	<g id="walker-a" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M166 172 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="172" cy="179" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="177" cy="178" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M163 192 Q155 216 159 244"/>
+		<path d="M179 192 Q187 214 184 242"/>
+		<path d="M163 202 Q152 212 149 224"/>
+		<path d="M179 202 Q189 210 192 222"/>
+		<path d="M162 244 Q155 260 147 272 l8 2"/>
+		<path d="M180 242 Q186 258 194 270 l8 1"/>
+		<path d="M160 226 Q170 228 180 227 Q169 231 161 231 Q171 234 179 234" stroke-width="1.5"/>
+		<path d="M132 288 Q172 292 212 288" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="bubble-a" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M182 93 a24 22 0 1 0 5 -2" stroke-opacity=".6"/>
+		<path d="M180 138 a3 3 0 1 0 4 -1 M174 150 a2 2 0 1 0 3 -1" stroke-width="1.75" stroke-opacity=".6"/>
+	</g>
+	<g id="walker-b" data-step data-beat="0.25" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M426 172 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="432" cy="179" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="437" cy="178" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M423 192 Q415 216 419 244"/>
+		<path d="M439 192 Q447 214 444 242"/>
+		<path d="M423 202 Q412 212 409 224"/>
+		<path d="M439 202 Q449 210 452 222"/>
+		<path d="M422 244 Q415 260 407 272 l8 2"/>
+		<path d="M440 242 Q446 258 454 270 l8 1"/>
+		<path d="M420 226 Q430 228 440 227 Q429 231 421 231 Q431 234 439 234" stroke-width="1.5"/>
+		<path d="M392 288 Q432 292 472 288" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="bubble-b" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M424 92 a34 30 0 1 0 6 -2.5" stroke-width="2.5" style="stroke:rgb(var(--color-accent, 245 158 11))"/>
+		<path d="M438 148 a3 3 0 1 0 4 -1 M433 158 a2 2 0 1 0 3 -1" stroke-width="1.75" style="stroke:rgb(var(--color-accent, 245 158 11))"/>
+		<path d="M420 104 q16 -6 32 -2 q-14 8 -30 6 q18 0 34 -4 q-12 10 -28 8" stroke-width="1.5"/>
+		<path d="M416 120 q18 -4 36 0 q-16 6 -34 2 q20 0 36 -4 q-10 8 -30 8" stroke-width="1.5"/>
+		<path d="M424 134 q16 -4 30 2 q-14 4 -28 0" stroke-width="1.5"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em" style="fill:rgb(var(--color-ink, 30 30 36))">
+		<text x="158" y="330" fill-opacity=".75">ME</text>
+		<text x="416" y="330" fill-opacity=".75">HER</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="300" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="90" cy="240" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="520" cy="240" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M300 200 v6 M297 203 h6" stroke-opacity=".35"/>
+	</g>
+</svg>
+
 ---
 
 ## i am not standing outside this

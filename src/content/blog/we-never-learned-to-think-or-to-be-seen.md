@@ -64,6 +64,40 @@ the first is how to think. not facts. reasoning. how to frame a problem, sit in 
 
 the second is how to be seen. communication, writing, selling an idea, being visible. we don't just skip this, we actively frame it as a distraction from "real" study. then we act surprised when the visible person wins.
 
+<svg viewBox="0 0 600 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-venn-title doodle-venn-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-venn-title">School graded neither of the two things that decide where you end up.</title>
+	<desc id="doodle-venn-desc">Two overlapping circles labeled think and be seen, their intersection highlighted, while a graded checklist sheet floats outside both.</desc>
+	<g id="circle-a" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M238 92 C176 100 140 148 146 202 C152 258 208 292 262 282 C314 272 342 224 332 172 C322 122 282 90 242 92"/>
+	</g>
+	<g id="circle-b" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M366 94 C304 100 268 150 274 204 C280 258 336 292 390 282 C442 272 470 222 460 170 C450 122 408 90 370 94"/>
+	</g>
+	<g id="sheet" data-step data-beat="0.2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M62 306 Q60 372 66 380 Q108 384 122 378 Q126 316 120 308 Q86 302 62 306" stroke-width="2.5" stroke-opacity=".6"/>
+		<path d="M74 324 l6 6 l10 -12 M96 322 h18" stroke-width="1.75" stroke-opacity=".6"/>
+		<path d="M74 344 l6 6 l10 -12 M96 342 h18" stroke-width="1.75" stroke-opacity=".6"/>
+		<path d="M74 364 l6 6 l10 -12 M96 362 h16" stroke-width="1.75" stroke-opacity=".6"/>
+	</g>
+	<g id="lens" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M300 126 q14 26 14 62 q0 36 -12 60 M304 132 q-12 24 -12 56 q0 34 10 58" stroke-width="1.75"/>
+		<path d="M298 150 q8 2 12 0 M294 168 q12 3 18 0 M292 188 q14 3 20 0 M292 208 q14 3 20 0 M294 228 q12 3 16 0" stroke-width="1.75"/>
+		<path d="M306 258 Q310 292 306 316" stroke-width="1.75"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="182" y="192" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">THINK</text>
+		<text x="360" y="192" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">BE SEEN</text>
+		<text x="252" y="342" style="fill:rgb(var(--color-accent, 245 158 11))">WHERE YOU LAND</text>
+		<text x="52" y="290" font-size="13" fill-opacity=".7" style="fill:rgb(var(--color-ink, 30 30 36))">WHAT SCHOOL GRADED</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="480" cy="330" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="160" cy="70" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M470 90 v8 M466 94 h8" stroke-opacity=".4"/>
+		<path d="M520 240 l4 -3" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 employer assessments back this up bluntly. the weakest skill among indian graduates, year after year, isn't technical. it's creativity, and the soft, non-technical skills around it. we are strong at the thing machines now do, and weak at the thing only humans do.
 
 look at my own field. a developer today is mostly a translator. you take a concept, turn it into an idea, turn the idea into a working system, increasingly with a machine writing the boilerplate beside you. that's the job.

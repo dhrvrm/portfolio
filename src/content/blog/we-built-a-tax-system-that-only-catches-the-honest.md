@@ -132,6 +132,41 @@ exemptions that haven't kept pace with inflation, so your real burden creeps up 
 
 it works in the short term, because the salaried can't refuse. and it fails in every other way, because it confirms to everyone outside the net that staying outside is the smart choice.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-nets-title doodle-nets-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-nets-title">We don't widen the tax net — we pull it tighter around whoever is already inside.</title>
+	<desc id="doodle-nets-desc">Left: a small net cinched tight around three fish. Right: a wide open circle holding many fish comfortably.</desc>
+	<g id="fish-left" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M116 208 q9 -6 18 0 q-9 6 -18 0 m0 0 l-6 -5 m6 5 l-6 5"/>
+		<path d="M142 232 q9 -6 18 0 q-9 6 -18 0 m0 0 l-6 -5 m6 5 l-6 5"/>
+		<path d="M112 246 q9 -6 18 0 q-9 6 -18 0 m18 0 l6 -5 m-6 5 l6 5"/>
+	</g>
+	<g id="net-left" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M132 178 Q96 192 94 228 Q93 262 128 270 Q168 276 180 242 Q188 208 160 190 Q146 182 136 179" stroke-width="2.5"/>
+		<path d="M128 182 Q125 170 130 160 M136 181 Q140 170 137 158 M126 163 l12 -4 M124 171 l13 -4" stroke-width="1.75"/>
+		<path d="M104 208 Q140 216 176 224 M100 236 Q136 240 174 240 M120 188 Q132 224 140 262 M152 192 Q158 226 158 264" stroke-width="1.5" stroke-opacity=".4"/>
+	</g>
+	<g id="fish-right" data-step data-beat="0.25" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M368 168 q9 -6 18 0 q-9 6 -18 0 m0 0 l-6 -5 m6 5 l-6 5"/>
+		<path d="M430 148 q9 -6 18 0 q-9 6 -18 0 m18 0 l6 -5 m-6 5 l6 5"/>
+		<path d="M480 190 q9 -6 18 0 q-9 6 -18 0 m0 0 l-6 -5 m6 5 l-6 5"/>
+		<path d="M392 228 q9 -6 18 0 q-9 6 -18 0 m18 0 l6 -5 m-6 5 l6 5"/>
+		<path d="M456 246 q9 -6 18 0 q-9 6 -18 0 m0 0 l-6 -5 m6 5 l-6 5"/>
+		<path d="M420 288 q9 -6 18 0 q-9 6 -18 0 m18 0 l6 -5 m-6 5 l6 5"/>
+	</g>
+	<g id="net-right" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M432 106 Q350 116 336 190 Q326 260 396 296 Q470 330 520 272 Q560 220 528 158 Q500 112 440 106"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="82" y="330" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">PULL TIGHTER</text>
+		<text x="368" y="368" style="fill:rgb(var(--color-accent, 245 158 11))">MAKE IT BIGGER</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="220" cy="140" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="250" cy="300" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M212 220 l4 3 M240 80 l-4 -3" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 ---
 
 ## what widening would actually mean

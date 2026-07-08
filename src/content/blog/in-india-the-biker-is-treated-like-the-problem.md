@@ -46,6 +46,43 @@ so logically, the most vulnerable road user should get the most protection. the 
 
 that gap is the whole story. everything below is just the gap showing up in different places.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-seesaw-title doodle-seesaw-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-seesaw-title">The most vulnerable road user gets the least protection.</title>
+	<desc id="doodle-seesaw-desc">A seesaw: a biker weighs down the risk end while a tiny shield floats high on the protection end.</desc>
+	<g id="stage" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M230 304 Q300 308 370 304" stroke-width="1.5" stroke-opacity=".35"/>
+		<path d="M286 302 L299 262 L314 302"/>
+	</g>
+	<g id="plank" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M155 296 Q228 279 300 261 T445 224" stroke-width="3"/>
+	</g>
+	<g id="biker" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M168 238 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="171" cy="244" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="177" cy="244" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M166 257 Q158 268 160 282 Q161 289 167 291"/>
+		<path d="M180 256 Q187 266 186 280"/>
+		<path d="M186 280 Q194 285 191 293"/>
+		<path d="M168 271 Q178 280 187 282"/>
+		<path d="M185 280 a4 4 0 1 0 6 2"/>
+		<path d="M166 291 l9 1 M185 292 l8 0" stroke-width="2.5"/>
+		<path d="M161 276 Q171 278 181 277 Q170 281 162 281 Q172 284 180 284" stroke-width="1.5"/>
+	</g>
+	<g id="shield" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M448 178 q8 -6 16 0 q0 14 -8 21 q-8 -7 -8 -21"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="142" y="340" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">THE RISK</text>
+		<text x="408" y="158" style="fill:rgb(var(--color-accent, 245 158 11))">THE PROTECTION</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="120" cy="180" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="510" cy="260" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M148 210 l-4 -4 M200 222 l4 -3" stroke-opacity=".4"/>
+		<path d="M480 210 v8 M476 214 h8" stroke-opacity=".4"/>
+	</g>
+</svg>
+
 ---
 
 ## treated as second class, even at the door

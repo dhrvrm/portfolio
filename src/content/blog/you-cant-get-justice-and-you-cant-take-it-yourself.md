@@ -50,6 +50,46 @@ when you do the lawful thing and report it, the system often won't act for you. 
 
 that gap, between a system that won't act and a rule that won't let you act, is exactly where the ordinary citizen gets stuck.
 
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="doodle-squeeze-title doodle-squeeze-desc" class="blog-doodle" style="width:100%;height:auto">
+	<title id="doodle-squeeze-title">Stuck between a system that won't move and a law that won't let you.</title>
+	<desc id="doodle-squeeze-desc">A person squeezed in the narrow gap between two massive walls leaning inward.</desc>
+	<g id="wall-left" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M92 322 L156 142 Q159 134 167 137 L284 172 Q268 246 258 322 Q160 326 92 322" stroke-width="2.5"/>
+		<path d="M124 300 L200 190 M108 316 L160 240 M150 296 L226 200" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="wall-right" data-step fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M508 322 L444 142 Q441 134 433 137 L316 172 Q332 246 342 322 Q440 326 508 322" stroke-width="2.5"/>
+		<path d="M476 300 L400 190 M492 316 L440 240 M450 296 L374 200" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="citizen" data-step data-beat="0.25" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<path d="M296 190 a9 9 0 1 0 4 -2.5"/>
+		<circle cx="298" cy="197" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="304" cy="197" r="2" stroke="none" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M296 192 l4 2 M306 194 l4 -2" stroke-width="1.75"/>
+		<path d="M295 210 Q291 236 293 268"/>
+		<path d="M307 210 Q310 234 308 266"/>
+		<path d="M294 216 Q286 222 283 232 M283 232 a4 4 0 1 0 -2 6"/>
+		<path d="M308 216 Q316 222 319 232 M319 232 a4 4 0 1 0 2 6"/>
+		<path d="M294 268 l-1 26 l7 1 M307 266 l1 26 l7 1"/>
+		<path d="M292 244 Q300 246 309 245 Q300 249 293 249 Q301 252 308 252" stroke-width="1.5"/>
+		<path d="M272 298 Q300 302 330 298" stroke-width="1.5" stroke-opacity=".35"/>
+	</g>
+	<g id="you" data-step data-beat="0.3" fill="none" stroke-linecap="round" stroke-linejoin="round" style="stroke:rgb(var(--color-accent, 245 158 11))">
+		<path d="M300 118 Q302 138 300 156 M293 148 L300 158 L308 149" stroke-width="2.5"/>
+	</g>
+	<g id="labels" font-family="'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif" font-size="15" letter-spacing=".05em">
+		<text x="96" y="110" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">WON'T MOVE</text>
+		<text x="392" y="110" fill-opacity=".75" style="fill:rgb(var(--color-ink, 30 30 36))">WON'T LET YOU</text>
+		<text x="282" y="104" style="fill:rgb(var(--color-accent, 245 158 11))">YOU</text>
+	</g>
+	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
+		<circle cx="70" cy="200" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<circle cx="532" cy="210" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
+		<path d="M284 158 l-5 -4 M316 158 l5 -4" stroke-opacity=".45"/>
+		<path d="M278 148 l-4 -5 M322 148 l4 -5" stroke-opacity=".45"/>
+	</g>
+</svg>
+
 ---
 
 ## the law is actually reasonable. that's the trap.
