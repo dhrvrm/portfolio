@@ -55,6 +55,7 @@ JSON-LD structured data is emitted per page (Breadcrumbs, index, blog, projects,
 
 ## Conventions
 
+- **Prose voice**: any content written for this site (posts, copy, summaries) follows `.cursor/rules/writing-tone.mdc` — lowercase, short paragraphs, grounded and plain-spoken, hard rules included. Read it before drafting.
 - **Site-wide values** (author name, bio, social links) live in `src/data/constants.ts` (`AUTHOR`). Reuse them rather than duplicating.
 - **Tabs** for indentation across `.astro`/`.ts` files.
 - **Planning docs** in `planning/` follow a phased checklist structure (scope → phases → validation); `work-log.md` is the running log. See `.cursor/rules/planning-optimizer.mdc`.
@@ -65,6 +66,8 @@ JSON-LD structured data is emitted per page (Breadcrumbs, index, blog, projects,
 **No AI image-generation in this env.** Make images with code; process photos with `sharp` (a dependency). Tools: `sharp`, Chrome (`/Applications/Google Chrome.app/Contents/MacOS/Google Chrome`). Missing: `magick`, `cwebp`, `exiftool`; `mdls` unreliable.
 
 **"Create an image" (e.g. the `imagegen-frontend-web` skill, blog covers) → render from code, not generation.** HTML/CSS → headless Chrome screenshot → `sharp` webp; don't claim AI/photographic art. Reusable template: **`scripts/covers/generate.mjs`** (add to its `POSTS` array, re-run). Match `src/styles/tokens.css` + brand fonts from `node_modules/@fontsource*` (Space Grotesk / Inter / JetBrains Mono) via `@font-face file://`; semantic colors, no invented hex. Render 2× scale then resize → `.webp({ quality: 82 })`. Chrome: `--headless=new --disable-gpu --hide-scrollbars --allow-file-access-from-files --force-device-scale-factor=2 --window-size=W,H --screenshot=out.png file://page.html`.
+
+**Blog doodles (hand-drawn SVG illustrations):** use the project `blog-doodle` skill — sketchbook characters + storytelling diagrams, theme-adaptive via `tokens.css` variables, delivered as inline SVG blocks in the post markdown (only inline SVG follows the `.dark` class toggle).
 
 **Photo → webp:** `sharp(src).rotate().resize(2400,2400,{fit:'inside',withoutEnlargement:true}).webp({quality:82})`. `.rotate()` bakes EXIF orientation. Metadata (EXIF/GPS/IPTC/XMP) is dropped by default — **never `.withMetadata()` on user photos**; the default is what strips personal data (GPS). q82 / 2400px longest edge = house default ("visually lossless"); true lossless only if asked (it exceeds the JPEG size).
 
