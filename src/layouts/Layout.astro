@@ -286,6 +286,57 @@ const canonicalURL = new URL(
 			gsap.registerPlugin(ScrollTrigger);
 			window.gsap = gsap;
 			window.ScrollTrigger = ScrollTrigger;
+
+			// Inline blog doodles (svg.blog-doodle) sketch themselves on scroll.
+			// Sequencing model: one [data-step] group = one semantic gesture — its
+			// paths draw together with a tight stagger (Gestalt common fate); steps
+			// run sequentially in DOM order (reading order, cause before effect);
+			// [data-beat] pauses before a step (timing beat before the payoff);
+			// circles/text fade in last (closure). Reduced motion skips it all.
+			const doodles = document.querySelectorAll('svg.blog-doodle');
+			const reducedMotion = window.matchMedia(
+				'(prefers-reduced-motion: reduce)'
+			).matches;
+			if (!reducedMotion) {
+				doodles.forEach((svg) => {
+					const strokes = Array.from(svg.querySelectorAll('path'));
+					const reveals = Array.from(svg.querySelectorAll('circle, text'));
+					strokes.forEach((p) => {
+						const len = p.getTotalLength();
+						p.style.strokeDasharray = `${len}`;
+						p.style.strokeDashoffset = `${len}`;
+					});
+					gsap.set(reveals, { opacity: 0 });
+					const steps = [];
+					strokes.forEach((p) => {
+						const group = p.closest('[data-step]');
+						const last = steps[steps.length - 1];
+						if (group && last && last.key === group) {
+							last.paths.push(p);
+						} else {
+							steps.push({ key: group || p, el: group || p, paths: [p] });
+						}
+					});
+					const tl = gsap.timeline({
+						scrollTrigger: { trigger: svg, start: 'top 85%', once: true },
+					});
+					steps.forEach((step) => {
+						const beat = parseFloat(step.el.dataset?.beat || '') || 0;
+						tl.to(
+							step.paths,
+							{
+								strokeDashoffset: 0,
+								duration: (i, target) =>
+									gsap.utils.clamp(0.15, 0.7, target.getTotalLength() / 500),
+								ease: 'power1.inOut',
+								stagger: 0.05,
+							},
+							beat ? `>+${beat}` : '>-0.05'
+						);
+					});
+					tl.to(reveals, { opacity: 1, duration: 0.35, stagger: 0.04 }, '>-0.1');
+				});
+			}
 		</script>
 		<a
 			href='#main-content'
