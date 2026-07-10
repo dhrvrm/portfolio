@@ -22,6 +22,7 @@
   --z-header: 100; /* sticky site header */
   --z-cursor: 200; /* custom cursor follower */
   --z-overlay: 300; /* full-screen page-transition overlay */
+  --z-modal: 350; /* keyboard-shortcuts dialog and other modals */
   --z-skiplink: 400; /* skip link, must always be reachable on focus */
 }
 

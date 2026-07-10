@@ -80,7 +80,18 @@ const socialLinks = [
 	<div class='footer__bottom'>
 		<div class='footer__container footer__container--bottom'>
 			<p class='footer__copy'>© {currentYear} Dhruv Verma</p>
-			<a href='/' class='footer__back'>Back to top</a>
+			<div class='footer__end'>
+				<button
+					type='button'
+					class='footer__kbd'
+					data-shortcuts-trigger
+					aria-label='Keyboard shortcuts'
+					title='Keyboard shortcuts'
+				>
+					<kbd>?</kbd>
+				</button>
+				<a href='/' class='footer__back'>Back to top</a>
+			</div>
 		</div>
 	</div>
 </footer>
@@ -270,6 +281,41 @@ const socialLinks = [
 	.footer__back:hover,
 	.footer__back:focus-visible {
 		color: rgb(var(--color-accent));
+	}
+
+	.footer__end {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	/* Whisper-quiet keycap: the only visible trace of the shortcut system.
+	   Faint at rest, wakes on hover or keyboard focus. */
+	.footer__kbd {
+		display: inline-flex;
+		align-items: center;
+		opacity: 0.3;
+		transition: opacity 0.2s ease;
+	}
+	.footer__kbd:hover,
+	.footer__kbd:focus-visible {
+		opacity: 1;
+	}
+	.footer__kbd kbd {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 0.6875rem;
+		line-height: 1;
+		color: rgb(var(--color-muted));
+		background: rgb(var(--color-surface));
+		border: 1px solid rgb(var(--color-border) / 0.8);
+		border-radius: var(--radius-sm);
+		padding: 0.2rem 0.4rem;
+		box-shadow: 0 1px 0 rgb(var(--color-border) / 0.7);
+	}
+	.footer__kbd:hover kbd,
+	.footer__kbd:focus-visible kbd {
+		color: rgb(var(--color-ink));
+		border-color: rgb(var(--color-accent) / 0.5);
 	}
 
 	@media (prefers-reduced-motion: reduce) {

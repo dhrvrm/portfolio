@@ -1,0 +1,364 @@
+---
+// On-demand keyboard navigation for keyboard-first visitors.
+// Invisible by default: developers who reflexively press `?` find it; everyone
+// else never sees it. GitHub/Linear-style `g`-leader routing + a few actions.
+const groups = [
+	{
+		label: 'Navigate',
+		rows: [
+			{ text: 'Home', keys: ['g', 'h'] },
+			{ text: 'Work', keys: ['g', 'w'] },
+			{ text: 'Experience', keys: ['g', 'e'] },
+			{ text: 'Activities', keys: ['g', 'a'] },
+			{ text: 'Writing', keys: ['g', 'b'] },
+			{ text: 'Contact', keys: ['g', 'c'] },
+			{ text: 'Top of page', keys: ['g', 'g'] },
+			{ text: 'Bottom of page', keys: ['G'] },
+		],
+	},
+	{
+		label: 'Actions',
+		rows: [
+			{ text: 'Toggle theme', keys: ['t'] },
+			{ text: 'This menu', keys: ['?'] },
+			{ text: 'Dismiss', keys: ['Esc'] },
+		],
+	},
+];
+---
+
+<div
+	id='kbd-overlay'
+	class='kbd-overlay'
+	role='dialog'
+	aria-modal='true'
+	aria-labelledby='kbd-title'
+	aria-hidden='true'
+	hidden
+>
+	<div class='kbd-scrim' data-kbd-close></div>
+	<div class='kbd-card' role='document'>
+		<div class='kbd-head'>
+			<h2 id='kbd-title' class='kbd-title'>Keyboard shortcuts</h2>
+			<button
+				type='button'
+				class='kbd-x'
+				aria-label='Close shortcuts'
+				data-kbd-close
+			>
+				Esc
+			</button>
+		</div>
+		<div class='kbd-groups'>
+			{
+				groups.map((group) => (
+					<section class='kbd-group'>
+						<p class='kbd-group-label'>{group.label}</p>
+						<ul class='kbd-rows'>
+							{group.rows.map((row) => (
+								<li class='kbd-row'>
+									<span class='kbd-row-text'>{row.text}</span>
+									<span class='kbd-row-keys'>
+										{row.keys.map((k, i) => (
+											<>
+												{i > 0 && <span class='kbd-then'>then</span>}
+												<kbd class='kbd-key'>{k}</kbd>
+											</>
+										))}
+									</span>
+								</li>
+							))}
+						</ul>
+					</section>
+				))
+			}
+		</div>
+	</div>
+</div>
+
+<style>
+	.kbd-overlay {
+		position: fixed;
+		inset: 0;
+		z-index: var(--z-modal);
+		display: grid;
+		place-items: center;
+		padding: 1.5rem;
+	}
+	.kbd-overlay[hidden] {
+		display: none;
+	}
+	.kbd-scrim {
+		position: absolute;
+		inset: 0;
+		background: rgb(var(--color-bg) / 0.55);
+		backdrop-filter: blur(6px);
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+	.kbd-card {
+		position: relative;
+		width: 100%;
+		max-width: 30rem;
+		background: rgb(var(--color-surface) / 0.98);
+		border: 1px solid rgb(var(--color-border) / 0.8);
+		border-radius: var(--radius-xl);
+		box-shadow: var(--shadow-card-hover);
+		padding: 1.5rem;
+		opacity: 0;
+		transform: translateY(8px) scale(0.98);
+		transition:
+			opacity 0.22s ease,
+			transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	.kbd-overlay[data-open] .kbd-scrim {
+		opacity: 1;
+	}
+	.kbd-overlay[data-open] .kbd-card {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+
+	.kbd-head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 1.25rem;
+	}
+	.kbd-title {
+		font-family: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+		font-size: 1rem;
+		font-weight: 600;
+		color: rgb(var(--color-ink));
+		letter-spacing: -0.01em;
+	}
+	.kbd-x {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 0.6875rem;
+		color: rgb(var(--color-muted));
+		border: 1px solid rgb(var(--color-border) / 0.8);
+		border-radius: var(--radius-sm);
+		padding: 0.15rem 0.4rem;
+		transition:
+			color 0.15s ease,
+			border-color 0.15s ease;
+	}
+	.kbd-x:hover {
+		color: rgb(var(--color-ink));
+		border-color: rgb(var(--color-border));
+	}
+
+	.kbd-groups {
+		display: grid;
+		gap: 1.25rem;
+	}
+	.kbd-group-label {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 0.625rem;
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		color: rgb(var(--color-muted) / 0.8);
+		margin-bottom: 0.5rem;
+	}
+	.kbd-rows {
+		display: grid;
+		gap: 0.125rem;
+	}
+	.kbd-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 0.3rem 0;
+	}
+	.kbd-row-text {
+		font-size: 0.875rem;
+		color: rgb(var(--color-ink) / 0.85);
+	}
+	.kbd-row-keys {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.3rem;
+	}
+	.kbd-then {
+		font-size: 0.625rem;
+		color: rgb(var(--color-muted) / 0.7);
+	}
+	.kbd-key {
+		font-family: 'JetBrains Mono', ui-monospace, monospace;
+		font-size: 0.75rem;
+		min-width: 1.5rem;
+		text-align: center;
+		color: rgb(var(--color-ink));
+		background: rgb(var(--color-bg));
+		border: 1px solid rgb(var(--color-border));
+		border-radius: var(--radius-sm);
+		padding: 0.15rem 0.4rem;
+		box-shadow: 0 1px 0 rgb(var(--color-border));
+	}
+
+	/* The single accent: a hairline tick under the dialog title. */
+	.kbd-title::after {
+		content: '';
+		display: block;
+		width: 1.75rem;
+		height: 2px;
+		margin-top: 0.5rem;
+		border-radius: 9999px;
+		background: rgb(var(--color-accent));
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.kbd-scrim,
+		.kbd-card {
+			transition: none;
+		}
+	}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const overlay = document.getElementById('kbd-overlay');
+		if (!overlay) return;
+		const card = overlay.querySelector<HTMLElement>('.kbd-card');
+		const closeEls = overlay.querySelectorAll<HTMLElement>('[data-kbd-close]');
+		const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		let lastFocused: HTMLElement | null = null;
+		let leader = false;
+		let leaderTimer: ReturnType<typeof setTimeout> | undefined;
+
+		const routes: Record<string, string> = {
+			h: '/',
+			w: '/projects',
+			e: '/experience',
+			a: '/activities',
+			b: '/blog',
+			c: '/contact',
+		};
+
+		const isOpen = () => overlay.hasAttribute('data-open');
+
+		const focusable = () =>
+			Array.from(
+				overlay.querySelectorAll<HTMLElement>(
+					'button, a[href], [tabindex]:not([tabindex="-1"])'
+				)
+			);
+
+		const open = () => {
+			if (isOpen()) return;
+			lastFocused = document.activeElement as HTMLElement;
+			overlay.hidden = false;
+			overlay.setAttribute('aria-hidden', 'false');
+			// next frame so the transition runs from the hidden state
+			requestAnimationFrame(() => overlay.setAttribute('data-open', ''));
+			document.body.style.overflow = 'hidden';
+			focusable()[0]?.focus();
+		};
+
+		const close = () => {
+			if (!isOpen()) return;
+			overlay.removeAttribute('data-open');
+			overlay.setAttribute('aria-hidden', 'true');
+			document.body.style.overflow = '';
+			const finish = () => {
+				overlay.hidden = true;
+			};
+			if (reduce) finish();
+			else setTimeout(finish, 220);
+			lastFocused?.focus();
+		};
+
+		const scrollTo = (top: number) =>
+			window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+
+		const toggleTheme = () =>
+			document
+				.querySelector<HTMLElement>('[data-theme-toggle]')
+				?.click();
+
+		const isTyping = (el: EventTarget | null) => {
+			const node = el as HTMLElement | null;
+			if (!node) return false;
+			const tag = node.tagName;
+			return (
+				tag === 'INPUT' ||
+				tag === 'TEXTAREA' ||
+				tag === 'SELECT' ||
+				node.isContentEditable
+			);
+		};
+
+		closeEls.forEach((el) => el.addEventListener('click', close));
+
+		document.addEventListener('keydown', (e: KeyboardEvent) => {
+			// Never hijack real typing or OS/browser chords.
+			if (isTyping(e.target) || e.metaKey || e.ctrlKey || e.altKey) return;
+
+			if (isOpen()) {
+				if (e.key === 'Escape' || e.key === '?') {
+					e.preventDefault();
+					close();
+				} else if (e.key === 'Tab') {
+					const items = focusable();
+					if (items.length === 0) return;
+					const first = items[0];
+					const last = items[items.length - 1];
+					if (e.shiftKey && document.activeElement === first) {
+						e.preventDefault();
+						last.focus();
+					} else if (!e.shiftKey && document.activeElement === last) {
+						e.preventDefault();
+						first.focus();
+					}
+				}
+				return;
+			}
+
+			if (leader) {
+				clearTimeout(leaderTimer);
+				leader = false;
+				if (e.key === 'g') {
+					e.preventDefault();
+					scrollTo(0);
+					return;
+				}
+				const dest = routes[e.key];
+				if (dest) {
+					e.preventDefault();
+					window.location.href = dest;
+				}
+				return;
+			}
+
+			switch (e.key) {
+				case '?':
+					e.preventDefault();
+					open();
+					break;
+				case 'g':
+					leader = true;
+					leaderTimer = setTimeout(() => {
+						leader = false;
+					}, 1200);
+					break;
+				case 'G':
+					e.preventDefault();
+					scrollTo(document.body.scrollHeight);
+					break;
+				case 't':
+					e.preventDefault();
+					toggleTheme();
+					break;
+			}
+		});
+
+		// The one visible trace: a quiet `?` keycap in the footer.
+		document
+			.querySelectorAll<HTMLElement>('[data-shortcuts-trigger]')
+			.forEach((el) => el.addEventListener('click', open));
+
+		if (card) card.addEventListener('click', (e) => e.stopPropagation());
+	});
+</script>
