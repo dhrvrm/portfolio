@@ -1,72 +1,143 @@
 ---
 const { headings } = Astro.props;
+const items = (headings ?? []).filter(
+	(h: { depth: number }) => h.depth >= 2 && h.depth <= 3
+);
 ---
 
-<nav class='toc pl-2 pr-4'>
-	<h2 class='text-sm font-semibold uppercase tracking-[0.2em] text-muted mb-4'>
-		On this page
-	</h2>
-	<ul class='space-y-2'>
-		{
-			headings.map((heading) => (
-				<li class='pl-4' style={`margin-left: ${(heading.depth - 1) * 1}rem`}>
-					<a
-						href={`#${heading.slug}`}
-						class='text-sm text-muted hover:text-ink transition-colors'
-					>
-						{heading.text}
-					</a>
-				</li>
-			))
-		}
-	</ul>
-</nav>
+{
+	items.length >= 2 && (
+		<nav
+			id='toc-rail'
+			class='toc-rail hidden lg:block fixed right-5 top-1/2 -translate-y-1/2 z-[var(--z-floating)]'
+			aria-label='On this page'
+		>
+			<ul class='toc-panel flex flex-col items-end gap-1 rounded-xl px-3 py-3'>
+				{items.map((heading: { depth: number; slug: string; text: string }) => (
+					<li class='w-full'>
+						<a
+							href={`#${heading.slug}`}
+							class='toc-item flex items-center justify-end gap-3 py-1'
+							data-depth={heading.depth}
+						>
+							<span class='toc-label text-sm text-muted whitespace-nowrap'>
+								{heading.text}
+							</span>
+							<span class='toc-tick' aria-hidden='true' />
+						</a>
+					</li>
+				))}
+			</ul>
+		</nav>
+	)
+}
 
 <style>
-	.toc {
-		position: sticky;
-		top: 6rem;
-		max-height: calc(100vh - 8rem);
-		overflow-y: auto;
-		padding-top: 1rem;
-		padding-bottom: 1rem;
-		margin-left: -0.5rem;
-	}
-
-	/* Custom Scrollbar for TableOfContents */
-	.toc::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.toc::-webkit-scrollbar-track {
-		background: transparent;
-	}
-
-	.toc::-webkit-scrollbar-thumb {
-		background-color: rgb(var(--color-ink) / 0.15);
+	/* Collapsed: a quiet stack of ticks at the screen edge. Hover or keyboard
+	   focus expands labels; nothing reserves layout space in the article. */
+	.toc-tick {
+		display: inline-block;
+		width: 18px;
+		height: 2px;
 		border-radius: 9999px;
+		background: rgb(var(--color-ink) / 0.22);
+		transition:
+			background-color 0.2s ease,
+			width 0.2s ease;
+		flex-shrink: 0;
+	}
+	.toc-item[data-depth='3'] .toc-tick {
+		width: 11px;
+	}
+	.toc-item[aria-current='true'] .toc-tick {
+		background: rgb(var(--color-accent));
+		width: 26px;
+	}
+	.toc-item:hover .toc-tick {
+		background: rgb(var(--color-ink) / 0.5);
 	}
 
-	.toc::-webkit-scrollbar-thumb:hover {
-		background-color: rgb(var(--color-ink) / 0.25);
+	.toc-label {
+		max-width: 0;
+		opacity: 0;
+		overflow: hidden;
+		transition:
+			max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 0.25s ease;
+	}
+	.toc-item[data-depth='3'] .toc-label {
+		font-size: 0.8125rem;
+	}
+	.toc-item[aria-current='true'] .toc-label {
+		color: rgb(var(--color-ink));
+	}
+	.toc-item:hover .toc-label {
+		color: rgb(var(--color-ink));
 	}
 
-	/* Dark theme specific styles */
-	:root.dark .toc::-webkit-scrollbar-thumb {
-		background-color: rgb(var(--color-ink) / 0.2);
+	.toc-panel {
+		border: 1px solid transparent;
+		transition:
+			background-color 0.25s ease,
+			border-color 0.25s ease,
+			box-shadow 0.25s ease;
+	}
+	.toc-rail:hover .toc-label,
+	.toc-rail:focus-within .toc-label {
+		max-width: 300px;
+		opacity: 1;
+	}
+	.toc-rail:hover .toc-panel,
+	.toc-rail:focus-within .toc-panel {
+		background: rgb(var(--color-surface) / 0.92);
+		border-color: rgb(var(--color-border) / 0.7);
+		box-shadow: var(--shadow-soft);
+		backdrop-filter: blur(12px);
 	}
 
-	:root.dark .toc::-webkit-scrollbar-thumb:hover {
-		background-color: rgb(var(--color-ink) / 0.3);
-	}
-
-	/* Firefox */
-	.toc {
-		scrollbar-width: thin;
-		scrollbar-color: rgb(var(--color-ink) / 0.2) transparent;
-	}
-
-	:root.dark .toc {
-		scrollbar-color: rgb(var(--color-ink) / 0.25) transparent;
+	@media (prefers-reduced-motion: reduce) {
+		.toc-tick,
+		.toc-label,
+		.toc-panel {
+			transition: none;
+		}
 	}
 </style>
+
+<script>
+	// Active-section tracking for the on-demand TOC rail.
+	document.addEventListener('DOMContentLoaded', () => {
+		const rail = document.getElementById('toc-rail');
+		if (!rail) return;
+		const links = Array.from(
+			rail.querySelectorAll<HTMLAnchorElement>('.toc-item')
+		);
+		const targets = links
+			.map((link) =>
+				document.getElementById(
+					decodeURIComponent(link.getAttribute('href')?.slice(1) ?? '')
+				)
+			)
+			.filter((el): el is HTMLElement => el !== null);
+		if (targets.length === 0) return;
+
+		const setActive = (id: string) => {
+			links.forEach((link) => {
+				const isActive = link.getAttribute('href') === `#${id}`;
+				if (isActive) link.setAttribute('aria-current', 'true');
+				else link.removeAttribute('aria-current');
+			});
+		};
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				for (const entry of entries) {
+					if (entry.isIntersecting) setActive(entry.target.id);
+				}
+			},
+			{ rootMargin: '-20% 0px -70% 0px' }
+		);
+		targets.forEach((t) => observer.observe(t));
+		setActive(targets[0].id);
+	});
+</script>

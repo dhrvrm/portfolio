@@ -115,7 +115,7 @@ const faqSchema =
 			]}
 		/>
 
-		<div class='grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-12'>
+		<div class='max-w-3xl mx-auto'>
 			<div>
 				<header class='mb-12'>
 					<div class='flex flex-wrap gap-2 mb-6 items-center'>
@@ -267,10 +267,9 @@ const faqSchema =
 				</div>
 			</div>
 
-			<aside class='hidden lg:block'>
-				<TableOfContents headings={headings} />
-			</aside>
 		</div>
+
+		<TableOfContents headings={headings} />
 
 		<div class='mt-16 border-t dark:border-gray-800 pt-8'>
 			<div class='bg-gray-50 dark:bg-gray-800 rounded-md p-8'>

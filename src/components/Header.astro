@@ -11,7 +11,7 @@ const navItems = [
 ];
 ---
 
-<header class='fixed top-0 left-0 right-0 z-[var(--z-header)]'>
+<header id='site-header' class='fixed top-0 left-0 right-0 z-[var(--z-header)]'>
 	<nav class='max-w-7xl mx-auto px-6 py-4'>
 		<div
 			class='backdrop-blur-lg bg-surface/90 border border-border/70 rounded-2xl px-5 py-3 flex items-center justify-between shadow-[var(--shadow-soft)]'
@@ -71,6 +71,39 @@ const navItems = [
 </header>
 
 <script>
+	import { gsap } from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+	gsap.registerPlugin(ScrollTrigger);
+
+	// On-demand nav: the header steps aside while reading (scroll down) and
+	// returns on any upward scroll, at the top of the page, on keyboard focus,
+	// or while the mobile menu is open. Rides the site's global ScrollTrigger.
+	document.addEventListener('DOMContentLoaded', () => {
+		const header = document.getElementById('site-header');
+		const menuEl = document.getElementById('mobile-menu');
+		if (header) {
+			const show = () => header.classList.remove('header-hidden');
+			const hide = () => header.classList.add('header-hidden');
+			ScrollTrigger.create({
+				start: 0,
+				end: 'max',
+				onUpdate(self) {
+					const menuOpen = menuEl && !menuEl.classList.contains('hidden');
+					if (self.scroll() < 96 || self.direction < 0) {
+						show();
+					} else if (
+						self.direction > 0 &&
+						!menuOpen &&
+						!header.matches(':focus-within')
+					) {
+						hide();
+					}
+				},
+			});
+			header.addEventListener('focusin', show);
+		}
+	});
+
 	document.addEventListener('DOMContentLoaded', () => {
 		const toggle = document.getElementById('mobile-menu-toggle');
 		const menu = document.getElementById('mobile-menu');
@@ -130,6 +163,17 @@ const navItems = [
 </script>
 
 <style>
+	header {
+		transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+	:global(#site-header.header-hidden) {
+		transform: translateY(calc(-100% - 8px));
+	}
+	@media (prefers-reduced-motion: reduce) {
+		header {
+			transition: none;
+		}
+	}
 	.nav-link {
 		display: inline-block;
 	}
