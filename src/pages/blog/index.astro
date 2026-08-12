@@ -67,7 +67,7 @@ const blogSchema = {
 			.map((p, i) => ({
 				'@type': 'ListItem',
 				position: i + 1,
-				url: new URL(`/blog/${p.slug}`, site).toString(),
+				url: new URL(`/blog/${p.id}`, site).toString(),
 				name: p.data.title,
 				datePublished: p.data.publishDate.toISOString(),
 			})),
@@ -103,7 +103,7 @@ const blogSchema = {
 										{entry.posts.map((post) => (
 											<li>
 												<a
-													href={`/blog/${post.slug}`}
+													href={`/blog/${post.id}`}
 													class='group flex items-baseline gap-3 py-1.5 hover:text-ink transition-colors'
 												>
 													<span class='font-mono text-xs text-muted flex-shrink-0'>

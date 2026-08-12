@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout
+	title='Page not found | Dhruv Verma'
+	description='This page does not exist. The rest of the site does.'
+>
+	<section class='min-h-[60vh] flex items-center'>
+		<div class='container mx-auto px-6'>
+			<div class='max-w-xl'>
+				<p class='font-mono text-xs tracking-[0.18em] uppercase text-muted mb-5'>
+					404 · not found
+				</p>
+				<h1
+					class='font-display font-semibold text-4xl md:text-5xl tracking-tight leading-[1.08] [text-wrap:balance] mb-6'
+				>
+					this page wandered off
+				</h1>
+				<p class='text-muted mb-8'>
+					whatever was here isn't anymore, or never was. the essays, work, and
+					everything else are still where they should be.
+				</p>
+				<div class='flex flex-wrap gap-4'>
+					<a
+						href='/'
+						class='inline-flex items-center justify-center px-6 py-3 rounded-md bg-accent text-onAccent text-sm font-semibold hover:bg-accentStrong transition-colors'
+					>
+						Go home
+					</a>
+					<a
+						href='/blog'
+						class='inline-flex items-center justify-center px-6 py-3 rounded-md border border-border text-sm font-semibold text-ink hover:border-accent hover:text-accent transition-colors'
+					>
+						Read the writing
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+</Layout>

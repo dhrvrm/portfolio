@@ -3,18 +3,18 @@ import Layout from '../../layouts/Layout.astro';
 import ImageGallery from '../../components/ImageGallery.astro';
 import StudioBadge from '../../components/StudioBadge.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
 	const items = await getCollection('activities');
 	return items.map((item) => ({
-		params: { slug: item.slug },
+		params: { slug: item.id },
 		props: { item },
 	}));
 }
 
 const { item } = Astro.props;
-const { Content } = await item.render();
+const { Content } = await render(item);
 const images = item.data.images ?? [];
 
 const categoryMap: Record<string, { href: string; label: string }> = {
@@ -51,7 +51,7 @@ const hackathonBadgeVariant = showHackathonBadge ? hackathonType! : 'default';
 const sameCategoryByDate = (await getCollection('activities'))
 	.filter((i) => i.data.category === item.data.category)
 	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const idx = sameCategoryByDate.findIndex((i) => i.slug === item.slug);
+const idx = sameCategoryByDate.findIndex((i) => i.id === item.id);
 const prevItem = idx > 0 ? sameCategoryByDate[idx - 1] : null;
 const nextItem =
 	idx >= 0 && idx < sameCategoryByDate.length - 1
@@ -135,7 +135,7 @@ const metaDescription =
 				>
 					{prevItem ? (
 						<a
-							href={`/activities/${prevItem.slug}`}
+							href={`/activities/${prevItem.id}`}
 							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors'
 						>
 							&larr; {prevItem.data.title}
@@ -145,7 +145,7 @@ const metaDescription =
 					)}
 					{nextItem ? (
 						<a
-							href={`/activities/${nextItem.slug}`}
+							href={`/activities/${nextItem.id}`}
 							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors text-right'
 						>
 							{nextItem.data.title} &rarr;

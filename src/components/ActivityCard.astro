@@ -30,7 +30,7 @@ const badgeVariant =
 	item.data.category === 'hackathons' && item.data.hackathonType
 		? item.data.hackathonType
 		: 'default';
-const href = `/activities/${item.slug}`;
+const href = `/activities/${item.id}`;
 const cardClass = [
 	'activity-card',
 	variant === 'asymmetric' ? 'activity-card--asymmetric' : '',

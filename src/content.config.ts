@@ -1,6 +1,8 @@
 import { defineCollection, z } from 'astro:content';
+import { glob } from 'astro/loaders';
 
 const projects = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
 	schema: z.object({
 		title: z.string(),
 		description: z.string(),
@@ -15,12 +17,13 @@ const projects = defineCollection({
 		challenge: z.string(),
 		solution: z.string(),
 		impact: z.string(),
-		website: z.string().url().optional(),
-		repository: z.string().url().optional(),
+		website: z.url().optional(),
+		repository: z.url().optional(),
 	}),
 });
 
 const blog = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
 	schema: z.object({
 		title: z.string(),
 		publishDate: z.date(),
@@ -57,6 +60,7 @@ const blog = defineCollection({
 });
 
 const activities = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/activities' }),
 	schema: z.object({
 		title: z.string(),
 		category: z.enum(['events', 'hackathons', 'speaking', 'awards', 'travel']),
@@ -79,6 +83,7 @@ const activities = defineCollection({
 });
 
 const experience = defineCollection({
+	loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/experience' }),
 	schema: z.object({
 		title: z.string(),
 		company: z.string(),

@@ -64,7 +64,7 @@ const schema = {
 				'@type': 'WebPage',
 				name: project.data.title,
 				description: project.data.description,
-				url: new URL(`/projects/${project.slug}`, site).toString(),
+				url: new URL(`/projects/${project.id}`, site).toString(),
 				image: new URL(project.data.image, site).toString(),
 			},
 		})),
