@@ -51,7 +51,7 @@ const hackathonBadgeVariant = showHackathonBadge ? hackathonType! : 'default';
 const sameCategoryByDate = (await getCollection('activities'))
 	.filter((i) => i.data.category === item.data.category)
 	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
-const idx = sameCategoryByDate.findIndex((i) => i.slug === item.slug);
+const idx = sameCategoryByDate.findIndex((i) => i.id === item.id);
 const prevItem = idx > 0 ? sameCategoryByDate[idx - 1] : null;
 const nextItem =
 	idx >= 0 && idx < sameCategoryByDate.length - 1
@@ -135,7 +135,7 @@ const metaDescription =
 				>
 					{prevItem ? (
 						<a
-							href={`/activities/${prevItem.slug}`}
+							href={`/activities/${prevItem.id}`}
 							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors'
 						>
 							&larr; {prevItem.data.title}
@@ -145,7 +145,7 @@ const metaDescription =
 					)}
 					{nextItem ? (
 						<a
-							href={`/activities/${nextItem.slug}`}
+							href={`/activities/${nextItem.id}`}
 							class='text-sm font-medium text-accent hover:text-accentStrong transition-colors text-right'
 						>
 							{nextItem.data.title} &rarr;
