@@ -84,7 +84,6 @@ nobody else spent years feeling invisible and turned it into a reason to make st
 		<circle cx="510" cy="90" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="100" cy="250" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="220" cy="330" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M470 60 v8 M466 64 h8" stroke-opacity=".4"/>
 		<path d="M160 180 l4 -3" stroke-opacity=".4"/>
 	</g>
 </svg>

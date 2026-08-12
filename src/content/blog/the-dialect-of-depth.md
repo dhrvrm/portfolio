@@ -76,7 +76,6 @@ i'd been filtering for people who spoke my dialect of depth, the fast, verbal, c
 		<circle cx="300" cy="230" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="80" cy="180" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="520" cy="180" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M300 66 v8 M296 70 h8" stroke-opacity=".4"/>
 	</g>
 </svg>
 

@@ -77,7 +77,6 @@ a word that arrives carrying more than its meaning.
 	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
 		<circle cx="90" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="540" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M520 80 v8 M516 84 h8" stroke-opacity=".4"/>
 		<path d="M200 90 l4 -3" stroke-opacity=".4"/>
 	</g>
 </svg>

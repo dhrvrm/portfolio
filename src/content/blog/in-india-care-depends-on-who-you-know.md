@@ -78,7 +78,6 @@ we had a few of those calls to make. and even while making them, i kept thinking
 	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
 		<circle cx="90" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="546" cy="260" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M236 96 v8 M232 100 h8" stroke-opacity=".4"/>
 	</g>
 </svg>
 

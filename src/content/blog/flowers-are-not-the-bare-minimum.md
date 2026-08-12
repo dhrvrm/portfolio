@@ -1,6 +1,6 @@
 ---
 title: 'Flowers Are Not the Bare Minimum'
-publishDate: 2026-08-12
+publishDate: 2026-08-01
 categories: ['Connection', 'Relationships', 'Personal Growth']
 excerpt: 'the bar was supposed to protect people. somewhere along the way it became a wall. an argument for keeping high standards and still lighting up at flowers.'
 image: '/images/blog/notes/01-flowers.webp'
@@ -58,7 +58,6 @@ but somewhere along the way the bar stopped being a bar and became a wall.
 		<circle cx="180" cy="180" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="330" cy="120" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="540" cy="370" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M196 148 v8 M192 152 h8" stroke-opacity=".4"/>
 		<path d="M64 214 l4 -3" stroke-opacity=".4"/>
 	</g>
 </svg>
@@ -108,7 +107,6 @@ and there's a plainer mechanism under the warm feeling. appreciation is positive
 		<circle cx="470" cy="90" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="130" cy="140" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="480" cy="330" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M330 52 v8 M326 56 h8" stroke-opacity=".4"/>
 		<path d="M500 180 l4 -3" stroke-opacity=".4"/>
 	</g>
 </svg>

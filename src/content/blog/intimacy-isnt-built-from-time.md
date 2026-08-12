@@ -78,7 +78,6 @@ intimacy is not a function of time. it's a function of escalation.
 	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
 		<circle cx="420" cy="140" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="340" cy="230" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M262 92 v8 M258 96 h8" stroke-opacity=".4"/>
 		<path d="M160 360 l4 -3" stroke-opacity=".4"/>
 	</g>
 </svg>

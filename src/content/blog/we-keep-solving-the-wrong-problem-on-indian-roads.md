@@ -128,7 +128,6 @@ we keep building more room for cars and calling it a traffic solution.
 	<g id="specks" stroke-linecap="round" stroke-width="1.5" fill="none" style="stroke:rgb(var(--color-ink, 30 30 36))">
 		<circle cx="90" cy="220" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="530" cy="200" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
-		<path d="M446 128 v8 M442 132 h8" stroke-opacity=".4"/>
 		<path d="M150 328 l4 -3 M480 330 l3 3" stroke-opacity=".4"/>
 	</g>
 </svg>

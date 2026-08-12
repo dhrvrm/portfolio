@@ -34,13 +34,14 @@ const POSTS_WRONG_PROBLEMS = [
   { part: 7, file: '07-healthcare',   lines: ['IN INDIA, CARE', 'DEPENDS ON', 'WHO YOU KNOW'],                  meta: 'india · systems · healthcare' },
   { part: 8, file: '08-policing',     lines: ["YOU CAN'T GET JUSTICE,", "AND YOU CAN'T", 'TAKE IT YOURSELF'],   meta: 'india · systems · justice' },
   { part: 9, file: '09-speaking-up',  lines: ['THE HARD', 'CONVERSATION', 'WE KEEP AVOIDING'],                  meta: 'systems · communication · growth' },
+  { part: 10, file: '10-cities',      lines: ['OUR CITIES GIVE US', 'NOTHING TO DO', 'BUT SPEND'],              meta: 'india · systems · urban planning' },
 ];
 
 const SERIES = [
   {
     kicker: 'Wrong Problems',
     outDir: join(ROOT, 'public', 'images', 'blog', 'wrong-problems'),
-    total: 9,
+    total: 10,
     posts: POSTS_WRONG_PROBLEMS,
   },
   {
@@ -86,7 +87,8 @@ const SERIES = [
   {
     kicker: 'Notes',
     outDir: join(ROOT, 'public', 'images', 'blog', 'notes'),
-    total: 1,
+    total: 5,
+    standalone: true, // unrelated essays: hide the NN/NN index
     motifs: {
       '01-flowers': `
         <path d="M200 408 Q380 402 560 406"/>
@@ -96,9 +98,61 @@ const SERIES = [
         <path d="M512 138 l66 -15 m-68 55 l70 -16 m-70 56 l70 -16 m-70 56 l70 -16 m-70 56 l70 -16"/>
         <path class="hot" d="M240 406 Q246 370 244 336"/>
         <path class="hot" d="M244 336 Q228 330 228 316 Q228 302 241 300 Q232 286 245 279 Q258 272 265 284 Q278 275 286 287 Q293 299 281 306 Q292 317 283 328 Q274 338 261 331 Q253 341 244 336"/>`,
+      '02-griefs': `
+        <path d="M240 408 Q400 402 560 406"/>
+        <path stroke-dasharray="0.1 16" d="M446 150 a20 20 0 1 0 6 -4"/>
+        <path stroke-dasharray="0.1 16" d="M462 196 Q432 202 426 268 Q420 344 440 350 Q478 355 484 346 Q494 268 480 200 Q476 194 462 196"/>
+        <path stroke-dasharray="0.1 16" d="M440 350 Q438 376 440 400 M472 350 Q474 376 472 400"/>
+        <path class="hot" d="M316 406 Q322 370 320 336"/>
+        <path class="hot" d="M320 336 Q304 330 304 316 Q304 302 317 300 Q308 286 321 279 Q334 272 341 284 Q354 275 362 287 Q369 299 357 306 Q368 317 359 328 Q350 338 337 331 Q329 341 320 336"/>`,
+      '03-argument': `
+        <path d="M180 400 Q360 394 570 398"/>
+        <path d="M330 396 Q345 362 358 330 Q373 364 386 396"/>
+        <path d="M200 372 Q360 330 520 288"/>
+        <path d="M196 372 Q193 350 194 330 Q220 327 246 330 Q249 350 248 370 Q222 375 196 372"/>
+        <path class="hot" d="M520 288 Q521 268 520 250"/>
+        <path class="hot" d="M520 252 Q538 251 550 257 Q537 264 521 263"/>`,
+      '04-signals': `
+        <path d="M60 220 L82 130 L100 300 L118 118 L138 318 L158 140 L180 286 L202 158 L222 272 L242 178 L258 240 L272 206"/>
+        <path d="M300 110 Q298 220 300 330"/>
+        <path class="hot" d="M330 220 Q344 202 358 220 Q372 238 386 220 Q400 202 414 220 Q428 238 442 220 Q456 202 470 220 Q484 238 498 220 Q512 202 526 220 Q540 238 554 220"/>`,
+      '05-deathzone': `
+        <path d="M40 408 Q160 320 236 234 Q292 168 336 116 Q388 172 438 232 Q510 318 590 408"/>
+        <path stroke-dasharray="3 14" d="M60 200 Q330 192 588 200"/>
+        <path class="hot" d="M336 114 Q337 92 336 74"/>
+        <path class="hot" d="M336 76 Q354 75 366 81 Q353 88 337 87"/>`,
     },
     posts: [
       { part: 1, file: '01-flowers', lines: ['FLOWERS ARE NOT', 'THE BARE MINIMUM'], meta: 'appreciation · relationships · people' },
+      { part: 2, file: '02-griefs', lines: ['THE GRIEFS THAT', "DON'T GET FUNERALS"], meta: 'grief · loss · people' },
+      { part: 3, file: '03-argument', lines: ['YOU CAN WIN', 'THE ARGUMENT AND', 'LOSE THE ROOM'], meta: 'communication · ego · people' },
+      { part: 4, file: '04-signals', lines: ['WHAT SMART', 'ACTUALLY', 'SOUNDS LIKE'], meta: 'intelligence · humility · people' },
+      { part: 5, file: '05-deathzone', lines: ['YOU GIVE UP,', 'YOU DIE'], meta: 'mindset · grit · people' },
+    ],
+  },
+  {
+    kicker: 'Conversations with S',
+    outDir: join(ROOT, 'public', 'images', 'blog', 'conversations-with-s'),
+    total: 2,
+    accent: '#f472b6',
+    motifs: {
+      '00-pour': `
+        <path d="M120 120 Q170 95 220 110 Q236 150 222 190 Q176 206 136 184 Q112 150 120 120"/>
+        <path d="M222 122 Q244 126 248 143 Q244 158 226 160"/>
+        <path stroke-dasharray="1 16" d="M250 118 Q290 143 326 168"/>
+        <path d="M420 330 Q418 372 430 404 Q466 414 500 404 Q512 372 510 330 Q465 322 420 330"/>
+        <path class="hot" d="M368 232 Q365 204 373 182 Q381 166 392 177 Q397 185 394 204 M394 204 Q402 176 413 182 Q421 188 416 210 M416 210 Q427 188 436 196 Q443 205 435 227 Q427 257 405 268 Q378 276 367 254 Q362 243 368 232"/>
+        <path class="hot" d="M367 254 Q351 265 346 281"/>`,
+      '01-dishes': `
+        <path d="M370 330 Q460 316 550 330 Q460 346 370 330"/>
+        <path d="M380 296 Q460 284 540 296 Q460 310 380 296"/>
+        <path d="M390 262 Q460 252 530 262 Q460 274 390 262"/>
+        <path d="M370 330 Q368 356 372 380 M550 330 Q552 356 548 380 M372 380 Q460 392 548 380" stroke-dasharray="2 14"/>
+        <path class="hot" d="M460 214 Q432 186 440 164 Q448 146 464 158 Q472 164 462 178 M462 178 Q470 158 486 164 Q500 172 490 190 Q480 204 460 214"/>`,
+    },
+    posts: [
+      { part: 0, file: '00-pour', lines: ['THE FRIEND WHO', 'STOPS ME', 'MID-POUR'], meta: 'friendship · boundaries · people' },
+      { part: 1, file: '01-dishes', lines: ['I WANT YOU', 'TO WANT TO DO', 'THE DISHES'], meta: 'friendship · care · people' },
     ],
   },
 ];
@@ -152,7 +206,7 @@ html,body{width:1600px;height:900px;}
   <div class="frame">
     <div class="top">
       <div class="kicker">${kicker}</div>
-      ${total > 1 ? `<div class="index"><b>${pad2(post.part)}</b> / ${pad2(total)}</div>` : ''}
+      ${total > 1 && !series.standalone ? `<div class="index"><b>${pad2(post.part)}</b> / ${pad2(total)}</div>` : ''}
     </div>
     <div class="mid">
       <div class="tick"></div>

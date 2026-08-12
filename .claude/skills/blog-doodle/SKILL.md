@@ -68,7 +68,7 @@ Characters follow the loose-sketchbook proportions:
 - **Dot eyes** (`r="2.5"` filled ink circles), eyebrow slants for emotion, mouth as a single short arc — or no mouth at all. No noses, no fingers (mitten hands), no detail creep.
 - **Emotion lives in posture,** not the face: slumped shoulders = burnout, leaning forward = curiosity, arms overhead = triumph, sitting cross-legged hunched at a phone = doomscroll. Pick the physical gesture first, then draw.
 - **Scribble fill** for exactly one or two garment zones per character (pants, skirt, hair, sock): a tight back-and-forth scribble path at stroke-width 1.5, clipped loosely inside the zone — it may poke past the contour; that's the charm. Stripes (4–6 imperfect horizontal wobble-lines) are the alternative texture for shirts. Everything else stays empty white.
-- **Floating specks:** 4–8 tiny marks (1–2px dots, short ticks, a sparkle asterisk) scattered around the figure at `stroke-opacity=".4"` — the paper dust of the reference style. Sparkles/action marks cluster near the head or the prop.
+- **Floating specks:** 4–8 tiny marks (1–2px dots, short ticks) scattered around the figure at `stroke-opacity=".4"` — the paper dust of the reference style. Action marks cluster near the head or the prop. **Never plus/cross marks** (`v8 M… h8` crosses read as UI icons, not paper dust); dots and single ticks only.
 
 ## 3. Storytelling layout archetypes
 

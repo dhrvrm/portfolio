@@ -79,7 +79,6 @@ that gap is the whole story. everything below is just the gap showing up in diff
 		<circle cx="120" cy="180" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<circle cx="510" cy="260" r="1.2" stroke="none" fill-opacity=".4" style="fill:rgb(var(--color-ink, 30 30 36))"/>
 		<path d="M148 210 l-4 -4 M200 222 l4 -3" stroke-opacity=".4"/>
-		<path d="M480 210 v8 M476 214 h8" stroke-opacity=".4"/>
 	</g>
 </svg>
 
