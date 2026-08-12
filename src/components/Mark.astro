@@ -1,0 +1,52 @@
+---
+// Static hand-drawn marks that pair with the rotating Spark — the still
+// half of the eyebrow shape language (xirp-style shape pairs). They never
+// animate; motion stays reserved for the Spark itself.
+interface Props {
+	shape:
+		| 'ring'
+		| 'triangle'
+		| 'squiggle'
+		| 'diamond'
+		| 'moon'
+		| 'spiral'
+		| 'wave'
+		| 'dots';
+}
+
+const { shape } = Astro.props;
+
+const paths: Record<string, string> = {
+	ring: 'M8 2.2 a5.8 5.8 0 1 0 2.5 -0.4',
+	triangle: 'M8 2.5 Q11.5 8 13.5 13 Q8 14.2 2.5 13 Q4.5 8 8 2.5',
+	squiggle: 'M2 10 Q4.5 6 7 9 T12 8.5 Q13 8.2 14 7.5',
+	diamond: 'M8 2 Q11.5 5 14 8 Q11 11.5 8 14 Q5 11 2 8 Q5 5 8 2',
+	moon: 'M10 2.5 a6 6 0 1 0 4 8 a4.6 4.6 0 0 1 -4 -8',
+	spiral:
+		'M8 8 q1.5 -1.5 3 0 q1.5 2 -0.5 3.5 q-2.5 1.8 -4.5 -0.5 q-2 -2.8 0.8 -5 q3 -2.3 5.7 0.3',
+	wave: 'M2 8 Q4 5.5 6 8 T10 8 T14 8',
+};
+---
+
+<span class='kicker-mark' aria-hidden='true'>
+	<svg
+		viewBox='0 0 16 16'
+		fill='none'
+		stroke='currentColor'
+		stroke-width='1.6'
+		stroke-linecap='round'
+		stroke-linejoin='round'
+	>
+		{
+			shape === 'dots' ? (
+				<>
+					<circle cx='4' cy='11' r='1.4' fill='currentColor' stroke='none' />
+					<circle cx='8' cy='5' r='1.4' fill='currentColor' stroke='none' />
+					<circle cx='12' cy='10' r='1.4' fill='currentColor' stroke='none' />
+				</>
+			) : (
+				<path d={paths[shape]}></path>
+			)
+		}
+	</svg>
+</span>

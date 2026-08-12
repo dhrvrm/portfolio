@@ -10,6 +10,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
 import '../styles/base.css';
 import '../styles/tokens.css';
+import '../styles/motion.css';
 
 interface Props {
 	title: string;
@@ -302,11 +303,17 @@ const canonicalURL = new URL(
 				doodles.forEach((svg) => {
 					const strokes = Array.from(svg.querySelectorAll('path'));
 					const reveals = Array.from(svg.querySelectorAll('circle, text'));
+					// Paths with an authored stroke-dasharray (dotted/dashed marks)
+					// can't use the dash-draw trick without losing their pattern —
+					// they fade in with their step instead.
+					const isDashed = (p) => p.hasAttribute('stroke-dasharray');
 					strokes.forEach((p) => {
+						if (isDashed(p)) return;
 						const len = p.getTotalLength();
 						p.style.strokeDasharray = `${len}`;
 						p.style.strokeDashoffset = `${len}`;
 					});
+					gsap.set(strokes.filter(isDashed), { opacity: 0 });
 					gsap.set(reveals, { opacity: 0 });
 					const steps = [];
 					strokes.forEach((p) => {
@@ -323,28 +330,52 @@ const canonicalURL = new URL(
 					});
 					steps.forEach((step) => {
 						const beat = parseFloat(step.el.dataset?.beat || '') || 0;
-						tl.to(
-							step.paths,
-							{
-								strokeDashoffset: 0,
-								duration: (i, target) =>
-									gsap.utils.clamp(0.15, 0.7, target.getTotalLength() / 500),
-								ease: 'power1.inOut',
-								stagger: 0.05,
-							},
-							beat ? `>+${beat}` : '>-0.05'
-						);
+						const pos = beat ? `>+${beat}` : '>-0.05';
+						const solid = step.paths.filter((p) => !isDashed(p));
+						const dashed = step.paths.filter(isDashed);
+						if (solid.length) {
+							tl.to(
+								solid,
+								{
+									strokeDashoffset: 0,
+									duration: (i, target) =>
+										gsap.utils.clamp(0.15, 0.7, target.getTotalLength() / 500),
+									ease: 'power1.inOut',
+									stagger: 0.05,
+								},
+								pos
+							);
+						}
+						if (dashed.length) {
+							tl.to(
+								dashed,
+								{ opacity: 1, duration: 0.45, ease: 'power1.out', stagger: 0.08 },
+								solid.length ? '<+0.1' : pos
+							);
+						}
 					});
 					tl.to(reveals, { opacity: 1, duration: 0.35, stagger: 0.04 }, '>-0.1');
 				});
 			}
 		</script>
-		<a
-			href='#main-content'
-			class='skip-link sr-only bg-surface text-ink border border-border px-4 py-2 rounded-md shadow-lg'
-		>
-			Skip to content
-		</a>
+		<!-- First-Tab panel: skip link + shortcut primer for keyboard visitors.
+		     Pure CSS (:focus-within) so it works before any JS runs. -->
+		<div class='skip-panel'>
+			<p class='skip-panel-label' aria-hidden='true'>skip to</p>
+			<a href='#main-content' class='skip-link'>Main content</a>
+			<div class='skip-hints' aria-hidden='true'>
+				<p class='skip-panel-label'>keyboard shortcuts</p>
+				<ul class='skip-hint-rows'>
+					<li><span>all shortcuts</span><kbd>?</kbd></li>
+					<li><span>go home / writing</span><span><kbd>g</kbd> <kbd>h</kbd> · <kbd>g</kbd> <kbd>b</kbd></span></li>
+					<li><span>scroll</span><span><kbd>j</kbd> / <kbd>k</kbd></span></li>
+					<li><span>theme</span><kbd>t</kbd></li>
+				</ul>
+			</div>
+			<button type='button' class='skip-more' data-shortcuts-trigger>
+				View all shortcuts
+			</button>
+		</div>
 		<div
 			class="fixed inset-0 bg-[url('/noise.png')] opacity-[0.02] pointer-events-none"
 		>

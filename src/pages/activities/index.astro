@@ -2,6 +2,8 @@
 import Layout from '../../layouts/Layout.astro';
 import ActivityCard from '../../components/ActivityCard.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Spark from '../../components/Spark.astro';
+import Mark from '../../components/Mark.astro';
 import { getCollection } from 'astro:content';
 import {
 	ACTIVITY_CATEGORIES,
@@ -77,7 +79,7 @@ const recent = [...items].sort(byDateDesc).slice(0, 3);
 		<Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Activities' }]} />
 
 		<header class='act-hero'>
-			<h1 class='act-hero__title'>Beyond the desk</h1>
+			<h1 class='act-hero__title'><Spark /><Mark shape='wave' />Beyond the desk</h1>
 			<p class='act-hero__desc'>
 				Events I cover, hackathons I coach, talks I give, and the places I work
 				from. The community side of the craft.
@@ -126,6 +128,8 @@ const recent = [...items].sort(byDateDesc).slice(0, 3);
 			recent.length > 0 && (
 				<section class='act-recent' aria-labelledby='recent-heading'>
 					<h2 id='recent-heading' class='act-recent__title'>
+						<Spark />
+						<Mark shape='dots' />
 						Recently
 					</h2>
 					<div class='act-recent__grid'>

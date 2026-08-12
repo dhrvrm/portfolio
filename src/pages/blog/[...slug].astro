@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Spark from '../../components/Spark.astro';
 import { getCollection } from 'astro:content';
 import { AUTHOR } from '../../data/constants';
 import { slugify } from '../../utils/content';
@@ -28,16 +29,69 @@ const formattedDate = new Date(post.data.publishDate).toLocaleDateString(
 
 const allPosts = await getCollection('blog');
 let prevPost, nextPost;
+let seriesTotal = 0;
 
 if (post.data.series) {
 	const seriesPosts = allPosts
 		.filter((p) => p.data.series === post.data.series)
 		.sort((a, b) => a.data.seriesPart - b.data.seriesPart);
 
+	seriesTotal = seriesPosts.length;
 	const currentIndex = seriesPosts.findIndex((p) => p.slug === post.slug);
 	prevPost = seriesPosts[currentIndex - 1];
 	nextPost = seriesPosts[currentIndex + 1];
 }
+
+// Keep-reading block: three lanes of discovery.
+// 1. Other series, pitched by their opening part.
+// 2. Posts sharing a category or tags with this one.
+// 3. One deliberate palate-cleanser with nothing in common.
+const sharedTags = (p: (typeof allPosts)[number]) =>
+	(p.data.tags ?? []).filter((t) => (post.data.tags ?? []).includes(t)).length;
+const sharesCategory = (p: (typeof allPosts)[number]) =>
+	p.data.categories.some((c) => post.data.categories.includes(c));
+
+const seriesMap = new Map<string, typeof allPosts>();
+for (const p of allPosts) {
+	if (!p.data.series) continue;
+	const list = seriesMap.get(p.data.series) ?? [];
+	list.push(p);
+	seriesMap.set(p.data.series, list);
+}
+const seriesStarts = [...seriesMap.entries()]
+	.filter(([name]) => name !== post.data.series)
+	.map(([name, posts]) => {
+		const sorted = posts.sort(
+			(a, b) => (a.data.seriesPart ?? 0) - (b.data.seriesPart ?? 0),
+		);
+		return { name, first: sorted[0], count: sorted.length };
+	})
+	.sort((a, b) => +b.first.data.publishDate - +a.first.data.publishDate)
+	.slice(0, 3);
+
+const similar = allPosts
+	.filter(
+		(p) =>
+			p.slug !== post.slug &&
+			(!post.data.series || p.data.series !== post.data.series) &&
+			(sharesCategory(p) || sharedTags(p) > 0),
+	)
+	.sort(
+		(a, b) =>
+			sharedTags(b) - sharedTags(a) ||
+			+b.data.publishDate - +a.data.publishDate,
+	)
+	.slice(0, 2);
+
+const different = allPosts
+	.filter(
+		(p) =>
+			p.slug !== post.slug &&
+			(!post.data.series || p.data.series !== post.data.series) &&
+			!sharesCategory(p) &&
+			sharedTags(p) === 0,
+	)
+	.sort((a, b) => +b.data.publishDate - +a.data.publishDate)[0];
 
 const site = Astro.site?.toString() ?? 'https://dhruvverma.dev';
 const ogImage = post.data.image || '/og-image.png';
@@ -106,93 +160,81 @@ const faqSchema =
 	{faqSchema && (
 		<script type='application/ld+json' set:html={JSON.stringify(faqSchema)} />
 	)}
+	<div
+		id='readProgress'
+		class='read-progress fixed top-0 left-0 h-[3px] w-0 z-[var(--z-floating)]'
+		aria-hidden='true'
+	>
+		<span class='flame-head'>
+			<svg viewBox='0 0 30 12' fill='none' aria-hidden='true'>
+				<path
+					d='M29 6 Q22 1 13 2.5 Q7 3.6 1.5 6 Q7 8.4 13 9.5 Q22 11 29 6'
+					style='fill:rgb(var(--color-accent))'
+				></path>
+				<path
+					d='M28.5 6 Q23 3.5 17 4.5 Q13 5.2 10 6 Q13 6.8 17 7.5 Q23 8.5 28.5 6'
+					style='fill:rgb(var(--color-surface))'
+					opacity='.85'
+				></path>
+			</svg>
+		</span>
+	</div>
 	<article class='container mx-auto px-6 py-16'>
-		<Breadcrumbs
-			items={[
-				{ label: 'Home', href: '/' },
-				{ label: 'Blog', href: '/blog' },
-				{ label: post.data.title },
-			]}
-		/>
-
 		<div class='max-w-3xl mx-auto'>
+			<Breadcrumbs
+				items={[
+					{ label: 'Home', href: '/' },
+					{ label: 'Blog', href: '/blog' },
+					{ label: post.data.title },
+				]}
+			/>
+
 			<div>
-				<header class='mb-12'>
-					<div class='flex flex-wrap gap-2 mb-6 items-center'>
-						{
-							post.data.categories.map((category: string) => (
-								<span class='border border-border/70 text-muted px-4 py-2 rounded-full text-xs font-medium'>
-									{category}
-								</span>
-							))
-						}
-						{post.data.series && (
-							<span class='text-xs text-muted font-mono'>
-								· Part {post.data.seriesPart} of {post.data.series}
-								{(prevPost || nextPost) && ' · '}
-								{prevPost && (
-									<a href={`/blog/${prevPost.slug}`} class='text-accent hover:text-accentStrong'>← Prev</a>
-								)}
-								{prevPost && nextPost && ' · '}
-								{nextPost && (
-									<a href={`/blog/${nextPost.slug}`} class='text-accent hover:text-accentStrong'>Next →</a>
-								)}
+				<header class='mt-10 mb-14'>
+					<p class='font-mono text-xs tracking-[0.18em] uppercase mb-5'>
+						<Spark />
+						{post.data.series ? (
+							<span>
+								<span class='text-accent'>{post.data.series}</span>
+								<span class='text-muted'> · part {post.data.seriesPart} of {seriesTotal}</span>
 							</span>
+						) : (
+							<span class='text-muted'>{post.data.categories.join(' · ').toLowerCase()}</span>
 						)}
-					</div>
-					<h1 class='text-3xl md:text-5xl font-semibold font-display mb-6'>
+					</p>
+					<h1
+						class='font-display font-semibold text-4xl md:text-5xl tracking-tight leading-[1.08] [text-wrap:balance] mb-6'
+					>
 						{post.data.title}
 					</h1>
+					<div class='flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-muted mb-10'>
+						<img
+							src={AUTHOR.avatar}
+							alt={`Portrait of ${AUTHOR.name}`}
+							width='32'
+							height='32'
+							decoding='async'
+							class='w-8 h-8 rounded-full'
+						/>
+						<span class='font-medium text-ink'>{AUTHOR.name}</span>
+						<span aria-hidden='true' class='opacity-40'>·</span>
+						<time datetime={post.data.publishDate.toISOString()}>{formattedDate}</time>
+						<span aria-hidden='true' class='opacity-40'>·</span>
+						<span>{post.data.readingTime} min read</span>
+					</div>
 
 					{/* Featured Image */}
 					{
 						post.data.image && (
-							<div class='mb-8 overflow-hidden rounded-md shadow-lg'>
+							<div class='overflow-hidden rounded-md'>
 								<img
 									src={post.data.image}
 									alt={`Featured image for ${post.data.title}`}
 									width='1200'
 									height='630'
 									decoding='async'
-									class='w-full h-64 md:h-80 lg:h-96 object-cover hover:scale-105 transition-transform duration-700'
+									class='w-full h-64 md:h-80 lg:h-96 object-cover'
 								/>
-							</div>
-						)
-					}
-					<div class='flex flex-col gap-3'>
-						<div class='flex items-center gap-3'>
-							<img
-								src={AUTHOR.avatar}
-								alt={`Portrait of ${AUTHOR.name}`}
-								width='40'
-								height='40'
-								decoding='async'
-								class='w-10 h-10 rounded-full'
-							/>
-							<div>
-								<p class='font-medium text-ink'>{AUTHOR.name}</p>
-								<p class='text-sm text-muted'>{AUTHOR.bio}</p>
-							</div>
-						</div>
-						<div class='flex items-center gap-3 text-xs text-muted'>
-							<time datetime={post.data.publishDate.toISOString()}
-								>{formattedDate}</time
-							>
-							<span>•</span>
-							<span>{post.data.readingTime} min read</span>
-						</div>
-					</div>
-					{
-						post.data.tags && post.data.tags.length > 0 && (
-							<div class='flex flex-wrap gap-2 mt-6'>
-								{post.data.tags.map((tag: string) => (
-									<a
-										href={`/blog/tag/${slugify(tag)}`}
-										class='text-xs px-3 py-1 rounded-full border border-border/70 text-muted hover:text-ink hover:border-accent transition-colors'
-									>
-										{tag}
-									</a>
-								))}
 							</div>
 						)
 					}
@@ -216,52 +258,249 @@ const faqSchema =
 					</section>
 				)}
 
-				<!-- Share Section -->
-				<div class='mt-12 pt-8 border-t border-border/70'>
-					<div class='flex flex-col items-center gap-4'>
-						<p class='text-lg font-medium text-ink'>
-							Found this helpful? Share this post!
-						</p>
-						<div class='flex items-center gap-4'>
-							<button
-								id='shareButton'
-								class='flex items-center gap-2 px-6 py-3 rounded-md bg-accent text-onAccent hover:bg-accentStrong transition-colors'
-							>
-								<svg
-									class='w-5 h-5'
-									fill='none'
-									stroke='currentColor'
-									viewBox='0 0 24 24'
-								>
-									<path
-										stroke-linecap='round'
-										stroke-linejoin='round'
-										stroke-width='2'
-										d='M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z'
-									></path>
-								</svg>
-								Share
-							</button>
+				<!-- hand-drawn end mark -->
+				<div class='mt-16 flex justify-center' aria-hidden='true'>
+					<svg
+						viewBox='0 0 240 14'
+						class='blog-doodle w-40 h-auto text-ink/30'
+						fill='none'
+						stroke='currentColor'
+						stroke-width='2'
+						stroke-linecap='round'
+					>
+						<path d='M4 8 Q34 4 64 8 T124 7 T184 9 T236 7'></path>
+					</svg>
+				</div>
 
-							<button
-								id='copyLinkButton'
-								class='flex items-center gap-2 px-6 py-3 bg-surface/70 text-muted rounded-md border border-border/70 hover:text-ink hover:border-accent transition-colors'
-							>
-								<svg
-									class='w-5 h-5'
-									fill='none'
-									stroke='currentColor'
-									viewBox='0 0 24 24'
+				{post.data.series && (prevPost || nextPost) && (
+					<nav class='mt-12' aria-label={`More in the ${post.data.series} series`}>
+						<p class='font-mono text-xs tracking-[0.18em] uppercase text-muted mb-4'>
+							{post.data.series} · part {post.data.seriesPart} of {seriesTotal}
+						</p>
+						<div class='grid sm:grid-cols-2 border-y border-border/70'>
+							{prevPost ? (
+								<a
+									href={`/blog/${prevPost.slug}`}
+									class='group py-6 sm:pr-8 flex flex-col gap-2'
 								>
-									<path
-										stroke-linecap='round'
-										stroke-linejoin='round'
-										stroke-width='2'
-										d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
-									></path>
-								</svg>
-								<span id='copyText'>Copy Link</span>
-							</button>
+									<span class='flex items-center gap-2 font-mono text-xs text-muted'>
+										<svg viewBox='0 0 32 12' class='w-7 h-3 -translate-y-px transition-transform group-hover:-translate-x-1' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>
+											<path d='M30 6 Q17 4.5 4 6.5 M12 1.5 Q7 4 3.5 6.5 Q7 9 12 11'></path>
+										</svg>
+										previous
+									</span>
+									<span class='font-display font-medium text-ink [text-wrap:balance] transition-colors group-hover:text-accent'>
+										{prevPost.data.title}
+									</span>
+								</a>
+							) : (
+								<span class='hidden sm:block' aria-hidden='true'></span>
+							)}
+							{nextPost && (
+								<a
+									href={`/blog/${nextPost.slug}`}
+									class='group py-6 sm:pl-8 sm:text-right sm:border-l border-border/70 flex flex-col gap-2 sm:items-end border-t sm:border-t-0'
+								>
+									<span class='flex items-center gap-2 font-mono text-xs text-muted'>
+										next
+										<svg viewBox='0 0 32 12' class='w-7 h-3 -translate-y-px transition-transform group-hover:translate-x-1' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'>
+											<path d='M2 6 Q15 4.5 28 6.5 M20 1.5 Q25 4 28.5 6.5 Q25 9 20 11'></path>
+										</svg>
+									</span>
+									<span class='font-display font-medium text-ink [text-wrap:balance] transition-colors group-hover:text-accent'>
+										{nextPost.data.title}
+									</span>
+								</a>
+							)}
+						</div>
+					</nav>
+				)}
+
+				{(seriesStarts.length > 0 || similar.length > 0 || different) && (
+					<section class='mt-14' aria-labelledby='keep-reading'>
+						<h2
+							id='keep-reading'
+							class='font-mono text-xs tracking-[0.18em] uppercase text-muted mb-6'
+						>
+							keep reading
+						</h2>
+						<div class='grid md:grid-cols-2 gap-x-12 gap-y-10'>
+							{seriesStarts.length > 0 && (
+								<div>
+									<p class='font-mono text-[0.65rem] tracking-[0.16em] uppercase text-muted/80 mb-1'>
+										start a series
+									</p>
+									<ul class='list-none pl-0 m-0 divide-y divide-border/60 border-y border-border/60'>
+										{seriesStarts.map((s) => (
+											<li class='m-0'>
+												<a
+													href={`/blog/${s.first.slug}`}
+													class='group flex items-baseline justify-between gap-6 py-4'
+												>
+													<span class='block min-w-0'>
+														<span class='block font-mono text-[0.65rem] tracking-[0.14em] uppercase text-accent'>
+															{s.name}
+														</span>
+														<span class='font-display font-medium text-ink transition-colors group-hover:text-accent [text-wrap:balance]'>
+															{s.first.data.title}
+														</span>
+													</span>
+													<span class='shrink-0 font-mono text-xs text-muted'>
+														{s.count} {s.count === 1 ? 'part' : 'parts'}
+													</span>
+												</a>
+											</li>
+										))}
+									</ul>
+								</div>
+							)}
+							<div class='flex flex-col gap-8'>
+								{similar.length > 0 && (
+									<div>
+										<p class='font-mono text-[0.65rem] tracking-[0.16em] uppercase text-muted/80 mb-1'>
+											more like this
+										</p>
+										<ul class='list-none pl-0 m-0 divide-y divide-border/60 border-y border-border/60'>
+											{similar.map((r) => (
+												<li class='m-0'>
+													<a
+														href={`/blog/${r.slug}`}
+														class='group flex items-baseline justify-between gap-6 py-4'
+													>
+														<span class='font-display font-medium text-ink transition-colors group-hover:text-accent [text-wrap:balance]'>
+															{r.data.title}
+														</span>
+														<span class='shrink-0 font-mono text-xs text-muted'>
+															{r.data.readingTime} min
+														</span>
+													</a>
+												</li>
+											))}
+										</ul>
+									</div>
+								)}
+								{different && (
+									<div>
+										<p class='font-mono text-[0.65rem] tracking-[0.16em] uppercase text-muted/80 mb-1'>
+											something different
+										</p>
+										<ul class='list-none pl-0 m-0 divide-y divide-border/60 border-y border-border/60'>
+											<li class='m-0'>
+												<a
+													href={`/blog/${different.slug}`}
+													class='group flex items-baseline justify-between gap-6 py-4'
+												>
+													<span class='font-display font-medium text-ink transition-colors group-hover:text-accent [text-wrap:balance]'>
+														{different.data.title}
+													</span>
+													<span class='shrink-0 font-mono text-xs text-muted'>
+														{different.data.readingTime} min
+													</span>
+												</a>
+											</li>
+										</ul>
+									</div>
+								)}
+							</div>
+						</div>
+					</section>
+				)}
+
+				{
+					post.data.tags && post.data.tags.length > 0 && (
+						<div class='flex flex-wrap gap-x-4 gap-y-2 mt-10'>
+							{post.data.tags.map((tag: string) => (
+								<a
+									href={`/blog/tag/${slugify(tag)}`}
+									class='font-mono text-xs text-muted hover:text-accent transition-colors'
+								>
+									#{slugify(tag)}
+								</a>
+							))}
+						</div>
+					)
+				}
+
+				<!-- Share Section -->
+				<div class='mt-12 pt-6 border-t border-border/70 flex flex-wrap items-center justify-between gap-4'>
+					<p class='text-sm text-muted m-0'>
+						if this one landed, send it to someone.
+					</p>
+					<div class='flex items-center gap-3'>
+						<button
+							id='shareButton'
+							class='flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-border/70 text-ink hover:border-accent hover:text-accent transition-colors'
+						>
+							<svg
+								class='w-4 h-4'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'
+							>
+								<path
+									stroke-linecap='round'
+									stroke-linejoin='round'
+									stroke-width='2'
+									d='M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z'
+								></path>
+							</svg>
+							Pass it on
+						</button>
+
+						<button
+							id='copyLinkButton'
+							class='flex items-center gap-2 px-4 py-2 text-sm rounded-md border border-border/70 text-muted hover:text-ink hover:border-accent transition-colors'
+						>
+							<svg
+								class='w-4 h-4'
+								fill='none'
+								stroke='currentColor'
+								viewBox='0 0 24 24'
+							>
+								<path
+									stroke-linecap='round'
+									stroke-linejoin='round'
+									stroke-width='2'
+									d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
+								></path>
+							</svg>
+							<span id='copyText'>Copy link</span>
+						</button>
+					</div>
+				</div>
+
+				<!-- Author -->
+				<div class='mt-12 pt-8 border-t border-border/70'>
+					<div class='flex items-start gap-4'>
+						<img
+							src={AUTHOR.avatar}
+							alt={`Portrait of ${AUTHOR.name}`}
+							width='56'
+							height='56'
+							loading='lazy'
+							decoding='async'
+							class='w-14 h-14 rounded-full'
+						/>
+						<div class='flex-1'>
+							<p class='font-display font-semibold text-ink m-0'>{AUTHOR.name}</p>
+							<p class='text-sm text-muted mt-1 mb-3'>{AUTHOR.shortBio}</p>
+							<div class='flex flex-wrap gap-x-4 gap-y-1 font-mono text-xs'>
+								{
+									Object.entries(AUTHOR.social).map(([platform, url]) => (
+										<a
+											href={url}
+											target='_blank'
+											rel='noopener noreferrer'
+											class='text-muted hover:text-accent transition-colors lowercase'
+										>
+											{platform}
+										</a>
+									))
+								}
+								<a href='/contact' class='text-accent hover:text-accentStrong transition-colors'>
+									get in touch →
+								</a>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -270,50 +509,6 @@ const faqSchema =
 		</div>
 
 		<TableOfContents headings={headings} />
-
-		<div class='mt-16 border-t dark:border-gray-800 pt-8'>
-			<div class='bg-gray-50 dark:bg-gray-800 rounded-md p-8'>
-				<div class='flex items-start gap-6'>
-					<img
-						src={AUTHOR.avatar}
-						alt={`Portrait of ${AUTHOR.name}`}
-						width='96'
-						height='96'
-						loading='lazy'
-						decoding='async'
-						class='w-24 h-24 rounded-full'
-					/>
-					<div class='flex-1'>
-						<h3 class='text-xl font-semibold mb-2'>{AUTHOR.name}</h3>
-						<p class='text-gray-600 dark:text-gray-400 mb-4'>
-							{AUTHOR.shortBio}
-						</p>
-						<div class='flex gap-4'>
-							{
-								Object.entries(AUTHOR.social).map(([platform, url]) => (
-									<a
-										href={url}
-										target='_blank'
-										rel='noopener noreferrer'
-										class='text-muted hover:text-accent transition-colors'
-									>
-										<span class='capitalize'>{platform}</span>
-									</a>
-								))
-							}
-						</div>
-						<div class='mt-4'>
-							<a
-								href='/contact'
-								class='inline-flex items-center px-4 py-2 rounded-md bg-accent text-onAccent font-medium hover:bg-accentStrong transition-colors'
-							>
-								Get in Touch →
-							</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
 	</article>
 
 	<!-- Floating Share Button -->
@@ -341,6 +536,57 @@ const faqSchema =
 			<span class='hidden sm:inline'>Share</span>
 		</button>
 	</div>
+
+	<style is:global>
+		/* Header entrances come from the shared motion language
+		   (src/styles/motion.css). Only the flaming reading progress —
+		   this page's one bespoke element — lives here. */
+
+		/* ── flaming reading progress ────────────────────────────────── */
+		.read-progress {
+			background: linear-gradient(
+				90deg,
+				rgb(var(--color-accent) / 0.25),
+				rgb(var(--color-accent))
+			);
+		}
+		.flame-head {
+			position: absolute;
+			right: -3px;
+			top: -4.5px;
+			width: 30px;
+			height: 12px;
+			pointer-events: none;
+			filter: drop-shadow(0 0 5px rgb(var(--color-accent) / 0.8));
+		}
+		.flame-head svg {
+			display: block;
+			width: 100%;
+			height: 100%;
+			transform-origin: right center;
+			animation: flame-flicker 0.55s steps(3, jump-none) infinite;
+		}
+		@keyframes flame-flicker {
+			0% {
+				transform: scaleX(1) rotate(0deg);
+			}
+			33% {
+				transform: scaleX(0.8) rotate(2.5deg);
+			}
+			66% {
+				transform: scaleX(1.14) rotate(-2deg);
+			}
+			100% {
+				transform: scaleX(1) rotate(0deg);
+			}
+		}
+
+		@media (prefers-reduced-motion: reduce) {
+			.flame-head {
+				display: none;
+			}
+		}
+	</style>
 
 	<script>
 		// Share functionality
@@ -378,20 +624,10 @@ const faqSchema =
 				const success = await copyToClipboard(currentUrl);
 				if (success) {
 					copyText.textContent = 'Copied!';
-					copyLinkButton.classList.add(
-						'bg-green-100',
-						'text-green-700',
-						'dark:bg-green-900',
-						'dark:text-green-300',
-					);
+					copyLinkButton.classList.add('border-accent', 'text-accent');
 					setTimeout(() => {
-						copyText.textContent = 'Copy Link';
-						copyLinkButton.classList.remove(
-							'bg-green-100',
-							'text-green-700',
-							'dark:bg-green-900',
-							'dark:text-green-300',
-						);
+						copyText.textContent = 'Copy link';
+						copyLinkButton.classList.remove('border-accent', 'text-accent');
 					}, 2000);
 				} else {
 					showToast('Failed to copy link');
@@ -424,15 +660,46 @@ const faqSchema =
 			}
 		});
 
-		// Show floating share button on scroll
+		// Show floating share button + reading progress on scroll.
+		// The flame trails the scroll with critically-damped smoothing:
+		// each frame it closes a fraction of the gap to the target, so
+		// fast scrolls glide instead of snapping. Reduced motion tracks 1:1.
 		const floatingShare = document.getElementById('floatingShare');
-		let lastScrollTop = 0;
+		const readProgress = document.getElementById('readProgress');
+		const instantProgress = window.matchMedia(
+			'(prefers-reduced-motion: reduce)',
+		).matches;
+		let targetProgress = 0;
+		let shownProgress = 0;
+		let progressRaf = 0;
 
-		window.addEventListener('scroll', () => {
+		function renderProgress() {
+			progressRaf = 0;
+			const gap = targetProgress - shownProgress;
+			shownProgress =
+				instantProgress || Math.abs(gap) < 0.0005
+					? targetProgress
+					: shownProgress + gap * 0.12;
+			if (readProgress) {
+				readProgress.style.width = `${shownProgress * 100}%`;
+				readProgress.style.opacity = shownProgress > 0.01 ? '1' : '0';
+			}
+			if (Math.abs(targetProgress - shownProgress) >= 0.0005) {
+				progressRaf = requestAnimationFrame(renderProgress);
+			}
+		}
+
+		function onScroll() {
 			const scrollTop =
 				window.pageYOffset || document.documentElement.scrollTop;
 			const windowHeight = window.innerHeight;
 			const documentHeight = document.documentElement.scrollHeight;
+
+			targetProgress = Math.min(
+				scrollTop / Math.max(documentHeight - windowHeight, 1),
+				1,
+			);
+			if (!progressRaf) progressRaf = requestAnimationFrame(renderProgress);
 
 			// Show floating button when scrolled down and not at the bottom
 			if (scrollTop > 300 && scrollTop < documentHeight - windowHeight - 100) {
@@ -442,9 +709,11 @@ const faqSchema =
 				floatingShare.classList.add('opacity-0', 'pointer-events-none');
 				floatingShare.classList.remove('opacity-100', 'pointer-events-auto');
 			}
+		}
 
-			lastScrollTop = scrollTop;
-		});
+		window.addEventListener('scroll', onScroll, { passive: true });
+		if (readProgress) readProgress.style.transition = 'opacity 0.3s ease';
+		onScroll();
 
 		// Utility functions
 		async function copyToClipboard(text) {
@@ -473,11 +742,11 @@ const faqSchema =
 			}
 		}
 
-		function showToast(message) {
+		function showToast(message: string) {
 			// Create toast notification
 			const toast = document.createElement('div');
 			toast.className =
-				'fixed top-4 right-4 bg-green-600 text-white px-6 py-3 rounded-md shadow-lg z-[var(--z-floating)] transform translate-x-full transition-transform duration-300';
+				'fixed top-4 right-4 bg-accent text-onAccent px-6 py-3 rounded-md shadow-lg z-[var(--z-floating)] transform translate-x-full transition-transform duration-300';
 			toast.textContent = message;
 			document.body.appendChild(toast);
 
