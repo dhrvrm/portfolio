@@ -29,10 +29,10 @@ ${posts
 	.map(
 		(post) => `    <item>
       <title>${escapeXml(post.data.title)}</title>
-      <link>${escapeXml(base)}/blog/${escapeXml(post.slug)}</link>
+      <link>${escapeXml(base)}/blog/${escapeXml(post.id)}</link>
       <description>${escapeXml(post.data.excerpt)}</description>
       <pubDate>${post.data.publishDate.toUTCString()}</pubDate>
-      <guid isPermaLink="true">${escapeXml(base)}/blog/${escapeXml(post.slug)}</guid>
+      <guid isPermaLink="true">${escapeXml(base)}/blog/${escapeXml(post.id)}</guid>
     </item>`,
 	)
 	.join('\n')}

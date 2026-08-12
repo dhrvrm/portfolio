@@ -29,7 +29,7 @@ const categories = ACTIVITY_CATEGORIES.map((c) => ({
 const currentCategoryItems =
 	current && (counts[current] ?? 0) > 0
 		? inCategory(allActivities, current).map((i) => ({
-				slug: i.slug,
+				slug: i.id,
 				title: i.data.title,
 				date: i.data.date,
 			}))

@@ -3,20 +3,20 @@ import Layout from '../../layouts/Layout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Breadcrumbs from '../../components/Breadcrumbs.astro';
 import Spark from '../../components/Spark.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, render } from 'astro:content';
 import { AUTHOR } from '../../data/constants';
 import { slugify } from '../../utils/content';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('blog');
 	return posts.map((post) => ({
-		params: { slug: post.slug },
+		params: { slug: post.id },
 		props: { post },
 	}));
 }
 
 const { post } = Astro.props;
-const { Content, headings } = await post.render();
+const { Content, headings } = await render(post);
 
 const formattedDate = new Date(post.data.publishDate).toLocaleDateString(
 	'en-US',
@@ -37,7 +37,7 @@ if (post.data.series) {
 		.sort((a, b) => a.data.seriesPart - b.data.seriesPart);
 
 	seriesTotal = seriesPosts.length;
-	const currentIndex = seriesPosts.findIndex((p) => p.slug === post.slug);
+	const currentIndex = seriesPosts.findIndex((p) => p.id === post.id);
 	prevPost = seriesPosts[currentIndex - 1];
 	nextPost = seriesPosts[currentIndex + 1];
 }
@@ -72,7 +72,7 @@ const seriesStarts = [...seriesMap.entries()]
 const similar = allPosts
 	.filter(
 		(p) =>
-			p.slug !== post.slug &&
+			p.id !== post.id &&
 			(!post.data.series || p.data.series !== post.data.series) &&
 			(sharesCategory(p) || sharedTags(p) > 0),
 	)
@@ -86,7 +86,7 @@ const similar = allPosts
 const different = allPosts
 	.filter(
 		(p) =>
-			p.slug !== post.slug &&
+			p.id !== post.id &&
 			(!post.data.series || p.data.series !== post.data.series) &&
 			!sharesCategory(p) &&
 			sharedTags(p) === 0,
@@ -280,7 +280,7 @@ const faqSchema =
 						<div class='grid sm:grid-cols-2 border-y border-border/70'>
 							{prevPost ? (
 								<a
-									href={`/blog/${prevPost.slug}`}
+									href={`/blog/${prevPost.id}`}
 									class='group py-6 sm:pr-8 flex flex-col gap-2'
 								>
 									<span class='flex items-center gap-2 font-mono text-xs text-muted'>
@@ -298,7 +298,7 @@ const faqSchema =
 							)}
 							{nextPost && (
 								<a
-									href={`/blog/${nextPost.slug}`}
+									href={`/blog/${nextPost.id}`}
 									class='group py-6 sm:pl-8 sm:text-right sm:border-l border-border/70 flex flex-col gap-2 sm:items-end border-t sm:border-t-0'
 								>
 									<span class='flex items-center gap-2 font-mono text-xs text-muted'>
@@ -334,7 +334,7 @@ const faqSchema =
 										{seriesStarts.map((s) => (
 											<li class='m-0'>
 												<a
-													href={`/blog/${s.first.slug}`}
+													href={`/blog/${s.first.id}`}
 													class='group flex items-baseline justify-between gap-6 py-4'
 												>
 													<span class='block min-w-0'>
@@ -364,7 +364,7 @@ const faqSchema =
 											{similar.map((r) => (
 												<li class='m-0'>
 													<a
-														href={`/blog/${r.slug}`}
+														href={`/blog/${r.id}`}
 														class='group flex items-baseline justify-between gap-6 py-4'
 													>
 														<span class='font-display font-medium text-ink transition-colors group-hover:text-accent [text-wrap:balance]'>
@@ -387,7 +387,7 @@ const faqSchema =
 										<ul class='list-none pl-0 m-0 divide-y divide-border/60 border-y border-border/60'>
 											<li class='m-0'>
 												<a
-													href={`/blog/${different.slug}`}
+													href={`/blog/${different.id}`}
 													class='group flex items-baseline justify-between gap-6 py-4'
 												>
 													<span class='font-display font-medium text-ink transition-colors group-hover:text-accent [text-wrap:balance]'>

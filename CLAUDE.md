@@ -15,20 +15,20 @@ There is no test suite, linter, or formatter configured. Validation is `npm run 
 
 ## Project
 
-Personal portfolio for Dhruv Verma — a static **Astro 4** site deployed at `https://dhruvverma.dev`. React, GSAP, and Tailwind are layered on top. There is no backend; all data is file-based content collections.
+Personal portfolio for Dhruv Verma — a static **Astro 7** site deployed at `https://dhruvverma.dev`. React, GSAP, and Tailwind are layered on top. There is no backend; all data is file-based content collections.
 
 ## Architecture
 
 ### Content collections are the data layer
 
-All user-facing content lives as markdown under `src/content/**`, never hardcoded in components or pages. Four collections are defined with Zod schemas in `src/content/config.ts`:
+All user-facing content lives as markdown under `src/content/**`, never hardcoded in components or pages. Four collections are defined with Zod schemas in `src/content.config.ts` (content layer glob loaders):
 
 - **projects** — case studies (`challenge`/`solution`/`impact`, `category: client|personal`)
 - **blog** — articles with `series`/`seriesPart`, optional `howTo` and `faqs` for SEO rich results
 - **activities** — `category: events|hackathons|speaking|awards|travel`; events nest under year folders
 - **experience** — work history sorted by an explicit `order` field
 
-Pages load content with `getCollection()` and filter/group/sort by frontmatter. When adding a content type or field, update the schema in `config.ts` first — the build fails on schema mismatch. Always handle empty states and missing optional fields (per `.cursor/rules/content-delivery.mdc`).
+Pages load content with `getCollection()` and filter/group/sort by frontmatter. When adding a content type or field, update the schema in `content.config.ts` first — the build fails on schema mismatch. Always handle empty states and missing optional fields (per `.cursor/rules/content-delivery.mdc`).
 
 ### Layout.astro is the single page shell
 

@@ -43,7 +43,7 @@ export async function GET() {
 
 	for (const post of blog) {
 		entries.push({
-			loc: `${base}/blog/${post.slug}`,
+			loc: `${base}/blog/${post.id}`,
 			lastmod: toLastmod(post.data.publishDate),
 		});
 	}
@@ -64,14 +64,14 @@ export async function GET() {
 
 	for (const project of projects) {
 		entries.push({
-			loc: `${base}/projects/${project.slug}`,
+			loc: `${base}/projects/${project.id}`,
 			lastmod: toLastmod(project.data.publishDate),
 		});
 	}
 
 	for (const activity of activities) {
 		entries.push({
-			loc: `${base}/activities/${activity.slug}`,
+			loc: `${base}/activities/${activity.id}`,
 			lastmod: toLastmod(activity.data.date),
 		});
 	}
