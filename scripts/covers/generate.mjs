@@ -83,6 +83,24 @@ const SERIES = [
       { part: 5, file: '05-dialect',    lines: ['THE DIALECT', 'OF DEPTH'],                              meta: 'connection · community · people' },
     ],
   },
+  {
+    kicker: 'Notes',
+    outDir: join(ROOT, 'public', 'images', 'blog', 'notes'),
+    total: 1,
+    motifs: {
+      '01-flowers': `
+        <path d="M200 408 Q380 402 560 406"/>
+        <path d="M330 406 Q331 376 330 346 M382 406 Q381 376 382 346 M322 348 Q356 343 390 347"/>
+        <path d="M420 406 Q421 344 420 282 M472 406 Q471 344 472 282 M412 284 Q446 279 480 283"/>
+        <path d="M502 406 Q500 260 503 108 Q548 102 588 107 Q591 260 589 406"/>
+        <path d="M512 138 l66 -15 m-68 55 l70 -16 m-70 56 l70 -16 m-70 56 l70 -16 m-70 56 l70 -16"/>
+        <path class="hot" d="M240 406 Q246 370 244 336"/>
+        <path class="hot" d="M244 336 Q228 330 228 316 Q228 302 241 300 Q232 286 245 279 Q258 272 265 284 Q278 275 286 287 Q293 299 281 306 Q292 317 283 328 Q274 338 261 331 Q253 341 244 336"/>`,
+    },
+    posts: [
+      { part: 1, file: '01-flowers', lines: ['FLOWERS ARE NOT', 'THE BARE MINIMUM'], meta: 'appreciation · relationships · people' },
+    ],
+  },
 ];
 
 
@@ -115,7 +133,7 @@ html,body{width:1600px;height:900px;}
 .ghost{position:absolute;right:-60px;bottom:-220px;font-family:'Grotesk';font-weight:700;
   font-size:760px;line-height:1;color:${FAINT};letter-spacing:-0.04em;user-select:none;}
 .motif{position:absolute;right:44px;bottom:52px;width:740px;height:543px;fill:none;
-  stroke:rgba(45,212,191,0.34);stroke-width:6.5;stroke-linecap:round;stroke-linejoin:round;}
+  stroke:${accent};stroke-opacity:.34;stroke-width:6.5;stroke-linecap:round;stroke-linejoin:round;}
 .motif .hot{stroke:${accent};stroke-opacity:.85;}
 .frame{position:absolute;inset:64px;display:flex;flex-direction:column;justify-content:space-between;z-index:2;}
 .top{display:flex;justify-content:space-between;align-items:center;}
@@ -134,7 +152,7 @@ html,body{width:1600px;height:900px;}
   <div class="frame">
     <div class="top">
       <div class="kicker">${kicker}</div>
-      <div class="index"><b>${pad2(post.part)}</b> / ${pad2(total)}</div>
+      ${total > 1 ? `<div class="index"><b>${pad2(post.part)}</b> / ${pad2(total)}</div>` : ''}
     </div>
     <div class="mid">
       <div class="tick"></div>
