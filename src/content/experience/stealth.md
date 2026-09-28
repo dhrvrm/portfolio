@@ -1,14 +1,15 @@
 ---
-title: 'Software Engineer'
-company: 'Stealth'
-startDate: 2025-05-01
+title: 'Software Engineer II'
+company: 'SDLC.works'
+startDate: 2026-01-01
 order: 1
 achievements:
-  - 'Building a custom framework for websites using custom meta framework and Cloudflare: Workers, R2, Durable Objects, and related edge stack'
-  - 'Building real-time collaborative features using Canvas, React Flow, Yjs, Blocknote'
-  - 'Developed frontend interfaces using React.js with structured state management'
-  - 'Worked on SDK development for reusable modules and integrations'
-  - 'Integrated real-time communication in canvas-based environments'
-  - 'Collaborated with backend systems developed in Golang'
-  - 'Contributing to the development of two separate products: Enterprise Goal & Work Management System and Saas Team Management System'
+  - 'Built auth and permissions for an AI agent platform from the ground up, secure enough for outside AI tools to plug into'
+  - 'Built the core engine that runs AI agents: they plan, write code and recover from crashes on their own'
+  - 'Fixed how multiple AI agents coordinate with each other and cut the cost of each run by ~75%'
+  - 'GrowCrazy AI: rebuilt the AI app builder on top of the platform, deleting 40k lines of code. Builds keep going even when an AI provider goes down'
+  - 'Gameplan SDK: built the planning toolkit that lets AI agents and people work on the same plan'
+  - 'Shipped 24 product templates that every AI-built app starts from'
+  - 'Led a multi-tenant website platform on Cloudflare end to end, from system design to the visual editor'
+  - 'Built usage-based billing with Paddle as merchant of record'
 ---
