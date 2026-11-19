@@ -87,7 +87,7 @@ const SERIES = [
   {
     kicker: 'Notes',
     outDir: join(ROOT, 'public', 'images', 'blog', 'notes'),
-    total: 5,
+    total: 7,
     standalone: true, // unrelated essays: hide the NN/NN index
     motifs: {
       '01-flowers': `
@@ -121,6 +121,21 @@ const SERIES = [
         <path stroke-dasharray="3 14" d="M60 200 Q330 192 588 200"/>
         <path class="hot" d="M336 114 Q337 92 336 74"/>
         <path class="hot" d="M336 76 Q354 75 366 81 Q353 88 337 87"/>`,
+      '06-way-back': `
+        <path d="M80 150 Q300 138 520 150"/>
+        <path d="M520 150 l-16 -12 m16 12 l-16 12"/>
+        <path d="M120 150 l0 -18 M162 150 l0 -26 M204 150 l0 -14 M246 150 l0 -30 M288 150 l0 -20 M330 150 l0 -24 M372 150 l0 -12 M414 150 l0 -28 M456 150 l0 -16"/>
+        <path d="M110 128 a8 8 0 1 0 3 -2 M236 112 q10 -10 20 0 M404 116 q10 -12 20 0"/>
+        <path class="hot" d="M520 300 Q300 312 80 300"/>
+        <path class="hot" d="M80 300 l16 -12 m-16 12 l16 12"/>`,
+      '07-butterflies': `
+        <path d="M70 400 Q190 360 250 280 Q310 200 420 170 Q520 146 590 150"/>
+        <path stroke-dasharray="2 18" d="M78 384 Q192 346 248 268 Q308 190 418 156 Q518 132 588 136"/>
+        <path d="M150 352 q8 -12 20 -4 M330 212 q10 -12 20 -2"/>
+        <path class="hot" d="M478 214 Q480 244 482 268"/>
+        <path class="hot" d="M478 226 Q446 196 432 212 Q420 228 452 246 Q468 254 478 240 M478 240 Q460 268 444 276 Q428 282 430 266 Q434 250 478 240"/>
+        <path class="hot" d="M482 226 Q514 196 528 212 Q540 228 508 246 Q492 254 482 240 M482 240 Q500 268 516 276 Q532 282 530 266 Q526 250 482 240"/>
+        <path class="hot" d="M476 216 l-8 -16 m14 16 l10 -15"/>`,
     },
     posts: [
       { part: 1, file: '01-flowers', lines: ['FLOWERS ARE NOT', 'THE BARE MINIMUM'], meta: 'appreciation · relationships · people' },
@@ -128,6 +143,8 @@ const SERIES = [
       { part: 3, file: '03-argument', lines: ['YOU CAN WIN', 'THE ARGUMENT AND', 'LOSE THE ROOM'], meta: 'communication · ego · people' },
       { part: 4, file: '04-signals', lines: ['WHAT SMART', 'ACTUALLY', 'SOUNDS LIKE'], meta: 'intelligence · humility · people' },
       { part: 5, file: '05-deathzone', lines: ['YOU GIVE UP,', 'YOU DIE'], meta: 'mindset · grit · people' },
+      { part: 6, file: '06-way-back', lines: ['THE WAY BACK', 'ALWAYS FEELS', 'SHORTER'], meta: 'time · memory · people' },
+      { part: 7, file: '07-butterflies', lines: ['I LEARNED TO RIDE', 'WHERE THE', 'BUTTERFLIES ARE'], meta: 'travel · learning · attention' },
     ],
   },
   {
