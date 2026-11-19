@@ -49,6 +49,7 @@ const travelPolaroids = (featuredTravel.length ? featuredTravel : travelEntries)
 	.sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
 	.slice(0, POLAROID_STYLES.length)
 	.map((item, i) => ({
+		href: `/activities/${item.id}`,
 		image: item.data.images![0],
 		caption: item.data.caption ?? item.data.title,
 		alt: `${item.data.caption ?? item.data.title} — travel photo`,
@@ -652,6 +653,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 							/>
 						</div>
 						<p class='travel-polaroid__caption'>{p.caption}</p>
+						<a class='travel-polaroid__link' href={p.href} aria-label={`View ${p.caption} travel log`}>View travel log</a>
 					</article>
 				))}
 			</div>
@@ -661,7 +663,6 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		</div>
 	</section>
 	)}
-
 
 </Layout>
 
@@ -901,7 +902,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		}
 
 		function onPointerDown(e: PointerEvent) {
-			if (e.button !== 0) return;
+			if (e.button !== 0 || (e.target instanceof Element && e.target.closest('a, button'))) return;
 			const el = (e.target as HTMLElement).closest(
 				'.travel-polaroid',
 			) as HTMLElement;
@@ -1919,6 +1920,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 	}
 
 	.travel-polaroid {
+		position: relative;
 		width: 200px;
 		flex-shrink: 0;
 		background: rgb(var(--color-surface));
@@ -1982,6 +1984,29 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		-webkit-user-drag: none;
 		user-drag: none;
 	}
+
+	.travel-polaroid__link {
+		position: absolute;
+		bottom: .75rem;
+		left: 0;
+		right: 0;
+		width: fit-content;
+		margin-inline: auto;
+		font-size: .75rem;
+		line-height: 1.5;
+		color: rgb(var(--color-muted));
+		text-decoration: underline;
+		text-underline-offset: 3px;
+		transition: opacity .2s, transform .2s, color .2s;
+	}
+	.travel-polaroid__link:hover { color: rgb(var(--color-accent)); }
+	.travel-polaroid:focus-within { z-index: 2; }
+	@media (hover: hover) and (pointer: fine) {
+		.travel-polaroid__link { opacity: 0; transform: translateY(4px); pointer-events: none; }
+		.travel-polaroid:hover .travel-polaroid__link,
+		.travel-polaroid:focus-within .travel-polaroid__link { opacity: 1; transform: none; pointer-events: auto; }
+	}
+	@media (prefers-reduced-motion: reduce) { .travel-polaroid__link { transition: none; } }
 
 	.travel-polaroid__caption {
 		margin-top: 0.75rem;

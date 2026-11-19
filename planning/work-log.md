@@ -119,3 +119,11 @@
 - Added small theme-aware blue/yellow hover accents without editing source artwork; muted and integrated the attribution.
 - Lowered bike and road together; checked float extrema across five viewport widths, with at most 15px illustration crossing below the road center.
 - Preserved system reduced motion, offscreen/background pausing and the original footer on other routes.
+
+
+### Hover boundaries, scene entrance and travel links
+
+- Replaced hover on moving artwork with fixed hit areas and a forgiving exit margin; scrolling clears the active scene.
+- Added a slow, staggered first entrance on scroll, with independent transforms and reduced-motion fallback.
+- Added per-photo travel-log links on hover/focus, visible on touch; preserved card dragging. Updated BookBNB to bnbhost.ca/stays/.
+- Browser checks cover stationary pointer stability, entrance progression, scroll reset, travel navigation, touch, reduced motion, responsive overflow and the updated destination.
