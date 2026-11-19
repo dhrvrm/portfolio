@@ -1,0 +1,800 @@
+---
+import { CLOSING_SCENES } from '../data/closing-scene';
+---
+
+<section
+	id="next-adventure"
+	class="closing-cta"
+	aria-labelledby="closing-cta-title"
+>
+	<div class="container mx-auto">
+		<div class="closing-cta__invitation">
+			<div>
+				<p class="closing-cta__eyebrow">got an idea? i'm all ears.</p>
+				<h2 id="closing-cta-title">
+					let’s make
+					<br />
+					something <span>move.</span>
+				</h2>
+			</div>
+			<div class="closing-cta__aside">
+				<p>
+					Thoughtful software, built together.
+					<br />
+					Tell me what you have in mind.
+				</p>
+				<div class="closing-cta__actions">
+					<a class="closing-cta__contact" href="/contact">
+						Work together
+					</a>
+					<a class="closing-cta__work" href="/projects">
+						See case work
+					</a>
+				</div>
+			</div>
+		</div>
+		<svg
+			class="svg-filter-defs"
+			width="0"
+			height="0"
+			aria-hidden="true"
+			focusable="false"
+		>
+			<defs>
+				<filter id="closing-scene-ink" color-interpolation-filters="sRGB">
+					<feColorMatrix
+						in="SourceGraphic"
+						type="matrix"
+						values="0 0 0 0 .153  0 0 0 0 .157  0 0 0 0 .125  -.2126 -.7152 -.0722 0 1"
+						result="ink"
+					/>
+					<feComposite in="ink" in2="SourceAlpha" operator="in" />
+				</filter>
+				<filter id="closing-scene-accent" color-interpolation-filters="sRGB">
+					<feColorMatrix
+						in="SourceGraphic"
+						type="matrix"
+						values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -.2126 -.7152 -.0722 0 1"
+						result="ink"
+					/>
+					<feComposite
+						in="ink"
+						in2="SourceAlpha"
+						operator="in"
+						result="shape"
+					/>
+					<feFlood class="scene-accent-color" result="accent" />
+					<feComposite in="accent" in2="shape" operator="in" />
+				</filter>
+			</defs>
+		</svg>
+		<figure
+			class="world"
+			aria-label="Dhruv and his motorcycle, surrounded by scenes of work, ideas and travel"
+		>
+			<div class="scene-ground" aria-hidden="true">
+				<svg
+					viewBox="0 0 1400 120"
+					preserveAspectRatio="none"
+					focusable="false"
+				>
+					<defs>
+						<linearGradient
+							id="closing-road-fade"
+							x1="0"
+							y1="0"
+							x2="1400"
+							y2="0"
+							gradientUnits="userSpaceOnUse"
+						>
+							<stop offset="0" stop-color="white" stop-opacity="0" />
+							<stop offset=".16" stop-color="white" />
+							<stop offset=".84" stop-color="white" />
+							<stop offset="1" stop-color="white" stop-opacity="0" />
+						</linearGradient>
+						<mask id="closing-road-mask">
+							<rect width="1400" height="120" fill="url(#closing-road-fade)" />
+						</mask>
+					</defs>
+					<g mask="url(#closing-road-mask)">
+						<path
+							class="road-surface"
+							d="M0 48 C350 34 1050 34 1400 48 L1400 88 C1050 74 350 74 0 88 Z"
+							fill="var(--scene-road)"
+						/>
+						<path
+							class="road-edge"
+							d="M0 48 C350 34 1050 34 1400 48 M0 88 C350 74 1050 74 1400 88"
+							fill="none"
+							stroke="var(--scene-road-edge)"
+							stroke-width="1"
+						/>
+					</g>
+				</svg>
+				<div class="ground-contact"></div>
+			</div>
+			<div class="orbit-field">
+				<div class="orbit-depth" aria-hidden="true"></div>
+				<ul
+					class="orbit-camera"
+					aria-label="Scenes of design, coding, ideas and travel"
+				>
+					{CLOSING_SCENES.map((scene) => (
+						<li
+							class:list={['orbit-slot', `orbit-slot--${scene.depth}`]}
+							style={scene.style}
+							data-side={scene.side}
+							data-band={scene.band}
+							data-mobile-low={scene.mobileLow ? 'true' : undefined}
+						>
+							<div class="orbit-drift">
+								<figure class="orbit-piece">
+									<span class="orbit-visual">
+										<img
+											src={`/images/closing-scene/${scene.file}`}
+											width="400"
+											height="400"
+											alt={scene.label}
+											loading="lazy"
+											decoding="async"
+											draggable="false"
+										/>
+										<img
+											class="orbit-accent"
+											src={`/images/closing-scene/${scene.file}`}
+											width="400"
+											height="400"
+											alt=""
+											aria-hidden="true"
+											loading="lazy"
+											decoding="async"
+											draggable="false"
+											style={{ maskImage: scene.accentMask }}
+										/>
+									</span>
+									<figcaption class="orbit-label" aria-hidden="true">
+										{scene.label}
+									</figcaption>
+								</figure>
+							</div>
+						</li>
+					))}
+				</ul>
+			</div>
+			<img
+				class="rider-art"
+				src="/images/closing-scene/rider.png"
+				width="1536"
+				height="1024"
+				alt="Dhruv in sunglasses and black riding gear, standing beside his cream motorcycle with striped tank and rear luggage."
+				loading="lazy"
+				decoding="async"
+			/>
+			<figcaption class="closing-cta__credit">
+				Illustrations by{' '}
+				<a
+					href="https://www.streamlinehq.com/"
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					Streamline
+				</a>
+			</figcaption>
+		</figure>
+	</div>
+</section>
+
+<script>
+	const world = document.querySelector<HTMLElement>('.closing-cta .world');
+	if (world) {
+		const field = world.querySelector<HTMLElement>('.orbit-field')!;
+		const camera = world.querySelector<HTMLElement>('.orbit-camera')!;
+		const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+		const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
+		let activePiece: HTMLElement | null = null;
+		let pieceBounds: DOMRect | undefined;
+		let targetX = 0;
+		let targetY = 0;
+		let cameraX = 0;
+		let cameraY = 0;
+		let tiltX = 0;
+		let tiltY = 0;
+		let frame = 0;
+
+		function setActivePiece(piece: HTMLElement | null) {
+			if (activePiece === piece) return;
+			activePiece?.style.removeProperty('--tilt-x');
+			activePiece?.style.removeProperty('--tilt-y');
+			activePiece = piece;
+			pieceBounds = piece?.closest('.orbit-slot')?.getBoundingClientRect();
+		}
+
+		function renderMotion() {
+			frame = 0;
+			cameraX += (targetX - cameraX) * 0.12;
+			cameraY += (targetY - cameraY) * 0.12;
+			camera.style.setProperty(
+				'--camera-rx',
+				`${(-cameraY * 4).toFixed(3)}deg`,
+			);
+			camera.style.setProperty('--camera-ry', `${(cameraX * 6).toFixed(3)}deg`);
+			if (activePiece) {
+				activePiece.style.setProperty('--tilt-x', `${tiltX.toFixed(2)}deg`);
+				activePiece.style.setProperty('--tilt-y', `${tiltY.toFixed(2)}deg`);
+			}
+			if (Math.abs(targetX - cameraX) + Math.abs(targetY - cameraY) > 0.001) {
+				frame = requestAnimationFrame(renderMotion);
+			}
+		}
+
+		function requestMotion() {
+			if (!frame && !reducedMotion.matches && finePointer.matches) {
+				frame = requestAnimationFrame(renderMotion);
+			}
+		}
+
+		field.addEventListener('pointermove', (event) => {
+			if (
+				reducedMotion.matches ||
+				!finePointer.matches ||
+				event.pointerType === 'touch'
+			)
+				return;
+			const bounds = field.getBoundingClientRect();
+			targetX = Math.max(
+				-1,
+				Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2),
+			);
+			targetY = Math.max(
+				-1,
+				Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2),
+			);
+			setActivePiece(
+				event.target instanceof Element
+					? event.target.closest<HTMLElement>('.orbit-piece')
+					: null,
+			);
+			if (pieceBounds) {
+				tiltX = Math.max(
+					-10,
+					Math.min(
+						10,
+						((event.clientX - pieceBounds.left - pieceBounds.width / 2) /
+							pieceBounds.width) *
+							16,
+					),
+				);
+				tiltY = Math.max(
+					-10,
+					Math.min(
+						10,
+						(-(event.clientY - pieceBounds.top - pieceBounds.height / 2) /
+							pieceBounds.height) *
+							16,
+					),
+				);
+			}
+			requestMotion();
+		});
+		field.addEventListener('pointerleave', () => {
+			setActivePiece(null);
+			targetX = targetY = 0;
+			requestMotion();
+		});
+
+		function resetMotion() {
+			cancelAnimationFrame(frame);
+			frame = 0;
+			targetX = targetY = cameraX = cameraY = 0;
+			camera.style.removeProperty('--camera-rx');
+			camera.style.removeProperty('--camera-ry');
+			setActivePiece(null);
+		}
+		reducedMotion.addEventListener('change', resetMotion);
+		finePointer.addEventListener('change', resetMotion);
+		window.addEventListener('blur', resetMotion);
+
+		new IntersectionObserver(([entry]) => {
+			world.dataset.floatVisible = String(entry.isIntersecting);
+		}).observe(world);
+		document.addEventListener('visibilitychange', () => {
+			world.dataset.pageHidden = String(document.hidden);
+		});
+
+		world.dataset.pageHidden = String(document.hidden);
+	}
+</script>
+
+<style>
+	.closing-cta {
+		--scene-paper: rgb(var(--color-bg));
+		--scene-ink: rgb(var(--color-ink));
+		--scene-muted: rgb(var(--color-muted));
+		--scene-glow: rgb(var(--color-accent) / 0.18);
+		--scene-road: rgb(var(--color-border) / 0.7);
+		--scene-road-edge: rgb(var(--color-surface));
+		padding-block: clamp(3rem, 5vw, 5rem) 0;
+		overflow: clip;
+	}
+	.closing-cta__invitation {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 2rem;
+	}
+	.closing-cta__eyebrow {
+		margin: 0 0 1.25rem;
+		color: rgb(var(--color-muted));
+		font-family: var(--font-mono);
+		font-size: 0.875rem;
+	}
+	.closing-cta h2 {
+		margin: 0;
+		font-family: 'Space Grotesk Variable', sans-serif;
+		font-size: clamp(2.5rem, 4.4vw, 4rem);
+		line-height: 1.06;
+		letter-spacing: -0.055em;
+		font-weight: 600;
+	}
+	.closing-cta h2 span {
+		color: rgb(var(--color-accent));
+	}
+	.closing-cta__aside p {
+		margin: 0 0 1.25rem;
+		color: rgb(var(--color-muted));
+		font-size: 1rem;
+		line-height: 1.6;
+	}
+	.closing-cta__actions {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 1.5rem;
+	}
+	.closing-cta__contact {
+		display: inline-flex;
+		justify-content: center;
+		padding: 0.875rem 1.25rem;
+		border-radius: var(--radius-md);
+		background: rgb(var(--color-accent));
+		color: rgb(var(--color-on-accent));
+		font-size: 0.875rem;
+		font-weight: 600;
+		transition:
+			background 0.2s,
+			transform 0.2s;
+	}
+	.closing-cta__contact:hover {
+		background: rgb(var(--color-accent-strong));
+	}
+	.closing-cta__contact:active {
+		transform: scale(0.98);
+	}
+	.closing-cta__work {
+		color: rgb(var(--color-muted));
+		font-size: 0.875rem;
+		text-underline-offset: 0.3rem;
+	}
+	.closing-cta__work:hover {
+		color: rgb(var(--color-ink));
+		text-decoration: underline;
+	}
+	.closing-cta__credit {
+		position: absolute;
+		z-index: 4;
+		right: 15px;
+		bottom: -4px;
+		margin: 0;
+		color: rgb(var(--color-muted) / 0.6);
+		font-size: 0.6875rem;
+		line-height: 1.5;
+	}
+	.closing-cta__credit a {
+		font-family: inherit;
+		text-underline-offset: 3px;
+	}
+	.closing-cta__credit a:hover {
+		color: rgb(var(--color-muted));
+		text-decoration: underline;
+	}
+	.scene-accent-color {
+		flood-color: rgb(var(--color-accent));
+	}
+
+	.svg-filter-defs {
+		position: absolute;
+		width: 0;
+		height: 0;
+		overflow: hidden;
+		pointer-events: none;
+	}
+	:global(.dark) .orbit-visual img:not(.orbit-accent) {
+		filter: url(#closing-scene-ink) invert(1);
+	}
+	:global(.dark) .rider-art {
+		filter: drop-shadow(0 0 1px rgb(var(--color-muted) / 0.4));
+	}
+	:global(.dark) .ground-contact {
+		background: radial-gradient(
+			ellipse,
+			rgb(var(--color-bg) / 0.8),
+			transparent 70%
+		);
+	}
+	@media (max-width: 700px) {
+		.closing-cta__invitation {
+			display: block;
+		}
+		.closing-cta__aside {
+			margin-top: 1.5rem;
+		}
+		.closing-cta__actions {
+			gap: 1.25rem;
+		}
+	}
+	.world {
+		position: relative;
+		container-type: inline-size;
+		height: clamp(510px, 43vw, 620px);
+		margin: 20px -15px 20px;
+		isolation: isolate;
+	}
+	.orbit-field {
+		position: absolute;
+		z-index: 1;
+		inset: 0;
+		perspective: 1200px;
+		perspective-origin: 50% 43%;
+	}
+	.orbit-depth {
+		position: absolute;
+		width: 76%;
+		height: 70%;
+		left: 12%;
+		top: 14%;
+		border-radius: 50%;
+		background: radial-gradient(ellipse, var(--scene-glow), transparent 70%);
+		opacity: 0.21;
+		pointer-events: none;
+	}
+	.orbit-camera {
+		position: absolute;
+		inset: 0;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		transform-style: preserve-3d;
+		transform-origin: 50% 50%;
+		transform: rotateX(var(--camera-rx, 0deg)) rotateY(var(--camera-ry, 0deg));
+		pointer-events: none;
+	}
+	.orbit-slot {
+		position: absolute;
+		left: calc(var(--x) * 1%);
+		top: calc(var(--y) * 1%);
+		width: clamp(60px, calc(var(--size) * 1cqw), 170px);
+		aspect-ratio: 1;
+		transform: translate(-50%, -50%) translateZ(var(--z));
+		transform-style: preserve-3d;
+		pointer-events: none;
+		--art-opacity: 0.68;
+	}
+	.orbit-slot--far {
+		--art-opacity: 0.52;
+	}
+	.orbit-slot--near {
+		--art-opacity: 0.82;
+	}
+	.orbit-slot[data-side='left'] {
+		--edge-x: clamp(15px, 6cqw, 80px);
+	}
+	.orbit-slot[data-side='right'] {
+		--edge-x: clamp(-80px, -6cqw, -15px);
+	}
+	.orbit-slot[data-band='top'] {
+		--edge-y: clamp(12px, 2.5cqw, 36px);
+	}
+	.orbit-slot[data-band='bottom'] {
+		--edge-y: clamp(-82px, -6.5cqw, -20px);
+	}
+	.orbit-drift {
+		width: 100%;
+		height: 100%;
+		transform-style: preserve-3d;
+		--float-strength: 1;
+		animation: orbit-float var(--float-duration)
+			cubic-bezier(0.3643, 0, 0.6357, 1) var(--float-delay) infinite alternate;
+	}
+	.orbit-piece {
+		position: relative;
+		display: block;
+		margin: 0;
+		width: 100%;
+		aspect-ratio: 1;
+		color: var(--scene-ink);
+		transform-style: preserve-3d;
+		transform: rotateX(calc(var(--rx) * var(--relax, 1) + var(--tilt-y, 0deg)))
+			rotateY(calc(var(--ry) * var(--relax, 1) + var(--tilt-x, 0deg)))
+			rotateZ(calc(var(--rz) * var(--relax, 1)))
+			translate3d(var(--move-x, 0px), var(--move-y, 0px), var(--lift, 0px))
+			scale(var(--piece-scale, 1));
+		transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+		pointer-events: auto;
+	}
+	.orbit-visual {
+		position: relative;
+		display: block;
+		width: 100%;
+		height: 100%;
+		opacity: var(--art-opacity);
+		transition:
+			opacity 0.25s,
+			filter 0.25s;
+	}
+	.orbit-visual img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		filter: url(#closing-scene-ink);
+		user-select: none;
+		-webkit-user-drag: none;
+	}
+	.orbit-visual img.orbit-accent {
+		position: absolute;
+		inset: 0;
+		opacity: 0;
+		filter: url(#closing-scene-accent);
+		pointer-events: none;
+		transition: opacity 0.25s;
+	}
+
+	.orbit-label {
+		position: absolute;
+		left: 50%;
+		bottom: -21px;
+		width: max-content;
+		max-width: 200px;
+		transform: translate(var(--label-x, -50%), 7px);
+		opacity: 0;
+		font-size: 14px;
+		font-weight: 650;
+		line-height: 1.15;
+		text-align: center;
+		pointer-events: none;
+		transition:
+			opacity 0.18s,
+			transform 0.25s;
+		text-shadow:
+			0 1px 4px var(--scene-paper),
+			0 -1px 4px var(--scene-paper),
+			2px 0 4px var(--scene-paper),
+			-2px 0 4px var(--scene-paper);
+	}
+	.orbit-slot[data-side='left'] .orbit-label {
+		left: 0;
+		--label-x: 0%;
+		text-align: left;
+	}
+	.orbit-slot[data-side='right'] .orbit-label {
+		left: auto;
+		right: 0;
+		--label-x: 0%;
+		text-align: right;
+	}
+	@keyframes orbit-float {
+		from {
+			transform: translate3d(
+					calc(var(--float-x) * var(--float-strength) * -1),
+					calc(var(--float-y) * var(--float-strength) * -1),
+					calc(var(--float-z) * var(--float-strength) * -1)
+				)
+				rotateZ(calc(var(--float-roll) * -1));
+		}
+		to {
+			transform: translate3d(
+					calc(var(--float-x) * var(--float-strength)),
+					calc(var(--float-y) * var(--float-strength)),
+					calc(var(--float-z) * var(--float-strength))
+				)
+				rotateZ(var(--float-roll));
+		}
+	}
+	.world[data-float-visible='false'] .orbit-drift,
+	.world[data-page-hidden='true'] .orbit-drift {
+		animation-play-state: paused;
+	}
+
+	/* The road and shadow share the rider's contact baseline. */
+	.scene-ground {
+		position: absolute;
+		z-index: 0;
+		left: 0;
+		right: 0;
+		bottom: calc(5% - 30px);
+		height: 60px;
+		pointer-events: none;
+	}
+	.scene-ground svg {
+		display: block;
+		width: 100%;
+		height: 100%;
+	}
+	.ground-contact {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		width: 44%;
+		height: 14px;
+		transform: translate(-50%, -50%);
+		background: radial-gradient(
+			ellipse,
+			rgb(var(--color-ink) / 0.16),
+			transparent 70%
+		);
+	}
+	.rider-art {
+		position: absolute;
+		z-index: 3;
+		display: block;
+		width: min(42%, 560px);
+		height: auto;
+		left: 50%;
+		bottom: 4%;
+		transform: translateX(-50%);
+		pointer-events: none;
+	}
+	@media (hover: hover) and (pointer: fine) {
+		.orbit-piece:hover {
+			--relax: 0.12;
+			--lift: 120px;
+			--piece-scale: 1.07;
+			--move-x: calc(var(--edge-x, 0px) * 0.65);
+			--move-y: calc(var(--edge-y, 0px) * 0.65);
+		}
+		.orbit-camera:has(.orbit-piece:hover)
+			.orbit-piece:not(:hover)
+			.orbit-visual {
+			opacity: calc(var(--art-opacity) * 0.22);
+		}
+		.orbit-piece:hover .orbit-visual {
+			opacity: 1;
+			filter: drop-shadow(0 10px 5px rgb(var(--color-ink) / 0.08));
+		}
+		.orbit-piece:hover .orbit-accent {
+			opacity: 1;
+		}
+		.orbit-piece:hover .orbit-label {
+			opacity: 1;
+			transform: translate(var(--label-x, -50%), 0);
+		}
+		.orbit-slot:hover .orbit-drift {
+			animation-play-state: paused;
+		}
+	}
+
+	@media (max-width: 1000px) {
+		.world {
+			height: 535px;
+			margin-top: 27px;
+		}
+		.rider-art {
+			width: 53%;
+		}
+		.orbit-slot {
+			width: clamp(64px, calc(var(--size) * 1cqw), 160px);
+		}
+		.orbit-label {
+			font-size: 13px;
+			max-width: 160px;
+		}
+	}
+	/* The larger tablet rider needs room below these two inner scenes. */
+	@media (min-width: 601px) and (max-width: 1000px) {
+		.orbit-slot--near[data-side='center'][data-band='bottom'] {
+			--y: 60 !important;
+		}
+	}
+
+	@media (max-width: 600px) {
+		.closing-cta {
+			margin-inline: -1.5rem;
+			padding-inline: 1.5rem;
+		}
+		.world {
+			height: 490px;
+			margin: 26px -7px 20px;
+		}
+		.orbit-field {
+			perspective: 900px;
+		}
+		.orbit-depth {
+			width: 100%;
+			left: 0;
+		}
+		.orbit-slot {
+			left: calc(var(--mobile-x) * 1%);
+			top: calc(var(--mobile-y) * 1%);
+			width: clamp(53px, calc(var(--size) * 1.25cqw), 90px);
+		}
+		.orbit-slot--far {
+			--z: -100px !important;
+		}
+		.orbit-slot--middle {
+			--z: -20px !important;
+		}
+		.orbit-slot--near {
+			--z: 10px !important;
+		}
+		.orbit-slot[data-mobile-low='true'] {
+			--edge-y: -85px;
+		}
+		.orbit-slot[data-mobile-low='true'][data-side='right'] {
+			width: 45px;
+		}
+		.orbit-drift {
+			--float-strength: 0.6;
+		}
+		.orbit-label {
+			font-size: 12px;
+			max-width: 120px;
+			bottom: -18px;
+		}
+		.rider-art {
+			width: 79%;
+		}
+		.scene-ground {
+			height: 44px;
+			bottom: calc(5% - 22px);
+		}
+		.ground-contact {
+			width: 66%;
+			height: 10px;
+		}
+	}
+	@media (max-width: 600px) and (hover: hover) and (pointer: fine) {
+		.orbit-piece:hover {
+			--lift: 55px;
+			--piece-scale: 1.08;
+		}
+	}
+	@media (max-width: 370px) {
+		.world {
+			height: 470px;
+		}
+		.orbit-slot {
+			width: 48px;
+		}
+		.orbit-slot[data-mobile-low='true'][data-side='right'] {
+			--mobile-y: 66 !important;
+		}
+		.orbit-slot[data-mobile-low='true'][data-side='left'] {
+			--mobile-x: 5 !important;
+		}
+		.rider-art {
+			width: 84%;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.orbit-camera {
+			transform: none !important;
+		}
+		.orbit-drift {
+			animation: none;
+			transform: none;
+		}
+		.orbit-piece:hover {
+			--lift: 0px;
+			--piece-scale: 1;
+			--relax: 1;
+			--move-x: 0px;
+			--move-y: 0px;
+		}
+		.orbit-piece,
+		.orbit-visual,
+		.orbit-label,
+		.orbit-accent {
+			transition: none;
+		}
+	}
+</style>

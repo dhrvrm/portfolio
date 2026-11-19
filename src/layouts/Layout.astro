@@ -21,6 +21,7 @@ interface Props {
 	article?: boolean;
 	prevHref?: string;
 	nextHref?: string;
+	illustratedFooter?: boolean;
 }
 
 const {
@@ -32,6 +33,7 @@ const {
 	article = false,
 	prevHref,
 	nextHref,
+	illustratedFooter = false,
 } = Astro.props;
 
 const canonicalURL = new URL(
@@ -388,7 +390,7 @@ const canonicalURL = new URL(
 			<main id='main-content' class='min-h-screen pt-24'>
 				<slot />
 			</main>
-			<Footer />
+			<Footer illustrated={illustratedFooter} />
 		</div>
 	</body>
 </html>

@@ -1,4 +1,8 @@
 ---
+import ClosingCTA from './ClosingCTA.astro';
+
+interface Props { illustrated?: boolean; }
+const { illustrated = false } = Astro.props;
 const currentYear = new Date().getFullYear();
 
 const navGroups = [
@@ -30,7 +34,8 @@ const socialLinks = [
 ];
 ---
 
-<footer class='footer'>
+<footer class:list={['footer', { 'footer--illustrated': illustrated }]}>
+	{illustrated && <ClosingCTA />}
 	<div class='footer__top'>
 		<div class='footer__container'>
 			<div class='footer__main'>
@@ -99,6 +104,15 @@ const socialLinks = [
 <style>
 	.footer {
 		margin-top: 6rem;
+	}
+
+	.footer--illustrated { margin-top: 0; }
+	.footer--illustrated .footer__top {
+		background: transparent;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+		padding-top: 2rem;
 	}
 
 	/* Signature: rounded top cap + elevated surface, echoes header pill */

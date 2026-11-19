@@ -102,3 +102,20 @@
 
 - Chat loop: repeatDelay 8s → 2s.
 - Community label loop: duration 0.24s → 0.45s, stagger 0.07s → 0.12s, repeatDelay 5s → 3s.
+
+
+## 2026-11-19
+
+### Illustrated closing CTA
+
+- Replaced the homepage's closing product-sprint panel with the approved rider/bike scene and twenty original Streamline illustrations.
+- Reused site fonts, semantic colours and shared theme, with Contact/Projects links and the existing footer below.
+- Preserved clear resting illustrations, hover-only emphasis, autonomous float, accessible pause and reduced motion. No scene click or held-selection behavior.
+- Checked source hashes, production build (174 pages), desktop/mobile browser behavior, responsive overflow and tyre clearance. See `2026-11-19-illustrated-secondary-cta.md` for validation and the whole-page Lighthouse result.
+
+### Footer refinement and deployment
+
+- Made the scene the homepage footer's top portion, without extra separator lines, pause UI or hover instructions.
+- Added small theme-aware blue/yellow hover accents without editing source artwork; muted and integrated the attribution.
+- Lowered bike and road together; checked float extrema across five viewport widths, with at most 15px illustration crossing below the road center.
+- Preserved system reduced motion, offscreen/background pausing and the original footer on other routes.
