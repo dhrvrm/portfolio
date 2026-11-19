@@ -75,6 +75,7 @@ const activities = defineCollection({
 		hackathonType: z.enum(['participated', 'mentored', 'judged']).optional(),
 		// Optional media gallery for cards/galleries
 		images: z.array(z.string()).optional(),
+		imageFit: z.enum(['cover', 'contain']).default('cover'),
 		// Optional video (mp4/webm/url) for featured media
 		video: z.string().optional(),
 		// Short label for the homepage travel polaroids (e.g. "Spiti"); falls back to title

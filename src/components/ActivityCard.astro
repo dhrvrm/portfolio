@@ -54,6 +54,7 @@ const cardClass = [
 				) : (
 					<img
 						class='activity-card__image'
+						data-fit={item.data.imageFit}
 						src={media[0]}
 						alt={item.data.title}
 						width='360'
@@ -171,6 +172,9 @@ const cardClass = [
 	.activity-card:hover .activity-card__image {
 		transform: scale(1.05) rotate(0.6deg);
 	}
+
+	.activity-card__image[data-fit='contain'] { object-fit: contain; }
+	.activity-card:hover .activity-card__image[data-fit='contain'] { transform: none; }
 
 	.activity-card__thumbs {
 		position: absolute;

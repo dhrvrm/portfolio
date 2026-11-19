@@ -115,7 +115,7 @@ const metaDescription =
 						/>
 					)}
 					{images.length > 0 && (
-						<ImageGallery images={images.map((src, i) => ({ src, alt: `${item.data.title} — image ${i + 1}` }))} />
+						<ImageGallery class={item.data.imageFit === 'contain' && images.length === 1 ? 'ig--poster' : undefined} images={images.map((src, i) => ({ src, alt: `${item.data.title} — image ${i + 1}` }))} />
 					)}
 				</div>
 			</section>

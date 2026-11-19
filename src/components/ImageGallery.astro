@@ -185,6 +185,19 @@ const id = `ig-${Math.random().toString(36).slice(2, 9)}`;
 		transform: scale(1.02);
 	}
 
+	.ig--poster {
+		grid-template-columns: minmax(0, 1fr);
+		max-width: 28rem;
+		margin-inline: auto;
+	}
+	.ig--poster .ig__cell-inner img {
+		max-height: min(560px, 70vh);
+	}
+	.ig--poster .ig__cell:hover .ig__cell-inner img {
+		transform: none;
+	}
+
+
 	@media (min-width: 640px) {
 		.ig__cell img {
 			max-height: min(440px, 70vh);

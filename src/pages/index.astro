@@ -51,6 +51,7 @@ const travelPolaroids = (featuredTravel.length ? featuredTravel : travelEntries)
 	.map((item, i) => ({
 		href: `/activities/${item.id}`,
 		image: item.data.images![0],
+		imageFit: item.data.imageFit,
 		caption: item.data.caption ?? item.data.title,
 		alt: `${item.data.caption ?? item.data.title} — travel photo`,
 		style: POLAROID_STYLES[i],
@@ -640,7 +641,7 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 			</div>
 			<div class='travel-polaroids__pile' aria-label='Featured travel photos'>
 				{travelPolaroids.map((p) => (
-					<article class='travel-polaroid' style={p.style}>
+					<article class='travel-polaroid' style={p.style} data-image-fit={p.imageFit}>
 						<div class='travel-polaroid__img-wrap'>
 							<img
 								src={p.image}
@@ -1984,6 +1985,8 @@ const bentoImageTravel = '/images/portraits/workation-1.png';
 		-webkit-user-drag: none;
 		user-drag: none;
 	}
+
+	.travel-polaroid[data-image-fit='contain'] .travel-polaroid__img { object-fit: contain; }
 
 	.travel-polaroid__link {
 		position: absolute;
